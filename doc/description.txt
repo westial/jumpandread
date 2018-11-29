@@ -1,0 +1,27 @@
+Esta aplicación es ese alguien o "algo" que te lee resultados de una búsqueda en internet. Puedes pedirle por ejemplo que busque documentos técnicos, cuentos, recetas de cocina,... cuando estás corriendo, cocinando con las manos pringadas u ocupadas, conduciendo o en la cama, incluso a oscuras.
+
+Para usar esta aplicación, acuérdate bien de los tres comandos principales: buscar, leer y saltar.
+
+Los conceptos con los que opera esta aplicación son dos: resultados y contenidos. 
+
+Concepto Resultado: resultado de búsqueda númerado.
+
+Concepto Contenido: grupo de párrafos recogidos de la página de un Resultado. El número de párrafos que componen un Contenido suele ser pequeño, a partir de 5.
+
+Comando Buscar: Ordena qué quieres buscar con la orden "busca (y lo que quieras buscar)". A continuación, te recitará una serie de resultados numerados. 
+
+Comando Leer: El comando más importante de todos. Cuando escoges qué resultado de búsqueda quieres leer, indica "lee (y el número del resultado elegido)". Se recogerá un Contenido que se empezará a leer. Cuando termine de leer un grupo de párrafos, la lectura se pausará, puedes continuar ordenando "leer", sin número, y se recogerá el siguiente Contenido y se leerá. Y así progresivamente. También puedes usar este comando para salir de un resultado y leer otro, ordenando "lee (y el número del resultado al que quieras ir)".
+
+Comando Saltar: Si el Contenido que se están leyendo no te interesa, da la orden "salta" y se procederá a leer el siguiente Contenido.
+
+Otros comandos que puedan ser de utilidad son:
+
+Comando Atrás: Para ir a leer el anterior Contenido.
+
+Comando Pausar: Para parar la lectura de un Contenido. 
+
+Comando Continuar: Para continuar desde el inicio de un Contenido después de haber ordenado una pausa.
+
+Comando Repetir: Para repetir la lectura del Contenido anterior. 
+
+Es una aplicación desarrollada para y por los usuarios, el primero de ellos yo mismo. La radio es una buena fuente de información, pero no puedo escuchar los contenidos que me apetecen justo cuando me apetecen. La aplicación está desarrollada siguiendo las mejores prácticas porque es un proyecto de largo recorrido, facilitando de este modo su mantenimiento y mejora.

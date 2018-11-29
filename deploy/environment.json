@@ -1,0 +1,16 @@
+{
+    "Variables": {
+        "AGENTS_RESOURCE_PATH": "useragent.pc.list",
+        "ISO4_LANGUAGE": "es-ES",
+        "HTTP_USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+        "DUCK_URL": "https://duckduckgo.com/html/",
+        "STATE_TABLE_NAME": "jnr_state",
+        "REFERRERS_RESOURCE_PATH": "referrers.list",
+        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
+        "LANGUAGES_RESOURCE_PATH": "languages.list",
+        "DUCK_LOCALE_RESOURCE_PATH": "duckduckgo.kl.lang.es.list",
+        "STARTING_CANDIDATE_INDEX": "1",
+        "CANDIDATE_TABLE_NAME": "jnr_candidate"
+    }
+}
+

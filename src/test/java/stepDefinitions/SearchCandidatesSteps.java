@@ -1,0 +1,258 @@
+package stepDefinitions;
+
+import com.westial.alexa.jumpandread.application.SearchCandidatesCommand;
+import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.infrastructure.*;
+import com.westial.alexa.jumpandread.infrastructure.service.*;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.junit.Assert;
+
+import java.net.URL;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+
+public class SearchCandidatesSteps
+{
+    private static int STARTING_CANDIDATE_INDEX = 1;
+    private CandidatesSearch candidatesSearch;
+    private StateRepository stateRepository;
+    private SearchCandidatesCommand searchCandidates;
+    private String foundCandidates;
+    private CandidateFactory candidateFactory;
+    private CandidateParser candidateParser;
+    private CandidateRepository candidateRepository;
+    private CandidateGetter candidateGetter;
+    private OutputFormatter outputFormatter;
+    private StateFactory stateFactory;
+    private State state;
+    private DuckDuckGoResultParser pageParser;
+    private WebClient pageClient;
+    private CandidatesSearch searchEngine;
+    private List<Candidate> candidates;
+    private HeadersProvider headersProvider;
+    private DuckDuckGoLocaleProvider duckLocaleProvider;
+
+    @Given("^A local web client service with a forced content as in file as \"([^\"]*)\"$")
+    public void anHtmlSearchResultPageAsInFileAs(String fileName) throws Throwable
+    {
+        URL url = Thread.currentThread()
+                .getContextClassLoader()
+                .getResource(fileName);
+
+        String filePath = "file://" + url.getPath();
+        pageClient = new LocalWebClient(filePath);
+    }
+
+    @Given("^A DuckDuckGo page parser service$")
+    public void aDuckDuckGoPageParserServiceForUrlAs() throws Throwable
+    {
+        pageParser = new JsoupDuckDuckGoResultParser();
+    }
+
+    @Given("^A DuckDuckGo candidates search service for url as \"([^\"]*)\", iso 4-letters locale as \"([^\"]*)\"$")
+    public void aDuckDuckGoCandidatesSearchService(String duckUrl, String iso4Locale)
+    {
+        searchEngine = new DuckDuckGoCandidatesSearch(
+                STARTING_CANDIDATE_INDEX,
+                pageClient,
+                pageParser,
+                duckUrl,
+                headersProvider,
+                duckLocaleProvider,
+                iso4Locale,
+                candidateFactory
+        );
+    }
+
+    @Given("^A random headers provider service for agents file as \"([^\"]*)\", languages file as \"([^\"]*)\", referrers file as \"([^\"]*)\"$")
+    public void aRandomHeadersProviderServiceForAgentsFileAsLanguagesFileAsReferrersFileAs(
+            String agentsFileName,
+            String languagesFileName,
+            String referrersFileName) throws Throwable
+    {
+        headersProvider = new RandomDuckDuckGoHeadersProvider(
+                agentsFileName,
+                languagesFileName,
+                referrersFileName
+        );
+    }
+
+    @Given("^A random duckduckgo locale provider service for available locales file as \"([^\"]*)\"$")
+    public void aRandomDuckduckgoLocaleProviderServiceForAvailableLocalesFileAs(String filePath) throws Throwable
+    {
+        duckLocaleProvider = new RandomDuckDuckGoLocaleProvider(filePath);
+    }
+
+    @When("^I ask to find candidates to search service for user with ID as \"([^\"]*)\", session ID as \"([^\"]*)\", search ID as \"([^\"]*)\", terms as \"([^\"]*)\"$")
+    public void iAskToFindCandidatesToSearchServiceForUserWithIDAsSessionIDAsSearchIDAsTermsAs(String userId, String sessionId, String searchId, String terms) throws Throwable
+    {
+        candidates = searchEngine.find(
+                new User(userId, sessionId),
+                searchId,
+                terms
+        );
+    }
+
+    @Then("^The service returned a list with \"([^\"]*)\" candidates$")
+    public void theServiceReturnedAListWithCandidates(String expectedCount) throws Throwable
+    {
+        Assert.assertEquals(Integer.parseInt(expectedCount), candidates.size());
+    }
+
+    @Then("^Candidate with position \"([^\"]*)\" in list has property \"([^\"]*)\" as \"([^\"]*)\"$")
+    public void candidateWithPositionInListHasPropertyAs(String candidateIndex, String property, String expected) throws Throwable
+    {
+        Candidate candidate = candidates.get(Integer.parseInt(candidateIndex));
+        String result;
+        switch (property)
+        {
+            case "title":
+                result = candidate.getTitle();
+                break;
+
+            case "description":
+                result = candidate.getDescription();
+                break;
+
+            case "url":
+                result = candidate.getUrl();
+                break;
+
+            default:
+                throw new RuntimeException("Unexpected property to assert");
+        }
+        Assert.assertEquals(expected, result);
+    }
+
+    @Given("^A candidates search service with \"([^\"]*)\" forced results$")
+    public void aSearchingServiceWithForcedResults(String forcedResults) throws Throwable
+    {
+        candidatesSearch = new MockCandidatesSearch(
+                Integer.parseInt(forcedResults),
+                candidateFactory
+        );
+    }
+
+    @Given("^A user state repository$")
+    public void aUserSessionRepositoryWithCurrentIntentAt() throws Throwable
+    {
+        stateRepository = new MockStateRepository();
+    }
+
+    @Given("^A mock candidate parser$")
+    public void aMockPageParser() throws Throwable
+    {
+        candidateParser = new MockCandidateParser();
+    }
+
+    @Given("^A searching step command$")
+    public void aSearchingCommand() throws Throwable
+    {
+        searchCandidates = new SearchCandidatesCommand(
+                candidatesSearch
+        );
+    }
+
+    @When("^I execute the step command with the terms \"([^\"]*)\"$")
+    public void iExecuteTheCommandWithTheTerms(String searchTerms) throws Throwable
+    {
+        foundCandidates = searchCandidates.execute(state, searchTerms);
+    }
+
+    @Then("^Command returns nothing$")
+    public void commandReturnsNothing() throws Throwable
+    {
+        Assert.assertNull(foundCandidates);
+    }
+
+    @Then("^The current intent in state repository is \"([^\"]*)\"$")
+    public void theCurrentIntentInStateRepositoryIs(String expectedIntent) throws Throwable
+    {
+        Assert.assertEquals(
+                expectedIntent,
+                stateRepository.get(state.getUserId(), state.getSessionId()).getIntent()
+        );
+    }
+
+    @Given("^A candidate repository$")
+    public void aCandidateRepository() throws Throwable
+    {
+        candidateRepository = new MockCandidateRepository();
+    }
+
+    @Given("^A candidate factory$")
+    public void aCandidateFactory() throws Throwable
+    {
+        candidateFactory = new DynamoDbCandidateFactory(
+                candidateGetter,
+                candidateParser,
+                candidateRepository,
+                outputFormatter
+        );
+    }
+
+    @Given("^A candidate document getter$")
+    public void aCandidateDocumentGetter() throws Throwable
+    {
+        candidateGetter = new MockCandidateGetter("<html></html>");
+    }
+
+    @Given("^An Alexa output formatter for searching$")
+    public void anAlexaOutputFormatterForSearching() throws Throwable
+    {
+        outputFormatter = new AlexaOutputFormatter();
+    }
+
+    @Then("^Searching command returned a text with points \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void searchingCommandReturnedATextWithPointsTo(String from, String to) throws Throwable
+    {
+        for (int number = Integer.parseInt(from); number <= Integer.parseInt(to); number ++)
+        {
+            Assert.assertThat(
+                    foundCandidates,
+                    containsString(
+                            String.format("%d.", number)
+                    )
+            );
+        }
+        Assert.assertThat(
+                foundCandidates,
+                not(
+                        containsString(
+                                String.format("%d.", Integer.parseInt(to) + 1)
+                        )
+                )
+        );
+    }
+
+    @Then("^Candidate repository contains exactly \"([^\"]*)\" candidates$")
+    public void candidateRepositoryContainsExactlyCandidates(String expected) throws Throwable
+    {
+        Assert.assertEquals(
+                Integer.parseInt(expected),
+                candidateRepository.countBySearch("no matters")
+        );
+    }
+
+    @Given("^A user state factory$")
+    public void aStateFactory() throws Throwable
+    {
+        stateFactory = new DynamoDbStateFactory(stateRepository);
+    }
+
+    @Given("^A state with the user as \"([^\"]*)\", session as \"([^\"]*)\" and intent as \"([^\"]*)\"$")
+    public void aStateWithTheUserAsSessionAsAndIntentAs(String userId, String sessionId, String intent) throws Throwable
+    {
+        state = stateFactory.create(userId, sessionId, intent, "no matters");
+    }
+
+    @Then("^The service returned no candidates$")
+    public void theServiceReturnedNoCandidates()
+    {
+        Assert.assertNull(candidates);
+    }
+}
