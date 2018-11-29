@@ -19,11 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchAndReadTest
+public class FullHandlersTest
 {
     private static int STARTING_CANDIDATE_INDEX = 1;
-    private static final String SEARCH_INTENT_NAME = "SearchCandidates";
-    private static final String RETRIEVE_INTENT_NAME = "RetrieveParagraphs";
     private static final int ONLY_ONE_CANDIDATE_INDEX = 3;
     private static final int PARAGRAPHS_GROUP_MEMBERS_COUNT_CONFIG = 10;
     private CandidatesSearch candidatesSearch;

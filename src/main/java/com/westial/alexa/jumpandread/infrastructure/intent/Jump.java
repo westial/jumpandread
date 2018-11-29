@@ -1,11 +1,10 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.amazon.ask.model.Slot;
-import com.westial.alexa.jumpandread.application.RetrieveParagraphsCommand;
+import com.westial.alexa.jumpandread.application.JumpCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 
@@ -13,19 +12,19 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Read extends SafeHandler
+public class Jump extends SafeIntent
 {
-    public static final String INTENT_NAME = "ReadCandidate";
-    private static final String CANDIDATE_INDEX_SLOT_NAME = "candidateIndex";
+    public static final String INTENT_NAME = "Jump";
     private final State state;
-    private final RetrieveParagraphsCommand retrieve;
+    private final JumpCommand retrieveNext;
 
-    public Read(
+    public Jump(
             State state,
-            Configuration config
+            Configuration config,
+            OutputFormatter outputFormatter
     )
     {
-        super(new AlexaOutputFormatter());
+        super(outputFormatter);
 
         this.state = state;
 
@@ -40,11 +39,10 @@ public class Read extends SafeHandler
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
-        retrieve = new RetrieveParagraphsCommand(
+        retrieveNext = new JumpCommand(
                 candidateFactory,
                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
         );
@@ -67,12 +65,18 @@ public class Read extends SafeHandler
                 current.getName(),
                 INTENT_NAME
         );
-        Slot candidateIndexSlot = current.getSlots().get(CANDIDATE_INDEX_SLOT_NAME);
-        int candidateIndex = Integer.parseInt(candidateIndexSlot.getValue());
 
-        speech = retrieve.execute(
-                state,
+        Integer candidateIndex = state.getCandidateIndex();
+
+        System.out.format(
+                "DEBUG: Current state candidate index %d\n",
                 candidateIndex
+        );
+
+        speech = outputFormatter.envelop(
+                retrieveNext.execute(
+                        state
+                )
         );
 
         return input.getResponseBuilder()

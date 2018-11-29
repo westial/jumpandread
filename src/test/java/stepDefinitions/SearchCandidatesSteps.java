@@ -190,8 +190,7 @@ public class SearchCandidatesSteps
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
     }
 

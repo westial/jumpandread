@@ -5,18 +5,15 @@ import com.westial.alexa.jumpandread.domain.*;
 public class NextCommand extends NextReadingCommandContract
 {
     private final int paragraphsGroup;
-    private final OutputFormatter outputFormatter;
     private final CandidateFactory candidateFactory;
 
     public NextCommand(
             CandidateFactory candidateFactory,
-            int paragraphsGroup,
-            OutputFormatter outputFormatter
+            int paragraphsGroup
     )
     {
         this.candidateFactory = candidateFactory;
         this.paragraphsGroup = paragraphsGroup;
-        this.outputFormatter = outputFormatter;
     }
 
     @Override
@@ -95,6 +92,10 @@ public class NextCommand extends NextReadingCommandContract
         );
 
         parse(candidate);
-        return dump(paragraphsGroup, candidate, null);
+        return dump(
+                paragraphsGroup,
+                candidate,
+                null
+        );
     }
 }

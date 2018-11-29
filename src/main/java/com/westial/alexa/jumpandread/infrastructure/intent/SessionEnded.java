@@ -1,9 +1,10 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.SessionEndedRequest;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -14,12 +15,15 @@ public class SessionEnded implements RequestHandler
 {
     public static final String INTENT_NAME = "SessionEnded";
     private final State state;
+    private final OutputFormatter outputFormatter;
 
     public SessionEnded(
-            State state
+            State state,
+            OutputFormatter outputFormatter
     )
     {
         this.state = state;
+        this.outputFormatter = outputFormatter;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -54,8 +58,10 @@ public class SessionEnded implements RequestHandler
                 break;
 
             default:
-                return (new Launch(state)).handle(input);
+                return (new Launch(state, outputFormatter)).handle(input);
         }
+
+        speech = outputFormatter.envelop(speech);
 
         return input.getResponseBuilder()
                 .withSpeech(speech)

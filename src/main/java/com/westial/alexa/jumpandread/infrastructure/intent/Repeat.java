@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
@@ -14,18 +14,19 @@ import java.util.Optional;
 import static com.amazon.ask.request.Predicates.intentName;
 
 // TODO can this class and Jump class be simplified? They look quite similar.
-public class Backward extends SafeHandler
+public class Repeat extends SafeIntent
 {
-    public static final String INTENT_NAME = "Backward";
+    public static final String INTENT_NAME = "Repeat";
     private final State state;
     private final NextReadingCommandContract retrieveCurrent;
 
-    public Backward(
+    public Repeat(
             State state,
-            Configuration config
+            Configuration config,
+            OutputFormatter outputFormatter
     )
     {
-        super(new AlexaOutputFormatter());
+        super(outputFormatter);
 
         this.state = state;
 
@@ -40,24 +41,20 @@ public class Backward extends SafeHandler
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
         retrieveCurrent = new RewindCommand(
                 candidateFactory,
                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                outputFormatter,
-                2
+                1
         );
     }
 
     public boolean canHandle(HandlerInput input)
     {
         return input.matches(
-                intentName(INTENT_NAME)
-                        .or(intentName("AMAZON.PreviousIntent")
-                        )
+                intentName(INTENT_NAME).or(intentName("AMAZON.RepeatIntent"))
         );
     }
 
@@ -81,8 +78,10 @@ public class Backward extends SafeHandler
                 candidateIndex
         );
 
-        speech = retrieveCurrent.execute(
-                state
+        speech = outputFormatter.envelop(
+                retrieveCurrent.execute(
+                        state
+                )
         );
 
         return input.getResponseBuilder()

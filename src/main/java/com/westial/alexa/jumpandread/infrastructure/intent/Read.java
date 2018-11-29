@@ -1,10 +1,11 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.application.JumpCommand;
+import com.amazon.ask.model.Slot;
+import com.westial.alexa.jumpandread.application.RetrieveParagraphsCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 
@@ -12,18 +13,20 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Jump extends SafeHandler
+public class Read extends SafeIntent
 {
-    public static final String INTENT_NAME = "Jump";
+    public static final String INTENT_NAME = "ReadCandidate";
+    private static final String CANDIDATE_INDEX_SLOT_NAME = "candidateIndex";
     private final State state;
-    private final JumpCommand retrieveNext;
+    private final RetrieveParagraphsCommand retrieve;
 
-    public Jump(
+    public Read(
             State state,
-            Configuration config
+            Configuration config,
+            OutputFormatter outputFormatter
     )
     {
-        super(new AlexaOutputFormatter());
+        super(outputFormatter);
 
         this.state = state;
 
@@ -38,14 +41,12 @@ public class Jump extends SafeHandler
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
-        retrieveNext = new JumpCommand(
+        retrieve = new RetrieveParagraphsCommand(
                 candidateFactory,
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                outputFormatter
+                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
         );
     }
 
@@ -66,16 +67,14 @@ public class Jump extends SafeHandler
                 current.getName(),
                 INTENT_NAME
         );
+        Slot candidateIndexSlot = current.getSlots().get(CANDIDATE_INDEX_SLOT_NAME);
+        int candidateIndex = Integer.parseInt(candidateIndexSlot.getValue());
 
-        Integer candidateIndex = state.getCandidateIndex();
-
-        System.out.format(
-                "DEBUG: Current state candidate index %d\n",
-                candidateIndex
-        );
-
-        speech = retrieveNext.execute(
-                state
+        speech = outputFormatter.envelop(
+                retrieve.execute(
+                        state,
+                        candidateIndex
+                )
         );
 
         return input.getResponseBuilder()

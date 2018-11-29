@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -21,17 +21,18 @@ public class Search implements RequestHandler
 
     private final CandidatesSearch candidatesSearch;
     private final State state;
-    private final AlexaOutputFormatter outputFormatter;
+    private final OutputFormatter outputFormatter;
 
     public Search(
             State state,
             Configuration config,
-            CandidatesSearchFactory searchFactory
+            CandidatesSearchFactory searchFactory,
+            OutputFormatter outputFormatter
     )
     {
         this.state = state;
+        this.outputFormatter = outputFormatter;
         CandidateParser candidateParser = new JsoupCandidateParser();
-        outputFormatter = new AlexaOutputFormatter();
         CandidateGetter candidateGetter = new UnirestCandidateGetter(
                 config.retrieve("HTTP_USER_AGENT")
         );
@@ -42,8 +43,7 @@ public class Search implements RequestHandler
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
         candidatesSearch = searchFactory.create(config, candidateFactory);

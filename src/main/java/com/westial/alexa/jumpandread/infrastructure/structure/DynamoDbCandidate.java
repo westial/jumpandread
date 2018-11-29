@@ -11,17 +11,17 @@ public class DynamoDbCandidate extends Candidate
 {
     public DynamoDbCandidate()
     {
-        super(null, null, null, null, null, null, null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
-    public DynamoDbCandidate(String id, Integer index, String userId, String sessionId, String searchId, String title, String url, String description, CandidateGetter getter, CandidateParser parser, CandidateRepository repository, OutputFormatter outputFormatter, Integer paragraphPosition)
+    public DynamoDbCandidate(String id, Integer index, String userId, String sessionId, String searchId, String title, String url, String description, CandidateGetter getter, CandidateParser parser, CandidateRepository repository, Integer paragraphPosition)
     {
-        super(id, index, userId, sessionId, searchId, title, url, description, getter, parser, repository, outputFormatter, paragraphPosition);
+        super(id, index, userId, sessionId, searchId, title, url, description, getter, parser, repository, paragraphPosition);
     }
 
-    public DynamoDbCandidate(String id, int index, String userId, String sessionId, String searchId, CandidateGetter getter, CandidateParser parser, CandidateRepository repository, OutputFormatter outputFormatter)
+    public DynamoDbCandidate(String id, int index, String userId, String sessionId, String searchId, CandidateGetter getter, CandidateParser parser, CandidateRepository repository)
     {
-        super(id, index, userId, sessionId, searchId, getter, parser, repository, outputFormatter);
+        super(id, index, userId, sessionId, searchId, getter, parser, repository);
     }
 
     @Override

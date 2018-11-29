@@ -1,9 +1,6 @@
 package com.westial.alexa.jumpandread.application;
 
-import com.westial.alexa.jumpandread.domain.Candidate;
-import com.westial.alexa.jumpandread.domain.CandidatesSearch;
-import com.westial.alexa.jumpandread.domain.State;
-import com.westial.alexa.jumpandread.domain.User;
+import com.westial.alexa.jumpandread.domain.*;
 
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class SearchCandidatesCommand
         for(Candidate candidate: candidates)
         {
             candidate.persist();
-            candidatesList.append(candidate.buildListing());
+            candidatesList.append(candidate.buildListing(OutputFormatter.STRONG_TOKEN));
         }
         return candidatesList.toString();
     }

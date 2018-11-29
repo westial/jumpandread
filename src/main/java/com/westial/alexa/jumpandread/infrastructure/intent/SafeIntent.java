@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -9,11 +9,11 @@ import com.westial.alexa.jumpandread.application.CannotContinueMandatoryReadExce
 
 import java.util.Optional;
 
-abstract class SafeHandler implements RequestHandler
+abstract class SafeIntent implements RequestHandler
 {
     protected final OutputFormatter outputFormatter;
 
-    public SafeHandler(OutputFormatter outputFormatter)
+    public SafeIntent(OutputFormatter outputFormatter)
     {
         this.outputFormatter = outputFormatter;
     }

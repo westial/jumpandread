@@ -8,11 +8,8 @@ import com.amazon.ask.model.services.Serializer;
 import com.amazon.ask.util.JacksonSerializer;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.westial.alexa.jumpandread.domain.Configuration;
-import com.westial.alexa.jumpandread.domain.State;
-import com.westial.alexa.jumpandread.domain.StateFactory;
-import com.westial.alexa.jumpandread.domain.StateRepository;
-import com.westial.alexa.jumpandread.infrastructure.handler.*;
+import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 
 import java.io.IOException;
@@ -34,6 +31,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
     protected CandidatesSearchFactory searchFactory;
 
+    private OutputFormatter outputFormatter;
+
     public final void jumpAndRead(InputStream input, OutputStream output, Context context) throws IOException
     {
         ResponseEnvelope response;
@@ -51,18 +50,20 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 request.getRequest().toString()
         );
 
+        outputFormatter = new AlexaOutputFormatter();
+
         skill = Skills.standard()
                 .addRequestHandlers(
-                        new Backward(state, config),
-                        new Continue(state, config),
-                        new Jump(state, config),
-                        new Launch(state),
-                        new Pause(state),
-                        new Read(state, config),
-                        new Repeat(state, config),
-                        new Search(state, config, searchFactory),
-                        new SessionEnded(state),
-                        new Stop(state)
+                        new Backward(state, config, outputFormatter),
+                        new Continue(state, config, outputFormatter),
+                        new Jump(state, config, outputFormatter),
+                        new Launch(state, outputFormatter),
+                        new Pause(state, outputFormatter),
+                        new Read(state, config, outputFormatter),
+                        new Repeat(state, config, outputFormatter),
+                        new Search(state, config, searchFactory, outputFormatter),
+                        new SessionEnded(state, outputFormatter),
+                        new Stop(state, outputFormatter)
                 )
                 .build();
 

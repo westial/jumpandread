@@ -5,20 +5,17 @@ import com.westial.alexa.jumpandread.domain.*;
 public class RewindCommand extends NextReadingCommandContract
 {
     private final int paragraphsGroup;
-    private final OutputFormatter outputFormatter;
     private final int backSteps;
     private final CandidateFactory candidateFactory;
 
     public RewindCommand(
             CandidateFactory candidateFactory,
             int paragraphsGroup,
-            OutputFormatter outputFormatter,
             int backSteps
     )
     {
         this.candidateFactory = candidateFactory;
         this.paragraphsGroup = paragraphsGroup;
-        this.outputFormatter = outputFormatter;
         this.backSteps = backSteps;
     }
 

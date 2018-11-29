@@ -1,6 +1,7 @@
 package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.domain.Candidate;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
 
 public abstract class ReadingCommandContract
 {
@@ -13,12 +14,20 @@ public abstract class ReadingCommandContract
         candidate.parse();
     }
 
-    protected String dump(int paragraphsGroup, Candidate candidate, String introduction)
+    String dump(
+            int paragraphsGroup,
+            Candidate candidate,
+            String introduction
+    )
     {
         if (candidate.isFinished())
         {
             throw new NoReadingElements("Finished Candidate");
         }
-        return candidate.dump(paragraphsGroup, introduction);
+        return candidate.dump(
+                paragraphsGroup,
+                introduction,
+                OutputFormatter.STRONG_TOKEN
+        );
     }
 }

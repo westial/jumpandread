@@ -49,8 +49,7 @@ public class DuckDuckGoCandidatesSearchTest
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
         CandidatesSearchFactory factory = new DuckDuckGoCandidatesSearchFactory();

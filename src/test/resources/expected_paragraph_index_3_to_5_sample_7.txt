@@ -1,1 +1,1 @@
-<speak>Lo 3 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time="1500ms"/>djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time="1500ms"/>Lo 4 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time="1500ms"/>djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time="1500ms"/></speak>
+Lo 3 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}Lo 4 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}

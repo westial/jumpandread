@@ -1,8 +1,9 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -12,13 +13,16 @@ import static com.amazon.ask.request.Predicates.intentName;
 public class Pause implements RequestHandler {
 
     private final State state;
+    private final OutputFormatter outputFormatter;
     public static final String INTENT_NAME = "Pause";
 
     public Pause(
-            State state
+            State state,
+            OutputFormatter outputFormatter
     )
     {
         this.state = state;
+        this.outputFormatter = outputFormatter;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class Pause implements RequestHandler {
                 "<break strength=\"strong\"/>: <break strength=\"x-strong\"/>" +
                 "<emphasis level=\"strong\">Alexa, continuar</emphasis>" +
                 "</amazon:effect>";
+        speech = outputFormatter.envelop(speech);
         return input.getResponseBuilder()
                 .withSpeech(speech)
                 .withReprompt(speech)

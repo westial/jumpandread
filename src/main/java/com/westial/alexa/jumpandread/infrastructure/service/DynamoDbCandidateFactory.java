@@ -8,20 +8,17 @@ public class DynamoDbCandidateFactory implements CandidateFactory
     private final CandidateGetter getter;
     private final CandidateParser parser;
     private final CandidateRepository repository;
-    private final OutputFormatter outputFormatter;
     private static final int FIRST_PARAGRAPH_POSITION = 0;
 
     public DynamoDbCandidateFactory(
             CandidateGetter getter,
             CandidateParser parser,
-            CandidateRepository repository,
-            OutputFormatter outputFormatter
+            CandidateRepository repository
     )
     {
         this.getter = getter;
         this.parser = parser;
         this.repository = repository;
-        this.outputFormatter = outputFormatter;
     }
 
     @Override
@@ -46,7 +43,6 @@ public class DynamoDbCandidateFactory implements CandidateFactory
                 getter,
                 parser,
                 repository,
-                outputFormatter,
                 FIRST_PARAGRAPH_POSITION
         );
     }
@@ -62,8 +58,7 @@ public class DynamoDbCandidateFactory implements CandidateFactory
                 searchId,
                 getter,
                 parser,
-                repository,
-                outputFormatter
+                repository
         );
     }
 }

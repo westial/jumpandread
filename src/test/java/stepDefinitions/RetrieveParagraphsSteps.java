@@ -120,7 +120,6 @@ public class RetrieveParagraphsSteps
                 candidateGetter,
                 candidateParser,
                 candidateRepository,
-                outputFormatter,
                 Integer.parseInt(candidateData.get(index).get(7))
         );
     }
@@ -144,8 +143,7 @@ public class RetrieveParagraphsSteps
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
     }
 
@@ -203,8 +201,7 @@ public class RetrieveParagraphsSteps
     {
         jumpCommand = new JumpCommand(
                 candidateFactory,
-                paragraphsGroup,
-                outputFormatter
+                paragraphsGroup
         );
     }
 

@@ -27,7 +27,6 @@ public class UnirestCandidateGetterTest
                 null,
                 null,
                 null,
-                null,
                 null
         );
 

@@ -26,7 +26,6 @@ public abstract class Candidate
     private final CandidateGetter getter;
     private final CandidateParser parser;
     private final CandidateRepository repository;
-    private final OutputFormatter outputFormatter;
 
     public Candidate(
             String id,
@@ -40,7 +39,6 @@ public abstract class Candidate
             CandidateGetter getter,
             CandidateParser parser,
             CandidateRepository repository,
-            OutputFormatter outputFormatter,
             Integer paragraphPosition
     )
     {
@@ -55,7 +53,6 @@ public abstract class Candidate
         this.getter = getter;
         this.parser = parser;
         this.repository = repository;
-        this.outputFormatter = outputFormatter;
         this.paragraphPosition = paragraphPosition;
     }
 
@@ -67,8 +64,7 @@ public abstract class Candidate
             String searchId,
             CandidateGetter getter,
             CandidateParser parser,
-            CandidateRepository repository,
-            OutputFormatter outputFormatter
+            CandidateRepository repository
     )
     {
         this(
@@ -83,7 +79,6 @@ public abstract class Candidate
                 getter,
                 parser,
                 repository,
-                outputFormatter,
                 null
         );
         Candidate candidate = repository.get(
@@ -134,7 +129,7 @@ public abstract class Candidate
         persist();
     }
 
-    public String dump(int number, String introduction)
+    public String dump(int number, String introduction, String strongToken)
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();
@@ -149,7 +144,7 @@ public abstract class Candidate
                     String.format(
                             "%s%s",
                             introduction,
-                            OutputFormatter.STRONG_TOKEN
+                            strongToken
                     )
             );
         }
@@ -161,12 +156,12 @@ public abstract class Candidate
                     String.format(
                             "%s%s",
                             paragraph.getContent(),
-                            OutputFormatter.STRONG_TOKEN
+                            strongToken
                     )
             );
         }
         this.persist();
-        return outputFormatter.envelop(text.toString());
+        return text.toString();
     }
 
     public boolean isFinished()
@@ -205,13 +200,13 @@ public abstract class Candidate
         return title;
     }
 
-    public String buildListing()
+    public String buildListing(String separatorToken)
     {
         return String.format(
                 "%d. %s.%s",
                 index,
                 title,
-                OutputFormatter.STRONG_TOKEN
+                separatorToken
         );
     }
 

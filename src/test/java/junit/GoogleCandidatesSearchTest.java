@@ -39,8 +39,7 @@ public class GoogleCandidatesSearchTest
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
         engine = new GoogleCandidatesSearch(

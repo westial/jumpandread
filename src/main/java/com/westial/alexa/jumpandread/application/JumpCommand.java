@@ -5,18 +5,15 @@ import com.westial.alexa.jumpandread.domain.*;
 public class JumpCommand extends ReadingCommandContract
 {
     private final int paragraphsGroup;
-    private final OutputFormatter outputFormatter;
     private final CandidateFactory candidateFactory;
 
     public JumpCommand(
             CandidateFactory candidateFactory,
-            int paragraphsGroup,
-            OutputFormatter outputFormatter
+            int paragraphsGroup
     )
     {
         this.candidateFactory = candidateFactory;
         this.paragraphsGroup = paragraphsGroup;
-        this.outputFormatter = outputFormatter;
     }
 
     public String execute(State state) throws MandatorySearchException

@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.handler;
+package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import static com.amazon.ask.request.Predicates.intentName;
 
 // TODO can this class and Jump class be simplified? They look quite similar.
-public class Continue extends SafeHandler
+public class Continue extends SafeIntent
 {
     public static final String INTENT_NAME = "Continue";
     private final State state;
@@ -23,10 +23,11 @@ public class Continue extends SafeHandler
 
     public Continue(
             State state,
-            Configuration config
+            Configuration config,
+            OutputFormatter outputFormatter
     )
     {
-        super(new AlexaOutputFormatter());
+        super(outputFormatter);
 
         this.state = state;
 
@@ -41,8 +42,7 @@ public class Continue extends SafeHandler
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,
                 candidateParser,
-                candidateRepository,
-                outputFormatter
+                candidateRepository
         );
 
         if (null != state.getIntent() && state.getIntent().equals(Pause.INTENT_NAME))
@@ -50,7 +50,6 @@ public class Continue extends SafeHandler
             retrieveCurrent = new RewindCommand(
                     candidateFactory,
                     Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                    outputFormatter,
                     1
             );
         }
@@ -58,8 +57,7 @@ public class Continue extends SafeHandler
         {
             retrieveCurrent = new NextCommand(
                     candidateFactory,
-                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                    outputFormatter
+                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
             );
         }
 
@@ -96,8 +94,10 @@ public class Continue extends SafeHandler
                 candidateIndex
         );
 
-        speech = retrieveCurrent.execute(
-                state
+        speech = outputFormatter.envelop(
+                retrieveCurrent.execute(
+                        state
+                )
         );
 
         return input.getResponseBuilder()
