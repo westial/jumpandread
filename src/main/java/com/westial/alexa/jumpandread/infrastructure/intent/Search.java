@@ -7,8 +7,8 @@ import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.westial.alexa.jumpandread.application.SearchCandidatesCommand;
-import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
 
@@ -19,34 +19,19 @@ public class Search implements RequestHandler
     public static final String INTENT_NAME = "SearchCandidates";
     private static final String TERMS_SLOT_NAME = "searchTerms";
 
-    private final CandidatesSearch candidatesSearch;
+    private final SearchCandidatesCommand searchCommand;
     private final State state;
     private final OutputFormatter outputFormatter;
 
     public Search(
             State state,
-            Configuration config,
-            CandidatesSearchFactory searchFactory,
+            SearchCandidatesCommand searchCommand,
             OutputFormatter outputFormatter
     )
     {
         this.state = state;
+        this.searchCommand = searchCommand;
         this.outputFormatter = outputFormatter;
-        CandidateParser candidateParser = new JsoupCandidateParser();
-        CandidateGetter candidateGetter = new UnirestCandidateGetter(
-                config.retrieve("HTTP_USER_AGENT")
-        );
-
-        CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
-                config.retrieve("CANDIDATE_TABLE_NAME")
-        );
-        CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-
-        candidatesSearch = searchFactory.create(config, candidateFactory);
     }
 
     public boolean canHandle(HandlerInput input)
@@ -76,6 +61,8 @@ public class Search implements RequestHandler
 
             speech = "¿Qué quieres buscar?";
 
+            speech = outputFormatter.envelop(speech);
+
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
                     .withSpeech(speech)
@@ -83,7 +70,7 @@ public class Search implements RequestHandler
                     .build();
         }
 
-        speech = outputFormatter.envelop(findCandidates(searchTerms));
+        speech = searchCommand.execute(state, searchTerms);
 
         if (null == speech)
         {
@@ -95,6 +82,8 @@ public class Search implements RequestHandler
 
             speech += "¿Quieres probar a buscar otra cosa?";
 
+            speech = outputFormatter.envelop(speech);
+
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
                     .withSpeech(speech)
@@ -102,18 +91,11 @@ public class Search implements RequestHandler
                     .build();
         }
 
+        speech = outputFormatter.envelop(speech);
+
         return input.getResponseBuilder()
                 .withSpeech(speech)
                 .withReprompt(speech)
                 .build();
-    }
-
-    protected String findCandidates(String terms)
-    {
-        System.out.format("DEBUG: Searching with terms as %s\n", terms);
-        SearchCandidatesCommand searchCommand = new SearchCandidatesCommand(
-                candidatesSearch
-        );
-        return searchCommand.execute(state, terms);
     }
 }

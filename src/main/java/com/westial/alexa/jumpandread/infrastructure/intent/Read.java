@@ -5,9 +5,9 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
-import com.westial.alexa.jumpandread.application.RetrieveParagraphsCommand;
-import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.application.ReadCommand;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
 
@@ -18,11 +18,11 @@ public class Read extends SafeIntent
     public static final String INTENT_NAME = "ReadCandidate";
     private static final String CANDIDATE_INDEX_SLOT_NAME = "candidateIndex";
     private final State state;
-    private final RetrieveParagraphsCommand retrieve;
+    private final ReadCommand retrieveCommand;
 
     public Read(
             State state,
-            Configuration config,
+            ReadCommand retrieveCommand,
             OutputFormatter outputFormatter
     )
     {
@@ -30,24 +30,7 @@ public class Read extends SafeIntent
 
         this.state = state;
 
-        CandidateParser candidateParser = new JsoupCandidateParser();
-        CandidateGetter candidateGetter = new UnirestCandidateGetter(
-                config.retrieve("HTTP_USER_AGENT")
-        );
-
-        CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
-                config.retrieve("CANDIDATE_TABLE_NAME")
-        );
-        CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-
-        retrieve = new RetrieveParagraphsCommand(
-                candidateFactory,
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        this.retrieveCommand = retrieveCommand;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -71,7 +54,7 @@ public class Read extends SafeIntent
         int candidateIndex = Integer.parseInt(candidateIndexSlot.getValue());
 
         speech = outputFormatter.envelop(
-                retrieve.execute(
+                retrieveCommand.execute(
                         state,
                         candidateIndex
                 )

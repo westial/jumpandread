@@ -2,12 +2,12 @@ package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.domain.*;
 
-public class RetrieveParagraphsCommand extends ReadingCommandContract
+public class ReadCommand extends ReadingCommandContract
 {
     private final int paragraphsGroup;
     private final CandidateFactory candidateFactory;
 
-    public RetrieveParagraphsCommand(
+    public ReadCommand(
             CandidateFactory candidateFactory,
             int paragraphsGroup
     )

@@ -5,8 +5,8 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.westial.alexa.jumpandread.application.JumpCommand;
-import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
 
@@ -16,11 +16,11 @@ public class Jump extends SafeIntent
 {
     public static final String INTENT_NAME = "Jump";
     private final State state;
-    private final JumpCommand retrieveNext;
+    private final JumpCommand jumpCommand;
 
     public Jump(
             State state,
-            Configuration config,
+            JumpCommand jumpCommand,
             OutputFormatter outputFormatter
     )
     {
@@ -28,24 +28,7 @@ public class Jump extends SafeIntent
 
         this.state = state;
 
-        CandidateParser candidateParser = new JsoupCandidateParser();
-        CandidateGetter candidateGetter = new UnirestCandidateGetter(
-                config.retrieve("HTTP_USER_AGENT")
-        );
-
-        CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
-                config.retrieve("CANDIDATE_TABLE_NAME")
-        );
-        CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-
-        retrieveNext = new JumpCommand(
-                candidateFactory,
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        this.jumpCommand = jumpCommand;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -74,7 +57,7 @@ public class Jump extends SafeIntent
         );
 
         speech = outputFormatter.envelop(
-                retrieveNext.execute(
+                jumpCommand.execute(
                         state
                 )
         );

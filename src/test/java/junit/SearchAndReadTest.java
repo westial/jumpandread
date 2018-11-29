@@ -86,7 +86,7 @@ public class SearchAndReadTest
         );
 
         read(
-                "<speak>Resultado de búsqueda número 3<break strength=\"x-strong\"/>titulado<break strength=\"x-strong\"/>Candidate title<break time=\"1500ms\"/>Main title<break time=\"1500ms\"/>Hey how are you?<break time=\"1500ms\"/>Lo 1 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time=\"1500ms\"/>jaume djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time=\"1500ms\"/>Lo 2 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time=\"1500ms\"/>djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time=\"1500ms\"/>Whats up bro!<break time=\"1500ms\"/>Lo 3 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time=\"1500ms\"/>djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time=\"1500ms\"/>Lo 4 rewfksdfj dkgkdjnjfgk jhdfkjghfk<break time=\"1500ms\"/>djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.<break time=\"1500ms\"/></speak>",
+                "Resultado de búsqueda número 3, titulado, Candidate title{{ . }}Main title{{ . }}Hey how are you?{{ . }}Lo 1 rewfksdfj dkgkdjnjfgk jhdfkjghfk. jaume djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}Lo 2 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}Whats up bro!{{ . }}Lo 3 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}Lo 4 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}",
                 PARAGRAPHS_GROUP_MEMBERS_COUNT_CONFIG
         );
     }
@@ -117,7 +117,7 @@ public class SearchAndReadTest
         );
 
         read(
-                "<speak>Resultado de búsqueda número 3<break strength=\"x-strong\"/>titulado<break strength=\"x-strong\"/>Candidate title<break time=\"1500ms\"/>1<break time=\"1500ms\"/>2<break time=\"1500ms\"/></speak>",
+                "Resultado de búsqueda número 3, titulado, Candidate title{{ . }}1{{ . }}2{{ . }}",
                 paragraphsCount
         );
 
@@ -131,7 +131,7 @@ public class SearchAndReadTest
         );
 
         doNext(
-                "<speak>3<break time=\"1500ms\"/>4<break time=\"1500ms\"/></speak>",
+                "3{{ . }}4{{ . }}",
                 paragraphsCount
         );
 
@@ -145,7 +145,7 @@ public class SearchAndReadTest
         );
 
         doRepeat(
-                "<speak>3<break time=\"1500ms\"/>4<break time=\"1500ms\"/></speak>",
+                "3{{ . }}4{{ . }}",
                 paragraphsCount
         );
 
@@ -159,7 +159,7 @@ public class SearchAndReadTest
         );
 
         jump(
-                "<speak>7<break time=\"1500ms\"/>8<break time=\"1500ms\"/></speak>",
+                "7{{ . }}8{{ . }}",
                 paragraphsCount
         );
 
@@ -173,7 +173,7 @@ public class SearchAndReadTest
         );
 
         doBackward(
-                "<speak>5<break time=\"1500ms\"/>6<break time=\"1500ms\"/></speak>",
+                "5{{ . }}6{{ . }}",
                 paragraphsCount
         );
 
@@ -187,7 +187,7 @@ public class SearchAndReadTest
         );
 
         doNext(
-                "<speak>7<break time=\"1500ms\"/>8<break time=\"1500ms\"/></speak>",
+                "7{{ . }}8{{ . }}",
                 paragraphsCount
         );
 
@@ -201,7 +201,7 @@ public class SearchAndReadTest
         );
 
         jump(
-                "<speak>11<break time=\"1500ms\"/></speak>",
+                "11{{ . }}",
                 paragraphsCount
         );
 
@@ -307,7 +307,7 @@ public class SearchAndReadTest
     {
         State state = stateFactory.create(user.getId(), user.getSessionId());
 
-        RetrieveParagraphsCommand retrieve = new RetrieveParagraphsCommand(
+        ReadCommand retrieve = new ReadCommand(
                 candidateFactory,
                 paragraphsCount
         );

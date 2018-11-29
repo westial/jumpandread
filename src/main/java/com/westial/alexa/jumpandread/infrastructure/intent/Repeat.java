@@ -4,10 +4,9 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.application.NextReadingCommandContract;
 import com.westial.alexa.jumpandread.application.RewindCommand;
-import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
 
@@ -18,37 +17,18 @@ public class Repeat extends SafeIntent
 {
     public static final String INTENT_NAME = "Repeat";
     private final State state;
-    private final NextReadingCommandContract retrieveCurrent;
+    private final RewindCommand rewindCommand;
 
     public Repeat(
             State state,
-            Configuration config,
+            RewindCommand rewindCommand,
             OutputFormatter outputFormatter
     )
     {
         super(outputFormatter);
 
         this.state = state;
-
-        CandidateParser candidateParser = new JsoupCandidateParser();
-        CandidateGetter candidateGetter = new UnirestCandidateGetter(
-                config.retrieve("HTTP_USER_AGENT")
-        );
-
-        CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
-                config.retrieve("CANDIDATE_TABLE_NAME")
-        );
-        CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-
-        retrieveCurrent = new RewindCommand(
-                candidateFactory,
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                1
-        );
+        this.rewindCommand = rewindCommand;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -79,7 +59,7 @@ public class Repeat extends SafeIntent
         );
 
         speech = outputFormatter.envelop(
-                retrieveCurrent.execute(
+                rewindCommand.execute(
                         state
                 )
         );

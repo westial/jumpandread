@@ -4,11 +4,9 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.application.RewindCommand;
-import com.westial.alexa.jumpandread.application.NextCommand;
 import com.westial.alexa.jumpandread.application.NextReadingCommandContract;
-import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
 
@@ -19,48 +17,18 @@ public class Continue extends SafeIntent
 {
     public static final String INTENT_NAME = "Continue";
     private final State state;
-    private final NextReadingCommandContract retrieveCurrent;
+    private final NextReadingCommandContract continueCommand;
 
     public Continue(
             State state,
-            Configuration config,
+            NextReadingCommandContract continueCommand,
             OutputFormatter outputFormatter
     )
     {
         super(outputFormatter);
 
         this.state = state;
-
-        CandidateParser candidateParser = new JsoupCandidateParser();
-        CandidateGetter candidateGetter = new UnirestCandidateGetter(
-                config.retrieve("HTTP_USER_AGENT")
-        );
-
-        CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
-                config.retrieve("CANDIDATE_TABLE_NAME")
-        );
-        CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-
-        if (null != state.getIntent() && state.getIntent().equals(Pause.INTENT_NAME))
-        {
-            retrieveCurrent = new RewindCommand(
-                    candidateFactory,
-                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                    1
-            );
-        }
-        else
-        {
-            retrieveCurrent = new NextCommand(
-                    candidateFactory,
-                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-            );
-        }
-
+        this.continueCommand = continueCommand;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -95,7 +63,7 @@ public class Continue extends SafeIntent
         );
 
         speech = outputFormatter.envelop(
-                retrieveCurrent.execute(
+                continueCommand.execute(
                         state
                 )
         );

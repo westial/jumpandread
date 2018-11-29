@@ -36,7 +36,7 @@ public class RetrieveParagraphsSteps
     private RuntimeException commandException;
     private OutputFormatter outputFormatter;
     private int paragraphsGroup;
-    private RetrieveParagraphsCommand retrieveCommand;
+    private ReadCommand retrieveCommand;
     private String userId;
     private String sessionId;
     private String searchId;
@@ -150,7 +150,7 @@ public class RetrieveParagraphsSteps
     @Given("^A retrieving paragraphs command$")
     public void aRetrievingParagraphsCommand() throws Throwable
     {
-        retrieveCommand = new RetrieveParagraphsCommand(
+        retrieveCommand = new ReadCommand(
                 candidateFactory,
                 paragraphsGroup
         );
