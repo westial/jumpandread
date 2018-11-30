@@ -36,7 +36,7 @@ public class SearchCandidatesCommand
         for(Candidate candidate: candidates)
         {
             candidate.persist();
-            candidatesList.append(candidate.buildListing(OutputFormatter.STRONG_TOKEN));
+            candidatesList.append(candidate.buildListing(Presenter.STRONG_TOKEN));
         }
         return candidatesList.toString();
     }

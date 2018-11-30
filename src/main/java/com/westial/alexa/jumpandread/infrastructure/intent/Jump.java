@@ -5,7 +5,7 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.westial.alexa.jumpandread.application.JumpCommand;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -21,10 +21,10 @@ public class Jump extends SafeIntent
     public Jump(
             State state,
             JumpCommand jumpCommand,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
-        super(outputFormatter);
+        super(presenter);
 
         this.state = state;
 
@@ -40,7 +40,6 @@ public class Jump extends SafeIntent
     public Optional<Response> safeHandle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        String speech;
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -56,15 +55,15 @@ public class Jump extends SafeIntent
                 candidateIndex
         );
 
-        speech = outputFormatter.envelop(
+        presenter.addText(
                 jumpCommand.execute(
                         state
                 )
         );
 
         return input.getResponseBuilder()
-                .withSpeech(speech)
-                .withReprompt(speech)
+                .withSpeech(presenter.output())
+                .withReprompt(presenter.output())
                 .build();
     }
 }

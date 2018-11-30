@@ -6,7 +6,7 @@ import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.westial.alexa.jumpandread.application.ReadCommand;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -23,10 +23,10 @@ public class Read extends SafeIntent
     public Read(
             State state,
             ReadCommand retrieveCommand,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
-        super(outputFormatter);
+        super(presenter);
 
         this.state = state;
 
@@ -42,7 +42,6 @@ public class Read extends SafeIntent
     public Optional<Response> safeHandle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        String speech;
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -53,7 +52,7 @@ public class Read extends SafeIntent
         Slot candidateIndexSlot = current.getSlots().get(CANDIDATE_INDEX_SLOT_NAME);
         int candidateIndex = Integer.parseInt(candidateIndexSlot.getValue());
 
-        speech = outputFormatter.envelop(
+        presenter.addText(
                 retrieveCommand.execute(
                         state,
                         candidateIndex
@@ -61,8 +60,8 @@ public class Read extends SafeIntent
         );
 
         return input.getResponseBuilder()
-                .withSpeech(speech)
-                .withReprompt(speech)
+                .withSpeech(presenter.output())
+                .withReprompt(presenter.output())
                 .build();
     }
 }

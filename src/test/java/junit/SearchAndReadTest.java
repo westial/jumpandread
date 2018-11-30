@@ -34,7 +34,7 @@ public class SearchAndReadTest
     private CandidateParser candidateParser;
     private CandidateRepository candidateRepository;
     private CandidateGetter candidateGetter;
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
     private StateFactory stateFactory;
 
     @Before
@@ -46,7 +46,7 @@ public class SearchAndReadTest
     private void resetDependencies()
     {
         candidateParser = new JsoupCandidateParser();
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(new MockTranslator());
 
         user = new User("user234", "session455");
         candidateRepository = new DynamoDbCandidateRepository(

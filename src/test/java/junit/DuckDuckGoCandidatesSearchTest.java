@@ -18,7 +18,7 @@ public class DuckDuckGoCandidatesSearchTest
     private CandidatesSearch engine;
     private CandidateFactory candidateFactory;
     private CandidateGetter candidateGetter;
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
     private CandidateParser candidateParser;
     private CandidateRepository candidateRepository;
 
@@ -44,7 +44,7 @@ public class DuckDuckGoCandidatesSearchTest
         candidateParser = new MockCandidateParser();
         candidateRepository = new MockCandidateRepository();
         candidateGetter = new UnirestCandidateGetter("fakebrowser");
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(new MockTranslator());
 
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,

@@ -26,7 +26,7 @@ public class SearchCandidatesSteps
     private CandidateParser candidateParser;
     private CandidateRepository candidateRepository;
     private CandidateGetter candidateGetter;
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
     private StateFactory stateFactory;
     private State state;
     private DuckDuckGoResultParser pageParser;
@@ -203,7 +203,7 @@ public class SearchCandidatesSteps
     @Given("^An Alexa output formatter for searching$")
     public void anAlexaOutputFormatterForSearching() throws Throwable
     {
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(new MockTranslator());
     }
 
     @Then("^Searching command returned a text with points \"([^\"]*)\" to \"([^\"]*)\"$")

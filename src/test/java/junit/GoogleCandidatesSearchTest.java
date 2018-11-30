@@ -2,10 +2,7 @@ package junit;
 
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.*;
-import com.westial.alexa.jumpandread.infrastructure.service.AlexaOutputFormatter;
-import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbCandidateFactory;
-import com.westial.alexa.jumpandread.infrastructure.service.GoogleCandidatesSearch;
-import com.westial.alexa.jumpandread.infrastructure.service.UnirestCandidateGetter;
+import com.westial.alexa.jumpandread.infrastructure.service.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,7 +21,7 @@ public class GoogleCandidatesSearchTest
     private CandidatesSearch engine;
     private CandidateFactory candidateFactory;
     private CandidateGetter candidateGetter;
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
     private CandidateParser candidateParser;
     private CandidateRepository candidateRepository;
 
@@ -34,7 +31,7 @@ public class GoogleCandidatesSearchTest
         candidateParser = new MockCandidateParser();
         candidateRepository = new MockCandidateRepository();
         candidateGetter = new UnirestCandidateGetter("fakebrowser");
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(new MockTranslator());
 
         candidateFactory = new DynamoDbCandidateFactory(
                 candidateGetter,

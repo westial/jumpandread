@@ -4,7 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.SessionEndedRequest;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -15,15 +15,15 @@ public class SessionEnded implements RequestHandler
 {
     public static final String INTENT_NAME = "SessionEnded";
     private final State state;
-    private final OutputFormatter outputFormatter;
+    private final Presenter presenter;
 
     public SessionEnded(
             State state,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
         this.state = state;
-        this.outputFormatter = outputFormatter;
+        this.presenter = presenter;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -34,7 +34,6 @@ public class SessionEnded implements RequestHandler
     public Optional<Response> handle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        String speech;
         SessionEndedRequest request = (SessionEndedRequest) input
                 .getRequestEnvelope().getRequest();
 
@@ -46,7 +45,9 @@ public class SessionEnded implements RequestHandler
         switch (request.getReason())
         {
             case ERROR:
-                speech = "Ha ocurrido un error y la sesión se va a cerrar.";
+                presenter.addText(
+                        "Ha ocurrido un error y la sesión se va a cerrar."
+                );
                 System.out.format(
                         "ERROR: Session error due to %s\n",
                         request.getError()
@@ -54,17 +55,15 @@ public class SessionEnded implements RequestHandler
                 break;
 
             case USER_INITIATED:
-                speech = "Hasta pronto.";
+                presenter.addText("Hasta pronto.");
                 break;
 
             default:
-                return (new Launch(state, outputFormatter)).handle(input);
+                return (new Launch(state, presenter)).handle(input);
         }
 
-        speech = outputFormatter.envelop(speech);
-
         return input.getResponseBuilder()
-                .withSpeech(speech)
+                .withSpeech(presenter.output())
                 .withShouldEndSession(true)
                 .build();
     }

@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.domain.Candidate;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 
 public abstract class ReadingCommandContract
 {
@@ -27,7 +27,7 @@ public abstract class ReadingCommandContract
         return candidate.dump(
                 paragraphsGroup,
                 introduction,
-                OutputFormatter.STRONG_TOKEN
+                Presenter.STRONG_TOKEN
         );
     }
 }

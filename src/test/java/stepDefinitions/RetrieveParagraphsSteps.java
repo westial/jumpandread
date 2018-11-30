@@ -1,15 +1,15 @@
 package stepDefinitions;
 
-import com.westial.alexa.jumpandread.application.*;
+import com.westial.alexa.jumpandread.application.IncompleteStateMandatorySearchException;
+import com.westial.alexa.jumpandread.application.JumpCommand;
+import com.westial.alexa.jumpandread.application.NoCandidateMandatorySearchException;
+import com.westial.alexa.jumpandread.application.ReadCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueCandidateGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
-import com.westial.alexa.jumpandread.infrastructure.service.AlexaOutputFormatter;
-import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbCandidateFactory;
-import com.westial.alexa.jumpandread.infrastructure.service.FileSystemService;
-import com.westial.alexa.jumpandread.infrastructure.service.JsoupCandidateParser;
+import com.westial.alexa.jumpandread.infrastructure.service.*;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
 import cucumber.api.DataTable;
@@ -34,7 +34,7 @@ public class RetrieveParagraphsSteps
     private CandidateRepository candidateRepository;
     private CandidateGetter candidateGetter;
     private RuntimeException commandException;
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
     private int paragraphsGroup;
     private ReadCommand retrieveCommand;
     private String userId;
@@ -54,7 +54,7 @@ public class RetrieveParagraphsSteps
     @Given("^An Alexa output formatter$")
     public void anAlexaOutputFormatter() throws Throwable
     {
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(new MockTranslator());
     }
 
     @Given("^An html candidate parser$")

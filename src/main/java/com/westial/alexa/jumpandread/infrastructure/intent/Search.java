@@ -7,7 +7,7 @@ import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.westial.alexa.jumpandread.application.SearchCandidatesCommand;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -21,17 +21,17 @@ public class Search implements RequestHandler
 
     private final SearchCandidatesCommand searchCommand;
     private final State state;
-    private final OutputFormatter outputFormatter;
+    private final Presenter presenter;
 
     public Search(
             State state,
             SearchCandidatesCommand searchCommand,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
         this.state = state;
         this.searchCommand = searchCommand;
-        this.outputFormatter = outputFormatter;
+        this.presenter = presenter;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -43,7 +43,6 @@ public class Search implements RequestHandler
 
     public Optional<Response> handle(HandlerInput input)
     {
-        String speech;
         state.updateIntent(INTENT_NAME);
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
@@ -59,43 +58,40 @@ public class Search implements RequestHandler
         {
             System.out.println("DEBUG: No search terms, delegating directive");
 
-            speech = "¿Qué quieres buscar?";
-
-            speech = outputFormatter.envelop(speech);
+            presenter.addText("¿Qué quieres buscar?");
 
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
-                    .withSpeech(speech)
-                    .withReprompt(speech)
+                    .withSpeech(presenter.output())
+                    .withReprompt(presenter.output())
                     .build();
         }
 
-        speech = searchCommand.execute(state, searchTerms);
+        presenter.reset();
+        presenter.addText(
+                searchCommand.execute(state, searchTerms)
+        );
 
-        if (null == speech)
+        if (presenter.isEmpty())
         {
             System.out.println("DEBUG: Null results, ask for new terms");
 
-            speech = outputFormatter.envelop(
+            presenter.addText(
                     "Lo siento mucho, pero no he encontrado ningun resultado con tus criterios de búsqueda."
             );
 
-            speech += "¿Quieres probar a buscar otra cosa?";
-
-            speech = outputFormatter.envelop(speech);
+            presenter.addText("¿Quieres probar a buscar otra cosa?");
 
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
-                    .withSpeech(speech)
-                    .withReprompt(speech)
+                    .withSpeech(presenter.output())
+                    .withReprompt(presenter.output())
                     .build();
         }
 
-        speech = outputFormatter.envelop(speech);
-
         return input.getResponseBuilder()
-                .withSpeech(speech)
-                .withReprompt(speech)
+                .withSpeech(presenter.output())
+                .withReprompt(presenter.output())
                 .build();
     }
 }

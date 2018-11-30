@@ -3,7 +3,7 @@ package com.westial.alexa.jumpandread.infrastructure.intent;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -13,15 +13,15 @@ import static com.amazon.ask.request.Predicates.intentName;
 public class Stop implements RequestHandler {
     public static final String INTENT_NAME = "Stop";
     private final State state;
-    private final OutputFormatter outputFormatter;
+    private final Presenter presenter;
 
     public Stop(
             State state,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
         this.state = state;
-        this.outputFormatter = outputFormatter;
+        this.presenter = presenter;
     }
 
     @Override
@@ -32,10 +32,11 @@ public class Stop implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
         state.updateIntent(INTENT_NAME);
-        String speechText = "<emphasis level=\"strong\">Adiós.<break strength=\"x-strong\"/>Busca y lee</emphasis>";
-        speechText = outputFormatter.envelop(speechText);
+        presenter.addText(
+                "<emphasis level=\"strong\">Adiós.{{ . }}Busca y lee</emphasis>"
+        );
         return input.getResponseBuilder()
-                .withSpeech(speechText)
+                .withSpeech(presenter.output())
                 .build();
     }
 }

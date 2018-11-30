@@ -5,7 +5,7 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.westial.alexa.jumpandread.application.NextReadingCommandContract;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -22,10 +22,10 @@ public class Continue extends SafeIntent
     public Continue(
             State state,
             NextReadingCommandContract continueCommand,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
-        super(outputFormatter);
+        super(presenter);
 
         this.state = state;
         this.continueCommand = continueCommand;
@@ -46,7 +46,6 @@ public class Continue extends SafeIntent
     public Optional<Response> safeHandle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        String speech;
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -62,15 +61,15 @@ public class Continue extends SafeIntent
                 candidateIndex
         );
 
-        speech = outputFormatter.envelop(
+        presenter.addText(
                 continueCommand.execute(
                         state
                 )
         );
 
         return input.getResponseBuilder()
-                .withSpeech(speech)
-                .withReprompt(speech)
+                .withSpeech(presenter.output())
+                .withReprompt(presenter.output())
                 .build();
     }
 }

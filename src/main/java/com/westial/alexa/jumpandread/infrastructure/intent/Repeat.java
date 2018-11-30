@@ -5,7 +5,7 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.westial.alexa.jumpandread.application.RewindCommand;
-import com.westial.alexa.jumpandread.domain.OutputFormatter;
+import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
 import java.util.Optional;
@@ -22,10 +22,10 @@ public class Repeat extends SafeIntent
     public Repeat(
             State state,
             RewindCommand rewindCommand,
-            OutputFormatter outputFormatter
+            Presenter presenter
     )
     {
-        super(outputFormatter);
+        super(presenter);
 
         this.state = state;
         this.rewindCommand = rewindCommand;
@@ -42,7 +42,6 @@ public class Repeat extends SafeIntent
     public Optional<Response> safeHandle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        String speech;
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -58,15 +57,15 @@ public class Repeat extends SafeIntent
                 candidateIndex
         );
 
-        speech = outputFormatter.envelop(
+        presenter.addText(
                 rewindCommand.execute(
                         state
                 )
         );
 
         return input.getResponseBuilder()
-                .withSpeech(speech)
-                .withReprompt(speech)
+                .withSpeech(presenter.output())
+                .withReprompt(presenter.output())
                 .build();
     }
 }

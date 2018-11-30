@@ -33,7 +33,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
     protected CandidatesSearchFactory searchFactory;
 
-    private OutputFormatter outputFormatter;
+    private Presenter presenter;
 
     public final void jumpAndRead(InputStream input, OutputStream output, Context context) throws IOException
     {
@@ -73,7 +73,12 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 candidateFactory
         );
 
-        outputFormatter = new AlexaOutputFormatter();
+        presenter = new AlexaPresenter(
+                new FromJsonFileTranslator(
+                        config.retrieve("ISO4_LANGUAGE"),
+                        config.retrieve("LOCALES_FILENAME")
+                )
+        );
 
         // Create Commands
 
@@ -105,16 +110,16 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         skill = Skills.standard()
                 .addRequestHandlers(
-                        new Backward(state, rewindCommand, outputFormatter),
-                        new Continue(state, continueCommand, outputFormatter),
-                        new Jump(state, jumpCommand, outputFormatter),
-                        new Launch(state, outputFormatter),
-                        new Pause(state, outputFormatter),
-                        new Read(state, readCommand, outputFormatter),
-                        new Repeat(state, rewindCommand, outputFormatter),
-                        new Search(state, searchCommand, outputFormatter),
-                        new SessionEnded(state, outputFormatter),
-                        new Stop(state, outputFormatter)
+                        new Backward(state, rewindCommand, presenter),
+                        new Continue(state, continueCommand, presenter),
+                        new Jump(state, jumpCommand, presenter),
+                        new Launch(state, presenter),
+                        new Pause(state, presenter),
+                        new Read(state, readCommand, presenter),
+                        new Repeat(state, rewindCommand, presenter),
+                        new Search(state, searchCommand, presenter),
+                        new SessionEnded(state, presenter),
+                        new Stop(state, presenter)
                 )
                 .build();
 
