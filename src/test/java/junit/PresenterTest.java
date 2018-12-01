@@ -10,13 +10,12 @@ import org.junit.Test;
 
 public class PresenterTest
 {
-    private Translator translator;
     private Presenter presenter;
 
     @Before
     public void setUp()
     {
-        translator = new FromJsonFileTranslator(
+        Translator translator = new FromJsonFileTranslator(
                 "es-ES",
                 "test"
         );
