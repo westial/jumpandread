@@ -1,9 +1,9 @@
-package com.westial.alexa.jumpandread.domain;
+package com.westial.alexa.jumpandread.infrastructure.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.westial.alexa.jumpandread.domain.Translator;
 import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
-import com.westial.alexa.jumpandread.infrastructure.service.FileSystemService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,15 +15,15 @@ public class FromJsonFileTranslator implements Translator
     private final Map<String, String> locales;
     private final String currentLocale;
 
-    public FromJsonFileTranslator(String iso4Locale, String fileName)
+    public FromJsonFileTranslator(String iso4Locale, String context)
     {
         iso4Locale = iso4Locale.toLowerCase();
         iso4Locale = iso4Locale.replace("_", "-");
         currentLocale = iso4Locale;
         String resourceFilePath = String.format(
-                "i18n/%s/%s",
+                "i18n/%s/%s.json",
                 iso4Locale,
-                fileName
+                context
         );
         try
         {

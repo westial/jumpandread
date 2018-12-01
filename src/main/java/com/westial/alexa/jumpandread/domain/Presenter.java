@@ -1,6 +1,9 @@
 package com.westial.alexa.jumpandread.domain;
 
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public abstract class Presenter
@@ -8,7 +11,7 @@ public abstract class Presenter
     private final Translator translator;
     public final static String WEAK_TOKEN = "{{ , }}";
     public final static String STRONG_TOKEN = "{{ . }}";
-    private LinkedList<String> texts = new LinkedList<>();
+    private LinkedList<Object[]> textKits = new LinkedList<>();
 
     public Presenter(Translator translator)
     {
@@ -30,19 +33,26 @@ public abstract class Presenter
 
     public boolean isEmpty()
     {
-        return texts.isEmpty();
+        return textKits.isEmpty();
     }
 
     protected abstract String clean(String text);
 
     public void addText(String text)
     {
-        texts.add(text);
+        textKits.add(new Object[]{text});
+    }
+
+    public void addText(String format, Object... args)
+    {
+        Object[] formats = new Object[]{format};
+        formats = ArrayUtils.addAll(formats, args);
+        textKits.add(formats);
     }
 
     public void reset()
     {
-        texts.clear();
+        textKits.clear();
     }
 
     private String humanize(String content)
@@ -60,9 +70,21 @@ public abstract class Presenter
     public String output()
     {
         String result = "";
-        for (String text: texts)
+        for (Object[] formatAndArgs: textKits)
         {
+            String text = (String) formatAndArgs[0];
             text = translate(text);
+            if (1 < formatAndArgs.length)
+            {
+                text = String.format(
+                        text,
+                        Arrays.copyOfRange(
+                                formatAndArgs,
+                                1,
+                                formatAndArgs.length
+                        )
+                );
+            }
             text = clean(text);
             text = humanize(text);
             result = String.format("%s%s", result, text);

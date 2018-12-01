@@ -1,6 +1,6 @@
 package junit;
 
-import com.westial.alexa.jumpandread.domain.FromJsonFileTranslator;
+import com.westial.alexa.jumpandread.infrastructure.service.FromJsonFileTranslator;
 import com.westial.alexa.jumpandread.domain.Translator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +18,7 @@ public class FromJsonFileTranslatorTest
     {
         translator = new FromJsonFileTranslator(
                 "es_ES",
-                "test.json"
+                "test"
         );
     }
 
