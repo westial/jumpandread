@@ -21,6 +21,32 @@ public class AlexaPresenter extends Presenter
         return "<break time=\"1500ms\"/>";
     }
 
+    @Override
+    public String whisper(boolean startToggle)
+    {
+        if (startToggle)
+        {
+            return "<amazon:effect name=\"whispered\">";
+        }
+        else
+        {
+            return "</amazon:effect>";
+        }
+    }
+
+    @Override
+    public String emphasis(boolean startToggle)
+    {
+        if (startToggle)
+        {
+            return "<emphasis level=\"strong\">";
+        }
+        else
+        {
+            return "<emphasis>";
+        }
+    }
+
     public String customBreak(int milliseconds)
     {
         return String.format("<break time=\"%dms\"/>", milliseconds);

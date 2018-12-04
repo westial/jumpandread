@@ -32,9 +32,11 @@ public class Stop implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
         state.updateIntent(INTENT_NAME);
-        presenter.addText(
-                "<emphasis level=\"strong\">Adiós.{{ . }}Busca y lee</emphasis>"
-        );
+        presenter.addText("{{ whisper }}");
+        presenter.addText("salutation.bye.2");
+        presenter.addText("{{ . }}");
+        presenter.addText("presentation.title");
+        presenter.addText("{{ end whisper }}");
         return input.getResponseBuilder()
                 .withSpeech(presenter.output())
                 .build();

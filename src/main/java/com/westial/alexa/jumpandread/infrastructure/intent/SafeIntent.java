@@ -27,32 +27,13 @@ abstract class SafeIntent implements RequestHandler
         } catch (CannotContinueMandatoryReadException excReading)
         {
             excReading.printStackTrace();
+            presenter.addText("notice.no.more.paragraphs");
 
-            presenter.addText(
-                    "Disculpa, no puedo continuar leyendo porque sigo " +
-                            "sin encontrar texto para leer en el resultado " +
-                            "seleccionado. Puedes pedirme de saltar otra vez " +
-                            "con la orden: Alexa salta. O también puedes " +
-                            "volver leer cualquier otro resultado con la " +
-                            "orden: Alexa lee, y el número de resultado que " +
-                            "quieras leer. O, también puedes volver a buscar " +
-                            "otra cosa con la orden: Alexa buscar, y las " +
-                            "palabras que quieras buscar."
-            );
         } catch (MandatorySearchException mandatoryExc)
         {
             mandatoryExc.printStackTrace();
 
-            presenter.addText(
-                    "Disculpa, algo raro ha pasado... " +
-                            "o no encuentro tu última búsqueda, o " +
-                            "no veo que queden más resultados en ella," +
-                            " o has pedido leer un número de resultado que " +
-                            "no es correcto. " +
-                            "Si quieres buscar otra cosa, dame la " +
-                            "orden: Alexa buscar, y las palabras que " +
-                            "quieras buscar."
-            );
+            presenter.addText("warning.something.unexpected");
         }
 
         return input.getResponseBuilder()

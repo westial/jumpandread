@@ -11,6 +11,10 @@ public abstract class Presenter
     private final Translator translator;
     public final static String WEAK_TOKEN = "{{ , }}";
     public final static String STRONG_TOKEN = "{{ . }}";
+    public final static String WHISPER_START_TOKEN = "{{ whisper }}";
+    public final static String WHISPER_END_TOKEN = "{{ end whisper }}";
+    public final static String EMPHASIS_START_TOKEN = "{{ emphasis }}";
+    public final static String EMPHASIS_END_TOKEN = "{{ end emphasis }}";
     private LinkedList<Object[]> textKits = new LinkedList<>();
 
     public Presenter(Translator translator)
@@ -21,6 +25,10 @@ public abstract class Presenter
     public abstract String weakBreak();
 
     public abstract String strongBreak();
+
+    public abstract String whisper(boolean startToggle);
+
+    public abstract String emphasis(boolean startToggle);
 
     public abstract String customBreak(int milliseconds);
 
@@ -57,11 +65,17 @@ public abstract class Presenter
 
     private String humanize(String content)
     {
-        // Important to replace forced token pauses before next ones
+        // Replace forced pauses before next ones
         content = content.replace(Presenter.STRONG_TOKEN, strongBreak());
         content = content.replace(Presenter.WEAK_TOKEN, weakBreak());
 
-        // Others
+        // Replace effects
+        content = content.replace(Presenter.WHISPER_START_TOKEN, whisper(true));
+        content = content.replace(Presenter.WHISPER_END_TOKEN, whisper(false));
+        content = content.replace(Presenter.EMPHASIS_START_TOKEN, emphasis(true));
+        content = content.replace(Presenter.EMPHASIS_END_TOKEN, emphasis(false));
+
+        // Punctuation replacements
         content = content.replace(". ", strongBreak());
         content = content.replace(", ", weakBreak());
         return content;

@@ -45,9 +45,7 @@ public class SessionEnded implements RequestHandler
         switch (request.getReason())
         {
             case ERROR:
-                presenter.addText(
-                        "Ha ocurrido un error y la sesión se va a cerrar."
-                );
+                presenter.addText("notice.session.exit.due.error");
                 System.out.format(
                         "ERROR: Session error due to %s\n",
                         request.getError()
@@ -55,7 +53,7 @@ public class SessionEnded implements RequestHandler
                 break;
 
             case USER_INITIATED:
-                presenter.addText("Hasta pronto.");
+                presenter.addText("salutation.see.you.1");
                 break;
 
             default:

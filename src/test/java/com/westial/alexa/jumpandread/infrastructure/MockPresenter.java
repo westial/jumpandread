@@ -21,6 +21,18 @@ public class MockPresenter extends Presenter
     }
 
     @Override
+    public String whisper(boolean startToggle)
+    {
+        return null;
+    }
+
+    @Override
+    public String emphasis(boolean startToggle)
+    {
+        return null;
+    }
+
+    @Override
     public String customBreak(int milliseconds)
     {
         return null;

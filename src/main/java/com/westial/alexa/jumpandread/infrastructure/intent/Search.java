@@ -58,7 +58,7 @@ public class Search implements RequestHandler
         {
             System.out.println("DEBUG: No search terms, delegating directive");
 
-            presenter.addText("¿Qué quieres buscar?");
+            presenter.addText("dialog.search.what");
 
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
@@ -68,19 +68,17 @@ public class Search implements RequestHandler
         }
 
         presenter.reset();
-        presenter.addText(
-                searchCommand.execute(state, searchTerms)
-        );
+        presenter.addText(searchCommand.execute(state, searchTerms));
 
         if (presenter.isEmpty())
         {
             System.out.println("DEBUG: Null results, ask for new terms");
 
-            presenter.addText(
-                    "Lo siento mucho, pero no he encontrado ningun resultado con tus criterios de búsqueda."
-            );
+            presenter.addText("notice.no.search.results");
 
-            presenter.addText("¿Quieres probar a buscar otra cosa?");
+            presenter.addText("dialog.search.want.other");
+            presenter.addText("{{ . }}");
+            presenter.addText("dialog.search.what");
 
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)

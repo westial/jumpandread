@@ -38,41 +38,31 @@ public class Launch implements RequestHandler
     public Optional<Response> handle(HandlerInput input)
     {
         state.updateIntent(INTENT_NAME);
-        presenter.addText(
-                "Busca y lee{{ . }}, un buscador que " +
-                        "lista tus resultados de búsqueda y entra a leerlos " +
-                        "para tí. {{ . }}{{ . }}. Salta esta " +
-                        "introducción con la orden " +
-                        "{{ . }} Alexa, buscar" +
-                        "{{ . }}{{ . }}. Voy a explicarte el " +
-                        "funcionamiento básico brevemente." +
-                        "{{ . }}{{ . }} Memoriza bien estos tres " +
-                        "verbos: buscar, {{ . }} " +
-                        "leer,  {{ . }}saltar. " +
-                        "{{ . }}{{ . }} Primero buscas con la orden " +
-                        "{{ . }}Alexa, buscar " +
-                        "{{ . }}{{ . }}. Después escoge uno de los " +
-                        "resultados de la lista numerada y dime  " +
-                        "{{ . }}Alexa, lee " +
-                        "{{ , }} y el número " +
-                        "de resultado que quieras leer. {{ . }}{{ . }} " +
-                        "Si el contenido que estoy leyendo no " +
-                        "te gusta dime:  {{ , }}" +
-                        "Alexa, saltar.  {{ . }}{{ . }} Si me " +
-                        "paro después de leer un contenido, puedes " +
-                        "decirme  {{ , }}Alexa, " +
-                        "leer {{ . }} para que " +
-                        "continúe en el siguiente contenido. " +
-                        "{{ . }}{{ . }}También dispones de " +
-                        "otras órdenes como para volver a escuchar el" +
-                        " último contenido, con {{ , }}" +
-                        "Alexa, repetir{{ . }}{{ . }} O incluso si " +
-                        "quieres ir más atrás, dime " +
-                        "{{ , }}Alexa, atrás. " +
-                        "{{ . }}{{ . }}Y bien, ya puedes empezar " +
-                        "a buscar. Empiezas tú, dime " +
-                        "{{ , }}Alexa, buscar"
-        );
+        presenter.addText("presentation.title");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("presentation.abstract");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.search.no.terms");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("presentation.getting.started.introduction");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("presentation.getting.started.obvious");
+        presenter.addText("{{ . }}");
+        presenter.addText("presentation.getting.started.jocking");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.search.with.terms");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.read.with.number");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.reading.next");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.reading.jump");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.reading.repeat");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("command.reading.back");
+        presenter.addText("{{ . }}{{ . }}");
+        presenter.addText("presentation.finish");
         return input.getResponseBuilder()
                 .withSpeech(presenter.output())
                 .withReprompt(presenter.output())

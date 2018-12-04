@@ -34,13 +34,7 @@ public class Pause implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
         state.updateIntent(INTENT_NAME);
-        presenter.addText(
-                "<amazon:effect name=\"whispered\">Pausa." +
-                "{{ , }} Para continuar dime" +
-                "{{ , }}: {{ . }}" +
-                "<emphasis level=\"strong\">Alexa, continuar</emphasis>" +
-                "</amazon:effect>"
-        );
+        presenter.addText("notice.after.pause");
         return input.getResponseBuilder()
                 .withSpeech(presenter.output())
                 .withReprompt(presenter.output())
