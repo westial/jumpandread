@@ -25,5 +25,11 @@
     "notice.session.exit.due.error": "Ha ocurrido un error y la sesión se va a cerrar.",
 
     "salutation.bye.1": "Hasta pronto.",
-    "salutation.bye.2": "Adiós."
+    "salutation.bye.2": "Adiós.",
+
+    "notice.candidate.has.no.elements.(index)": "El resultado de búsqueda número %s no dispone de contenido legible, salto a leer el siguiente resultado.",
+
+    "response.search.result.listing.(index,title)": "Resultado de búsqueda número %s, titulado, %s",
+
+    "notice.no.candidate.for.this.index.(index,start,end)": "No recuerdo haberte dado el número %s en la lista de resultados. La lista de resultados empieza en el número %s y tiene un total de %s resultados."
 }

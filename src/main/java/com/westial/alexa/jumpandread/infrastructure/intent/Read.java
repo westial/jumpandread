@@ -1,36 +1,32 @@
 package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
+import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
-import com.westial.alexa.jumpandread.application.ReadCommand;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.CurrentUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Read extends SafeIntent
+public class Read implements RequestHandler
 {
     public static final String INTENT_NAME = "ReadCandidate";
     private static final String CANDIDATE_INDEX_SLOT_NAME = "candidateIndex";
-    private final State state;
-    private final ReadCommand retrieveCommand;
+    private final CurrentUseCase currentUseCase;
+    private final int defaultParagraphsGroup;
 
     public Read(
-            State state,
-            ReadCommand retrieveCommand,
-            Presenter presenter
+            CurrentUseCase currentUseCase,
+            int defaultParagraphsGroup
     )
     {
-        super(presenter);
-
-        this.state = state;
-
-        this.retrieveCommand = retrieveCommand;
+        this.currentUseCase = currentUseCase;
+        this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -38,10 +34,8 @@ public class Read extends SafeIntent
         return input.matches(intentName(INTENT_NAME));
     }
 
-    @Override
-    public Optional<Response> safeHandle(HandlerInput input)
+    public Optional<Response> handle(HandlerInput input)
     {
-        state.updateIntent(INTENT_NAME);
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -52,16 +46,17 @@ public class Read extends SafeIntent
         Slot candidateIndexSlot = current.getSlots().get(CANDIDATE_INDEX_SLOT_NAME);
         int candidateIndex = Integer.parseInt(candidateIndexSlot.getValue());
 
-        presenter.addText(
-                retrieveCommand.execute(
-                        state,
-                        candidateIndex
-                )
+        View view = currentUseCase.invoke(
+                INTENT_NAME,
+                candidateIndex,
+                1,
+                1,
+                defaultParagraphsGroup
         );
 
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
-                .withReprompt(presenter.output())
+                .withSpeech(view.getSpeech())
+                .withReprompt(view.getSpeech())
                 .build();
     }
 }

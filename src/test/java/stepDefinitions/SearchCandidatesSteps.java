@@ -1,6 +1,6 @@
 package stepDefinitions;
 
-import com.westial.alexa.jumpandread.application.SearchCandidatesCommand;
+import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;

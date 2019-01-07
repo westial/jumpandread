@@ -4,8 +4,9 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.SessionEndedRequest;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.LaunchUseCase;
+import com.westial.alexa.jumpandread.application.SessionEndedUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
@@ -14,16 +15,16 @@ import static com.amazon.ask.request.Predicates.requestType;
 public class SessionEnded implements RequestHandler
 {
     public static final String INTENT_NAME = "SessionEnded";
-    private final State state;
-    private final Presenter presenter;
+    private final SessionEndedUseCase endedUseCase;
+    private final LaunchUseCase launchUseCase;
 
     public SessionEnded(
-            State state,
-            Presenter presenter
+            SessionEndedUseCase endedUseCase,
+            LaunchUseCase launchUseCase
     )
     {
-        this.state = state;
-        this.presenter = presenter;
+        this.endedUseCase = endedUseCase;
+        this.launchUseCase = launchUseCase;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -33,7 +34,6 @@ public class SessionEnded implements RequestHandler
 
     public Optional<Response> handle(HandlerInput input)
     {
-        state.updateIntent(INTENT_NAME);
         SessionEndedRequest request = (SessionEndedRequest) input
                 .getRequestEnvelope().getRequest();
 
@@ -42,26 +42,32 @@ public class SessionEnded implements RequestHandler
                 INTENT_NAME
         );
 
+        View view;
+
         switch (request.getReason())
         {
             case ERROR:
-                presenter.addText("notice.session.exit.due.error");
                 System.out.format(
                         "ERROR: Session error due to %s\n",
                         request.getError()
                 );
+                view = endedUseCase.invoke(
+                        INTENT_NAME, SessionEndedUseCase.Reason.ERROR
+                );
                 break;
 
             case USER_INITIATED:
-                presenter.addText("salutation.see.you.1");
+                view = endedUseCase.invoke(
+                        INTENT_NAME, SessionEndedUseCase.Reason.USER_DID
+                );
                 break;
 
             default:
-                return (new Launch(state, presenter)).handle(input);
+                return (new Launch(launchUseCase)).handle(input);
         }
 
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
+                .withSpeech(view.getSpeech())
                 .withShouldEndSession(true)
                 .build();
     }

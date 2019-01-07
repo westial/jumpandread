@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.westial.alexa.jumpandread.application.ProvideStateCommand;
+import com.westial.alexa.jumpandread.application.command.ProvideStateCommand;
 import com.westial.alexa.jumpandread.domain.State;
 import com.westial.alexa.jumpandread.domain.StateFactory;
 

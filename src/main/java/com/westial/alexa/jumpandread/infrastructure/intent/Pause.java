@@ -3,8 +3,8 @@ package com.westial.alexa.jumpandread.infrastructure.intent;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.PauseUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
@@ -12,17 +12,13 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class Pause implements RequestHandler {
 
-    private final State state;
-    private final Presenter presenter;
     public static final String INTENT_NAME = "Pause";
+    private final PauseUseCase pauseUseCase;
 
     public Pause(
-            State state,
-            Presenter presenter
-    )
+            PauseUseCase pauseUseCase)
     {
-        this.state = state;
-        this.presenter = presenter;
+        this.pauseUseCase = pauseUseCase;
     }
 
     @Override
@@ -33,11 +29,11 @@ public class Pause implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        state.updateIntent(INTENT_NAME);
-        presenter.addText("notice.after.pause");
+        View view = pauseUseCase.invoke(INTENT_NAME);
+
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
-                .withReprompt(presenter.output())
+                .withSpeech(view.getSpeech())
+                .withReprompt(view.getSpeech())
                 .build();
     }
 }

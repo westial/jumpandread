@@ -47,11 +47,6 @@ public class AlexaPresenter extends Presenter
         }
     }
 
-    public String customBreak(int milliseconds)
-    {
-        return String.format("<break time=\"%dms\"/>", milliseconds);
-    }
-
     protected String clean(String content)
     {
         content = StringEscapeUtils.escapeXml11(content);

@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.application;
+package com.westial.alexa.jumpandread.application.exception;
 
 public class GettingCandidateContentException extends RuntimeException
 {

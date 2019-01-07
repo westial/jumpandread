@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.westial.alexa.jumpandread.application.NoReadingElements;
+import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.CandidateParser;
 import com.westial.alexa.jumpandread.domain.Paragraph;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
@@ -27,7 +27,7 @@ public class JsoupCandidateParser implements CandidateParser
         }
         if (0 == readElements.size())
         {
-            throw new NoReadingElements("No reading elements found");
+            throw new IteratingNoParagraphsException("No reading elements found");
         }
         readElements = sort(readElements);
         for (Element readElement: readElements)

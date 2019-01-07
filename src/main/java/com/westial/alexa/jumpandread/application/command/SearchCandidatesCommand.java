@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.application;
+package com.westial.alexa.jumpandread.application.command;
 
 import com.westial.alexa.jumpandread.domain.*;
 

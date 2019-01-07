@@ -6,9 +6,8 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
-import com.westial.alexa.jumpandread.application.SearchCandidatesCommand;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.SearchUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
@@ -18,20 +17,12 @@ public class Search implements RequestHandler
 {
     public static final String INTENT_NAME = "SearchCandidates";
     private static final String TERMS_SLOT_NAME = "searchTerms";
+    private final SearchUseCase searchUseCase;
 
-    private final SearchCandidatesCommand searchCommand;
-    private final State state;
-    private final Presenter presenter;
 
-    public Search(
-            State state,
-            SearchCandidatesCommand searchCommand,
-            Presenter presenter
-    )
+    public Search(SearchUseCase searchUseCase)
     {
-        this.state = state;
-        this.searchCommand = searchCommand;
-        this.presenter = presenter;
+        this.searchUseCase = searchUseCase;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -43,7 +34,6 @@ public class Search implements RequestHandler
 
     public Optional<Response> handle(HandlerInput input)
     {
-        state.updateIntent(INTENT_NAME);
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -54,42 +44,22 @@ public class Search implements RequestHandler
         Slot termsSlot = current.getSlots().get(TERMS_SLOT_NAME);
         String searchTerms = termsSlot.getValue();
 
-        if (null == searchTerms || searchTerms.isEmpty())
+        View view = searchUseCase.invoke(INTENT_NAME, searchTerms);
+
+        if (null == searchTerms || searchTerms.isEmpty() || view.isEmpty())
         {
             System.out.println("DEBUG: No search terms, delegating directive");
 
-            presenter.addText("dialog.search.what");
-
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
-                    .withSpeech(presenter.output())
-                    .withReprompt(presenter.output())
-                    .build();
-        }
-
-        presenter.reset();
-        presenter.addText(searchCommand.execute(state, searchTerms));
-
-        if (presenter.isEmpty())
-        {
-            System.out.println("DEBUG: Null results, ask for new terms");
-
-            presenter.addText("notice.no.search.results");
-
-            presenter.addText("dialog.search.want.other");
-            presenter.addText("{{ . }}");
-            presenter.addText("dialog.search.what");
-
-            return input.getResponseBuilder()
-                    .addElicitSlotDirective(TERMS_SLOT_NAME, current)
-                    .withSpeech(presenter.output())
-                    .withReprompt(presenter.output())
+                    .withSpeech(view.getSpeech())
+                    .withReprompt(view.getSpeech())
                     .build();
         }
 
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
-                .withReprompt(presenter.output())
+                .withSpeech(view.getSpeech())
+                .withReprompt(view.getSpeech())
                 .build();
     }
 }

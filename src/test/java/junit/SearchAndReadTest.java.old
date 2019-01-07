@@ -1,6 +1,8 @@
 package junit;
 
-import com.westial.alexa.jumpandread.application.*;
+import com.westial.alexa.jumpandread.application.command.*;
+import com.westial.alexa.jumpandread.application.command.move.MoveCommand;
+import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.MockOneCandidateSearch;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
@@ -221,7 +223,7 @@ public class SearchAndReadTest
                     paragraphsCount
             );
         }
-        catch (NoReadingElements exc)
+        catch (IteratingNoParagraphsException exc)
         {
             assert true;
             System.out.println(exc.getMessage());
@@ -333,7 +335,7 @@ public class SearchAndReadTest
     {
         State state = stateFactory.create(user.getId(), user.getSessionId());
 
-        JumpCommand jump = new JumpCommand(
+        MoveCommand jump = new MoveCommand(
                 candidateFactory,
                 paragraphsCount
         );

@@ -33,7 +33,8 @@ Feature: Retrieving paragraphs from current user's candidate after selecting a c
     And A candidate factory for parsing
     And A configuration value for joining paragraphs as "10"
     And A retrieving paragraphs command
-    When I execute retrieving command for user and session and number of candidate as "3" for intent "RetrieveCandidates"
+    When I execute retriev
+  ing command for user and session and number of candidate as "3" for intent "RetrieveCandidates"
     Then Command returned a text as in file "<expectedFile>"
     Examples:
       | index | userId                               | sessionId                            | searchId                            | title           | url             | description | paragraphIndex | expectedFile                            |

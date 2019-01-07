@@ -1,7 +1,5 @@
 package com.westial.alexa.jumpandread.domain;
 
-import com.westial.alexa.jumpandread.application.NoCandidateMandatorySearchException;
-
 import java.util.Calendar;
 import java.util.List;
 
@@ -87,7 +85,7 @@ public abstract class Candidate
         );
         if (null == candidate)
         {
-            throw new NoCandidateMandatorySearchException(
+            throw new RetrievingNoCandidateException(
                     String.format(
                             "No Candidate for index %d",
                             index
@@ -108,19 +106,33 @@ public abstract class Candidate
     public void forward(int number)
     {
         paragraphPosition += number;
-        if (paragraphs.size() < paragraphPosition)
+        paragraphPosition = adjustNextParagraphIndex(paragraphPosition);
+        persist();
+    }
+
+    private int adjustNextParagraphIndex(int index)
+    {
+        if (paragraphs.size() < index)
         {
-            paragraphPosition = paragraphs.size();
+            return paragraphs.size();
         }
+        return index;
+    }
+
+    private int adjustLastParagraphIndex(int index)
+    {
+        if (0 > index)
+        {
+            return 0;
+        }
+        return index;
     }
 
     public void rewind(int number)
     {
         paragraphPosition -= number;
-        if (0 > paragraphPosition)
-        {
-            paragraphPosition = 0;
-        }
+        paragraphPosition = adjustLastParagraphIndex(paragraphPosition);
+        persist();
     }
 
     public void reset()
@@ -129,38 +141,24 @@ public abstract class Candidate
         persist();
     }
 
-    public String dump(int number, String introduction, String strongToken)
+    public String dump(int number, String pauseToken)
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();
 
-        int starting = paragraphPosition;
+        int ending = adjustNextParagraphIndex(paragraphPosition + number);
 
-        forward(number);
-
-        if (null != introduction)
-        {
-            text.append(
-                    String.format(
-                            "%s%s",
-                            introduction,
-                            strongToken
-                    )
-            );
-        }
-
-        for (int index = starting; index < paragraphPosition; index ++)
+        for (int index = paragraphPosition; index < ending; index ++)
         {
             paragraph = paragraphs.get(index);
             text.append(
                     String.format(
                             "%s%s",
                             paragraph.getContent(),
-                            strongToken
+                            pauseToken
                     )
             );
         }
-        this.persist();
         return text.toString();
     }
 

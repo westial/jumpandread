@@ -5,33 +5,33 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.application.BackwardUseCase;
+import com.westial.alexa.jumpandread.application.ForwardUseCase;
 import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Repeat implements RequestHandler
+public class Forward implements RequestHandler
 {
-    public static final String INTENT_NAME = "Repeat";
-    private final BackwardUseCase repeatUseCase;
+    public static final String INTENT_NAME = "Jump";
+    private final ForwardUseCase forwardUseCase;
     private final int defaultParagraphsGroup;
+    private static final int DEFAULT_FORWARD_FACTOR = 2;
 
-    public Repeat(
-            BackwardUseCase repeatUseCase,
+    public Forward(
+            ForwardUseCase forwardUseCase,
             int defaultParagraphsGroup
     )
     {
-        this.repeatUseCase = repeatUseCase;
+
+        this.forwardUseCase = forwardUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     public boolean canHandle(HandlerInput input)
     {
-        return input.matches(
-                intentName(INTENT_NAME).or(intentName("AMAZON.RepeatIntent"))
-        );
+        return input.matches(intentName(INTENT_NAME));
     }
 
     @Override
@@ -45,11 +45,11 @@ public class Repeat implements RequestHandler
                 INTENT_NAME
         );
 
-        View view = repeatUseCase.invoke(
+        View view = forwardUseCase.invoke(
                 INTENT_NAME,
                 null,
                 1,
-                0,
+                DEFAULT_FORWARD_FACTOR,
                 defaultParagraphsGroup
         );
 

@@ -1,34 +1,30 @@
 package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
+import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.application.NextReadingCommandContract;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.ForwardUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-// TODO can this class and Jump class be simplified? They look quite similar.
-public class Continue extends SafeIntent
+public class Next implements RequestHandler
 {
     public static final String INTENT_NAME = "Continue";
-    private final State state;
-    private final NextReadingCommandContract continueCommand;
+    private final ForwardUseCase nextUseCase;
+    private final int defaultParagraphsGroup;
 
-    public Continue(
-            State state,
-            NextReadingCommandContract continueCommand,
-            Presenter presenter
-    )
+    public Next(
+            ForwardUseCase nextUseCase,
+            int defaultParagraphsGroup
+            )
     {
-        super(presenter);
-
-        this.state = state;
-        this.continueCommand = continueCommand;
+        this.nextUseCase = nextUseCase;
+        this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -43,9 +39,8 @@ public class Continue extends SafeIntent
     }
 
     @Override
-    public Optional<Response> safeHandle(HandlerInput input)
+    public Optional<Response> handle(HandlerInput input)
     {
-        state.updateIntent(INTENT_NAME);
         IntentRequest request = (IntentRequest) input.getRequestEnvelope().getRequest();
         Intent current = request.getIntent();
         System.out.format(
@@ -54,22 +49,17 @@ public class Continue extends SafeIntent
                 INTENT_NAME
         );
 
-        Integer candidateIndex = state.getCandidateIndex();
-
-        System.out.format(
-                "DEBUG: Current state candidate index %d\n",
-                candidateIndex
-        );
-
-        presenter.addText(
-                continueCommand.execute(
-                        state
-                )
+        View view = nextUseCase.invoke(
+                INTENT_NAME,
+                null,
+                1,
+                0,
+                defaultParagraphsGroup
         );
 
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
-                .withReprompt(presenter.output())
+                .withSpeech(view.getSpeech())
+                .withReprompt(view.getSpeech())
                 .build();
     }
 }

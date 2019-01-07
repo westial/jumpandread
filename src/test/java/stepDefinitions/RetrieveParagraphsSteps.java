@@ -1,12 +1,12 @@
 package stepDefinitions;
 
-import com.westial.alexa.jumpandread.application.IncompleteStateMandatorySearchException;
-import com.westial.alexa.jumpandread.application.JumpCommand;
-import com.westial.alexa.jumpandread.application.NoCandidateMandatorySearchException;
-import com.westial.alexa.jumpandread.application.ReadCommand;
+import com.westial.alexa.jumpandread.application.BackwardUseCase;
+import com.westial.alexa.jumpandread.application.CurrentUseCase;
+import com.westial.alexa.jumpandread.application.ForwardUseCase;
+import com.westial.alexa.jumpandread.application.View;
 import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.MockCandidateGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
+import com.westial.alexa.jumpandread.infrastructure.MockPresenter;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueCandidateGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
@@ -16,12 +16,8 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
-import java.io.File;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,77 +26,36 @@ import java.util.Queue;
 public class RetrieveParagraphsSteps
 {
     private CandidateParser candidateParser;
-    private Candidate candidate;
     private CandidateRepository candidateRepository;
     private CandidateGetter candidateGetter;
-    private RuntimeException commandException;
     private Presenter presenter;
-    private int paragraphsGroup;
-    private ReadCommand retrieveCommand;
-    private String userId;
-    private String sessionId;
-    private String searchId;
-    private String resultText;
-    private String errorMessage;
     private StateRepository stateRepository;
     private static final String INTENT_NAME = "RetrievingParagraphs";
     private State state;
-    private StateFactory stateFactory;
     private CandidateFactory candidateFactory;
-    private JumpCommand jumpCommand;
-    private int candidateIndex;
     private List<Candidate> candidates;
+    private int defaultCandidatesFactor;
+    private UseCaseFactory useCaseFactory;
+    private CurrentUseCase currentUseCase;
+    private View resultView;
+    private ForwardUseCase nextUseCase;
+    private BackwardUseCase repeatUseCase;
+    private int defaultParagraphsGroup;
 
-    @Given("^An Alexa output formatter$")
-    public void anAlexaOutputFormatter() throws Throwable
+    @Given("^A candidate factory for parsing$")
+    public void aCandidateFactory() throws Throwable
     {
-        presenter = new AlexaPresenter(new MockTranslator());
-    }
-
-    @Given("^An html candidate parser$")
-    public void anHtmlFormatCandidateParser() throws Throwable
-    {
-        candidateParser = new JsoupCandidateParser();
-    }
-
-    @Given("^A configuration value for joining paragraphs as \"([^\"]*)\"$")
-    public void aConfigurationValueForJoiningParagraphsAs(String paragraphsGroup) throws Throwable
-    {
-        this.paragraphsGroup = Integer.parseInt(paragraphsGroup);
-    }
-
-    @Given("^A user with user id as \"([^\"]*)\", session id as \"([^\"]*)\", search id as \"([^\"]*)\"$")
-    public void aUserWithUserIdAs(String userId, String sessionId, String searchId) throws Throwable
-    {
-        this.userId = userId;
-        this.sessionId = sessionId;
-        this.searchId = searchId;
-    }
-
-    @Given("^A candidate document getter with forced content as in file \"([^\"]*)\"$")
-    public void aSampleHtmlDocumentAs(String filePath) throws Throwable
-    {
-        URL url = Thread.currentThread()
-                .getContextClassLoader()
-                .getResource(filePath);
-
-        String content = FileUtils.readFileToString(
-                new File(url.toURI()),
-                StandardCharsets.UTF_8
+        candidateFactory = new DynamoDbCandidateFactory(
+                candidateGetter,
+                candidateParser,
+                candidateRepository
         );
-        candidateGetter = new MockCandidateGetter(content);
     }
 
-    @Given("^A candidate repository for parsing$")
-    public void aCandidateRepository() throws Throwable
+    @Given("^A multiple candidate repository for jumping$")
+    public void aMultipleCandidateRepositoryForJumping() throws Throwable
     {
-        candidateRepository = new MockCandidateRepository(candidate);
-    }
-
-    @Given("^A selected candidate as follows$")
-    public void aSelectedCandidateAsFollows(DataTable candidateTable) throws Throwable
-    {
-        candidate = buildCandidate(1, candidateTable.raw());
+        candidateRepository = new MockCandidateRepository(candidates);
     }
 
     private Candidate buildCandidate(int index, List<List<String>> candidateData)
@@ -137,94 +92,6 @@ public class RetrieveParagraphsSteps
         }
     }
 
-    @Given("^A candidate factory for parsing$")
-    public void aCandidateFactory() throws Throwable
-    {
-        candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
-        );
-    }
-
-    @Given("^A retrieving paragraphs command$")
-    public void aRetrievingParagraphsCommand() throws Throwable
-    {
-        retrieveCommand = new ReadCommand(
-                candidateFactory,
-                paragraphsGroup
-        );
-    }
-
-    @Then("^Command returned a text as in file \"([^\"]*)\"$")
-    public void retrievingCommandReturnedATextAsInFile(String filePath) throws Throwable
-    {
-        String expected = FileSystemService.readResourceFile(filePath);
-        System.out.println("Expected: " + expected);
-        System.out.println("Result Text: " + resultText);
-        Assert.assertEquals(expected, resultText);
-    }
-
-    @Then("^Command thrown an exception with the message as \"([^\"]*)\"$")
-    public void commandThrownAnExceptionWithTheMessageAs(String expected) throws Throwable
-    {
-        Assert.assertEquals(expected, errorMessage);
-    }
-
-    @Given("^A user state repository for parsing$")
-    public void aUserStateRepositoryForReading() throws Throwable
-    {
-        stateRepository = new MockStateRepository();
-    }
-
-    @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\"$")
-    public void aCurrentStateWithUserIdAsSessionIdAsSearchIdAs(String userId, String sessionId, String searchId) throws Throwable
-    {
-        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
-    }
-
-    @When("^I execute retrieving command for user and session and number of candidate as \"([^\"]*)\" for intent \"([^\"]*)\"$")
-    public void iExecuteRetrievingCommandForUserAndSessionAndNumberOfCandidateAsForIntent(String candidateIndex, String intent) throws Throwable
-    {
-        try
-        {
-            resultText = retrieveCommand.execute(state, Integer.parseInt(candidateIndex));
-        }
-        catch (NoCandidateMandatorySearchException exception)
-        {
-            errorMessage = exception.getMessage();
-        }
-    }
-
-    @Given("^A jump command$")
-    public void aJumpCommand() throws Throwable
-    {
-        jumpCommand = new JumpCommand(
-                candidateFactory,
-                paragraphsGroup
-        );
-    }
-
-    @When("^I execute jump command for current state$")
-    public void iExecuteJumpCommandForCurrentState() throws Throwable
-    {
-        try
-        {
-            resultText = jumpCommand.execute(state);
-        }
-        catch (IncompleteStateMandatorySearchException | NoCandidateMandatorySearchException exception)
-        {
-            errorMessage = exception.getMessage();
-        }
-    }
-
-    @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
-    public void aCurrentStateWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex) throws Throwable
-    {
-        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
-        state.updateCandidateIndex(Integer.parseInt(rawCandidateIndex));
-    }
-
     @Given("^A candidate document getter with forced and queued contents as in files as follows$")
     public void aCandidateDocumentGetterWithForcedAndQueuedContentsAsInFilesAsFollows(DataTable dataTable) throws Throwable
     {
@@ -240,9 +107,117 @@ public class RetrieveParagraphsSteps
         candidateGetter = new MockQueueCandidateGetter(contents);
     }
 
-    @Given("^A multiple candidate repository for jumping$")
-    public void aMultipleCandidateRepositoryForJumping() throws Throwable
+    @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
+    public void aCurrentStateWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex) throws Throwable
     {
-        candidateRepository = new MockCandidateRepository(candidates);
+        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
+        state.updateCandidateIndex(Integer.parseInt(rawCandidateIndex));
+    }
+
+    @Given("^A user state repository for parsing$")
+    public void aUserStateRepositoryForReading() throws Throwable
+    {
+        stateRepository = new MockStateRepository();
+    }
+
+    @Given("^An html candidate parser$")
+    public void anHtmlFormatCandidateParser() throws Throwable
+    {
+        candidateParser = new JsoupCandidateParser();
+    }
+
+    @Given("^An Alexa Presenter service$")
+    public void anAlexaPresenterService()
+    {
+        presenter = new AlexaPresenter(new MockTranslator());
+    }
+
+    @Given("^A Mock Presenter service$")
+    public void aMockPresenterService()
+    {
+        presenter = new MockPresenter(new MockTranslator());
+    }
+
+    @Given("^A configuration value for default grouping paragraphs as \"([^\"]*)\"$")
+    public void aConfigurationValueForJoiningParagraphsAs(String rawParagraphsGroup) throws Throwable
+    {
+        defaultParagraphsGroup = Integer.parseInt(rawParagraphsGroup);
+    }
+
+    @Given("^A configuration value for default candidates factor as \"([^\"]*)\"$")
+    public void aConfigurationValueForCandidatesFactorAs(String rawCandidatesFactor) throws Throwable
+    {
+        defaultCandidatesFactor = Integer.parseInt(rawCandidatesFactor);
+    }
+
+    @Given("^A Use Case Factory for reading only$")
+    public void aUseCaseFactoryForReadingOnly()
+    {
+        useCaseFactory = new UseCaseFactory(
+                candidateRepository,
+                candidateFactory,
+                null,
+                state,
+                presenter,
+                defaultCandidatesFactor,
+                defaultParagraphsGroup
+        );
+    }
+
+    @Given("^A newly created use case for current candidate reading$")
+    public void aNewlyCreatedUseCaseForCurrentCandidateReading()
+    {
+        currentUseCase = useCaseFactory.createCurrent();
+    }
+
+    @When("^I invoke current candidate use case for intent name as \"([^\"]*)\", candidate index as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokeCurrentCandidateUseCaseForIntentNameAsCandidateIndexAs(String intentName, String rawCandidateIndex, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = currentUseCase.invoke(intentName, Integer.parseInt(rawCandidateIndex), Integer.parseInt(rawParagraphsGroup));
+    }
+
+    @Then("^The result after invocation is not null$")
+    public void theResultAfterInvocationIsAViewTypedObject()
+    {
+        Assert.assertNotNull(resultView);
+    }
+
+    @Then("^The speech contained in result is as in file \"([^\"]*)\"$")
+    public void theSpeechContainedInResultIsAsInFile(String expectedResultFilePath) throws Throwable
+    {
+        String expected = FileSystemService.readResourceFile(expectedResultFilePath);
+        System.out.println("\nExpected: " + expected);
+        System.out.println("\nResult Text: " + resultView.getSpeech());
+        Assert.assertEquals(expected, resultView.getSpeech());
+    }
+
+    @Given("^A newly created use case for reading next$")
+    public void aNewlyCreatedUseCaseForReadingNextWithParagraphsGroupingAs() throws Throwable
+    {
+        nextUseCase = useCaseFactory.createForward();
+    }
+
+    @When("^I invoke next candidate use case for intent name as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokeNextCandidateUseCaseForIntentNameAs(String intentName, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = nextUseCase.invoke(intentName, null, 1, 1, Integer.parseInt(rawParagraphsGroup));
+    }
+
+    @Given("^A newly created use case for repeat reading$")
+    public void aNewlyCreatedUseCaseForRepeatReadingWithParagraphsGroupingAs() throws Throwable
+    {
+        repeatUseCase = useCaseFactory.createBackward();
+    }
+
+    @When("^I invoke repeat reading use case for intent name as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokeRepeatReadingUseCaseForIntentNameAs(String intentName, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = repeatUseCase.invoke(intentName, null, 1, 0, Integer.parseInt(rawParagraphsGroup));
+    }
+
+    @Given("^The current state candidate index is as \"([^\"]*)\"$")
+    public void theCurrentStateCandidateIndexIsAs(String rawCandidateIndex) throws Throwable
+    {
+        Assert.assertEquals(rawCandidateIndex, String.valueOf(state.getCandidateIndex()));
     }
 }

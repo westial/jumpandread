@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.domain;
 
-import com.westial.alexa.jumpandread.application.GettingCandidateContentException;
+import com.westial.alexa.jumpandread.application.exception.GettingCandidateContentException;
 
 public interface CandidateGetter
 {

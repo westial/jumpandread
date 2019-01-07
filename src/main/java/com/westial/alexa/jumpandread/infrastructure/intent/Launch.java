@@ -4,8 +4,8 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.Response;
-import com.westial.alexa.jumpandread.domain.Presenter;
-import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.application.LaunchUseCase;
+import com.westial.alexa.jumpandread.application.View;
 
 import java.util.Optional;
 
@@ -14,17 +14,14 @@ import static com.amazon.ask.request.Predicates.requestType;
 
 public class Launch implements RequestHandler
 {
-    private State state;
-    private final Presenter presenter;
     public static final String INTENT_NAME = "Launch";
+    private final LaunchUseCase launchUseCase;
 
     public Launch(
-            State state,
-            Presenter presenter
+            LaunchUseCase launchUseCase
     )
     {
-        this.state = state;
-        this.presenter = presenter;
+        this.launchUseCase = launchUseCase;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -37,35 +34,11 @@ public class Launch implements RequestHandler
 
     public Optional<Response> handle(HandlerInput input)
     {
-        state.updateIntent(INTENT_NAME);
-        presenter.addText("presentation.title");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("presentation.abstract");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.search.no.terms");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("presentation.getting.started.introduction");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("presentation.getting.started.obvious");
-        presenter.addText("{{ . }}");
-        presenter.addText("presentation.getting.started.jocking");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.search.with.terms");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.read.with.number");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.reading.next");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.reading.jump");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.reading.repeat");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("command.reading.back");
-        presenter.addText("{{ . }}{{ . }}");
-        presenter.addText("presentation.finish");
+        View view = launchUseCase.invoke(INTENT_NAME);
+
         return input.getResponseBuilder()
-                .withSpeech(presenter.output())
-                .withReprompt(presenter.output())
+                .withSpeech(view.getSpeech())
+                .withReprompt(view.getSpeech())
                 .build();
     }
 }

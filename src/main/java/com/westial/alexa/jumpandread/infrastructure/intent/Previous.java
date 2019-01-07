@@ -12,25 +12,27 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Repeat implements RequestHandler
+public class Previous implements RequestHandler
 {
-    public static final String INTENT_NAME = "Repeat";
-    private final BackwardUseCase repeatUseCase;
+    public static final String INTENT_NAME = "Backward";
+    private final BackwardUseCase previousUseCase;
     private final int defaultParagraphsGroup;
 
-    public Repeat(
-            BackwardUseCase repeatUseCase,
+    public Previous(
+            BackwardUseCase previousUseCase,
             int defaultParagraphsGroup
     )
     {
-        this.repeatUseCase = repeatUseCase;
+        this.previousUseCase = previousUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     public boolean canHandle(HandlerInput input)
     {
         return input.matches(
-                intentName(INTENT_NAME).or(intentName("AMAZON.RepeatIntent"))
+                intentName(INTENT_NAME)
+                        .or(intentName("AMAZON.PreviousIntent")
+                        )
         );
     }
 
@@ -45,11 +47,11 @@ public class Repeat implements RequestHandler
                 INTENT_NAME
         );
 
-        View view = repeatUseCase.invoke(
+        View view = previousUseCase.invoke(
                 INTENT_NAME,
                 null,
                 1,
-                0,
+                1,
                 defaultParagraphsGroup
         );
 

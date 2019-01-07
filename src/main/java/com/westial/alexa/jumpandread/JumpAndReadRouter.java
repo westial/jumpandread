@@ -10,7 +10,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.westial.alexa.jumpandread.application.*;
 import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.CommandFactory;
 import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 
@@ -33,7 +32,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
     protected CandidatesSearchFactory searchFactory;
 
-    private Presenter presenter;
+    private static final int DEFAULT_CANDIDATES_FACTOR = 1;
+    private static final int DEFAULT_PARAGRAPHS_GROUP_FACTOR = 1;
 
     public final void jumpAndRead(InputStream input, OutputStream output, Context context) throws IOException
     {
@@ -73,53 +73,71 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 candidateFactory
         );
 
-        presenter = new AlexaPresenter(
+        Presenter presenter = new AlexaPresenter(
                 new FromJsonFileTranslator(
                         config.retrieve("ISO4_LANGUAGE"),
                         config.retrieve("LOCALES_FILENAME")
                 )
         );
 
-        // Create Commands
+        // Create Use Cases
 
-        CommandFactory commandFactory = new CommandFactory(
+        UseCaseFactory useCaseFactory = new UseCaseFactory(
+                candidateRepository,
                 candidateFactory,
-                candidatesSearch
+                candidatesSearch,
+                state,
+                presenter,
+                DEFAULT_CANDIDATES_FACTOR,
+                DEFAULT_PARAGRAPHS_GROUP_FACTOR
         );
 
-        RewindCommand rewindCommand = commandFactory.createRewindCommand(
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        BackwardUseCase backwardUseCase = useCaseFactory.createBackward();
 
-        NextReadingCommandContract continueCommand = commandFactory.createContinueCommand(
-                state.getIntent(),
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        ForwardUseCase forwardUseCase = useCaseFactory.createForward();
 
-        JumpCommand jumpCommand = commandFactory.createJumpCommand(
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        CurrentUseCase currentUseCase = useCaseFactory.createCurrent();
 
-        ReadCommand readCommand = commandFactory.createReadCommand(
-                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-        );
+        SearchUseCase searchUseCase = useCaseFactory.createSearch();
 
-        SearchCandidatesCommand searchCommand = commandFactory.createSearchCommand();
+        PauseUseCase pauseUseCase = useCaseFactory.createPause();
+
+        LaunchUseCase launchUseCase = useCaseFactory.createLaunch();
+
+        StopUseCase stopUseCase = useCaseFactory.createStop();
+
+        SessionEndedUseCase sessionEndedUseCase = useCaseFactory.createEnded();
+
 
         // Create Skill
 
         skill = Skills.standard()
                 .addRequestHandlers(
-                        new Backward(state, rewindCommand, presenter),
-                        new Continue(state, continueCommand, presenter),
-                        new Jump(state, jumpCommand, presenter),
-                        new Launch(state, presenter),
-                        new Pause(state, presenter),
-                        new Read(state, readCommand, presenter),
-                        new Repeat(state, rewindCommand, presenter),
-                        new Search(state, searchCommand, presenter),
-                        new SessionEnded(state, presenter),
-                        new Stop(state, presenter)
+                        new Previous(
+                                backwardUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
+                        new Next(
+                                forwardUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
+                        new Forward(
+                                forwardUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
+                        new Launch(launchUseCase),
+                        new Pause(pauseUseCase),
+                        new Read(
+                                currentUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
+                        new Repeat(
+                                backwardUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
+                        new Search(searchUseCase),
+                        new SessionEnded(sessionEndedUseCase, launchUseCase),
+                        new Stop(stopUseCase)
                 )
                 .build();
 

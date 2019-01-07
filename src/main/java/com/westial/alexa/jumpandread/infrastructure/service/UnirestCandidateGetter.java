@@ -3,7 +3,7 @@ package com.westial.alexa.jumpandread.infrastructure.service;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.westial.alexa.jumpandread.application.GettingCandidateContentException;
+import com.westial.alexa.jumpandread.application.exception.GettingCandidateContentException;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateGetter;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;

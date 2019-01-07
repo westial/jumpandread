@@ -12,35 +12,43 @@ public class MockPresenter extends Presenter
 
     public String weakBreak()
     {
-        return null;
+        return "{WEAK_TOKEN}";
     }
 
     public String strongBreak()
     {
-        return null;
+        return "{STRONG_TOKEN}";
     }
 
     @Override
     public String whisper(boolean startToggle)
     {
-        return null;
+        if (startToggle)
+        {
+            return "{WHISPER_START_TOKEN}";
+        }
+        else
+        {
+            return "{WHISPER_END_TOKEN}";
+        }
     }
 
     @Override
     public String emphasis(boolean startToggle)
     {
-        return null;
-    }
-
-    @Override
-    public String customBreak(int milliseconds)
-    {
-        return null;
+        if (startToggle)
+        {
+            return "{EMPHASIS_START_TOKEN}";
+        }
+        else
+        {
+            return "{EMPHASIS_END_TOKEN}";
+        }
     }
 
     public String wrap(String output)
     {
-        return null;
+        return output;
     }
 
     @Override

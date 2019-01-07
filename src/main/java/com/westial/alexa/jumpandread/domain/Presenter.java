@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Presenter
 {
@@ -30,8 +31,6 @@ public abstract class Presenter
 
     public abstract String emphasis(boolean startToggle);
 
-    public abstract String customBreak(int milliseconds);
-
     protected abstract String wrap(String output);
 
     protected String translate(String format)
@@ -51,6 +50,24 @@ public abstract class Presenter
         textKits.add(new Object[]{text});
     }
 
+    public void addTexts(List<Object[]> texts)
+    {
+        for (Object[] textKit: texts)
+        {
+            if (textKit.length == 1)
+            {
+                addText((String) textKit[0]);
+            }
+            else
+            {
+                addText(
+                        (String) textKit[0],
+                        Arrays.copyOfRange(textKit, 1, textKit.length)
+                );
+            }
+        }
+    }
+
     public void addText(String format, Object... args)
     {
         Object[] formats = new Object[]{format};
@@ -58,7 +75,7 @@ public abstract class Presenter
         textKits.add(formats);
     }
 
-    public void reset()
+    public void clear()
     {
         textKits.clear();
     }
@@ -76,7 +93,7 @@ public abstract class Presenter
         content = content.replace(Presenter.EMPHASIS_END_TOKEN, emphasis(false));
 
         // Punctuation replacements
-        content = content.replace(". ", strongBreak());
+        content = content.replaceAll("\\.[\\s\\r\\n]", strongBreak());
         content = content.replace(", ", weakBreak());
         return content;
     }
