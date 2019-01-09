@@ -97,7 +97,7 @@ public class RetrieveParagraphsSteps
     {
         List<List<String>> dataTableList = dataTable.raw();
         Queue<String> contents = new LinkedList<>();
-        for (int i = 0; i <= dataTableList.get(0).size(); i ++)
+        for (int i = 0; i < dataTableList.size(); i ++)
         {
             String content = FileSystemService.readResourceFile(
                     dataTableList.get(i).get(0)
@@ -219,5 +219,17 @@ public class RetrieveParagraphsSteps
     public void theCurrentStateCandidateIndexIsAs(String rawCandidateIndex) throws Throwable
     {
         Assert.assertEquals(rawCandidateIndex, String.valueOf(state.getCandidateIndex()));
+    }
+
+    @Then("^The speech contained in result is as \"([^\"]*)\"$")
+    public void theSpeechContainedInResultIsAs(String expected) throws Throwable
+    {
+        Assert.assertEquals(expected, resultView.getSpeech());
+    }
+
+    @Given("^A new state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\"$")
+    public void aNewStateWithUserIdAsSessionIdAs(String userId, String sessionId) throws Throwable
+    {
+        state = new DynamoDbState(stateRepository, userId, sessionId);
     }
 }

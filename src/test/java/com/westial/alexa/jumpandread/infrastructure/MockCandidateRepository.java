@@ -5,6 +5,7 @@ import com.westial.alexa.jumpandread.domain.CandidateRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,10 +13,20 @@ public class MockCandidateRepository implements CandidateRepository
 {
 
     private final HashMap<Pair<Integer, String>, Candidate> candidates;
+    private final HashMap<String, List<Candidate>> candidatesBySearchId = new HashMap<>();
 
     public MockCandidateRepository()
     {
         candidates = new HashMap<>();
+    }
+
+    private void addCandidateBySearchId(String searchId, Candidate candidate)
+    {
+        if (!candidatesBySearchId.containsKey(searchId))
+        {
+            candidatesBySearchId.put(searchId, new ArrayList<>());
+        }
+        candidatesBySearchId.get(searchId).add(candidate);
     }
 
     public MockCandidateRepository(Candidate forcedCandidate)
@@ -26,6 +37,10 @@ public class MockCandidateRepository implements CandidateRepository
                         forcedCandidate.getIndex(),
                         forcedCandidate.getSearchId()
                 ),
+                forcedCandidate
+        );
+        addCandidateBySearchId(
+                forcedCandidate.getSearchId(),
                 forcedCandidate
         );
     }
@@ -40,6 +55,10 @@ public class MockCandidateRepository implements CandidateRepository
                             forcedCandidate.getIndex(),
                             forcedCandidate.getSearchId()
                     ),
+                    forcedCandidate
+            );
+            addCandidateBySearchId(
+                    forcedCandidate.getSearchId(),
                     forcedCandidate
             );
         }
@@ -72,6 +91,10 @@ public class MockCandidateRepository implements CandidateRepository
     @Override
     public int countBySearch(String searchId)
     {
-        return candidates.size();
+        if (!candidatesBySearchId.containsKey(searchId))
+        {
+            return 0;
+        }
+        return candidatesBySearchId.get(searchId).size();
     }
 }

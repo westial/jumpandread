@@ -83,7 +83,7 @@ public abstract class ReadingCommandTemplate
             {
                 appendResult(
                         results,
-                        "response.search.result.listing.(index,title)",
+                        "response.search.result.listing.(index(%s),title(%s))",
                         String.valueOf(candidateIndex),
                         candidate.getTitle()
                 );
@@ -106,7 +106,7 @@ public abstract class ReadingCommandTemplate
 
             appendResult(
                     results,
-                    "notice.candidate.has.no.elements.(index)",
+                    "notice.candidate.has.no.elements.(index(%s))",
                     candidateIndex
             );
 
@@ -117,7 +117,7 @@ public abstract class ReadingCommandTemplate
                     candidateIndex,
                     signedCandidateMovingFactor,
                     paragraphsGroup,
-                    paragraphsGroupFactor,
+                    0,
                     results
             );
 
