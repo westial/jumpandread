@@ -1,1 +1,1 @@
-Lo 3 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}Lo 4 rewfksdfj dkgkdjnjfgk jhdfkjghfk. djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{{ . }}
+Lo 2 rewfksdfj dkgkdjnjfgk jhdfkjghfk{STRONG_TOKEN}djghkfjhgjh jhgjhgjhg jdjhgk djfhgk.{STRONG_TOKEN}Whats up bro!{STRONG_TOKEN}

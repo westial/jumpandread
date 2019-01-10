@@ -113,7 +113,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         skill = Skills.standard()
                 .addRequestHandlers(
-                        new Previous(
+                        new Backward(
                                 backwardUseCase,
                                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
                         ),

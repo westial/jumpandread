@@ -12,13 +12,13 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Previous implements RequestHandler
+public class Backward implements RequestHandler
 {
     public static final String INTENT_NAME = "Backward";
     private final BackwardUseCase previousUseCase;
     private final int defaultParagraphsGroup;
 
-    public Previous(
+    public Backward(
             BackwardUseCase previousUseCase,
             int defaultParagraphsGroup
     )

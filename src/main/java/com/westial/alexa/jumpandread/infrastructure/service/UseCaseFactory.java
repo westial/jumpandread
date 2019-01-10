@@ -62,7 +62,7 @@ public class UseCaseFactory
                 state,
                 forwardCommandFactory,
                 presenter,
-                1,
+                defaultUnsignedCandidatesFactor,
                 defaultUnsignedParagraphsFactor
         );
     }

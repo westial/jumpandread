@@ -14,7 +14,7 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class Forward implements RequestHandler
 {
-    public static final String INTENT_NAME = "Jump";
+    public static final String INTENT_NAME = "Forward";
     private final ForwardUseCase forwardUseCase;
     private final int defaultParagraphsGroup;
     private static final int DEFAULT_FORWARD_FACTOR = 2;

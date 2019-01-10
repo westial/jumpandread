@@ -161,3 +161,51 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     Then The result after invocation is not null
     And The speech contained in result is as in file "expected_paragraph_index_sample_7_following.txt"
     And The current state candidate index is as "3"
+
+
+  Scenario: Forward command, jump forwards as value of jumping factor and read paragraphs when current candidate has them
+    Given An html candidate parser
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A candidate document getter with forced and queued contents as in files as follows
+      | sample_7_paragraphs.html           |
+      | sample_7_paragraphs_following.html |
+    And A searching result candidate list as follows
+      | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
+      | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 3              |
+      | 2     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | Second candidate title | http://second.candidate.com | second bla bla desc | 0              |
+    And A multiple candidate repository for jumping
+    And A candidate factory for parsing
+    And A Mock Presenter service
+    And A configuration value for default candidates factor as "1"
+    And A configuration value for default jumping factor as "1"
+    And A Use Case Factory for reading only
+    And A forward created use case for reading as times as default jumping factor after next
+    When I invoke forward candidate use case for intent name as "Forward", paragraphs group as "2"
+    Then The result after invocation is not null
+    And The speech contained in result is as in file "expected_paragraph_index_5_sample_7.txt"
+    And The current state candidate index is as "1"
+
+
+  Scenario: Backward command, jump backwards as value of jumping factor and read paragraphs when current candidate has them
+    Given An html candidate parser
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A candidate document getter with forced and queued contents as in files as follows
+      | sample_7_paragraphs.html           |
+      | sample_7_paragraphs_following.html |
+    And A searching result candidate list as follows
+      | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
+      | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 5              |
+      | 2     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | Second candidate title | http://second.candidate.com | second bla bla desc | 0              |
+    And A multiple candidate repository for jumping
+    And A candidate factory for parsing
+    And A Mock Presenter service
+    And A configuration value for default candidates factor as "1"
+    And A configuration value for default jumping factor as "1"
+    And A Use Case Factory for reading only
+    And A backward created use case for reading as times as default jumping factor after last
+    When I invoke backward candidate use case for intent name as "Backward", paragraphs group as "2"
+    Then The result after invocation is not null
+    And The speech contained in result is as in file "expected_paragraph_index_3_to_5_sample_7.txt"
+    And The current state candidate index is as "1"

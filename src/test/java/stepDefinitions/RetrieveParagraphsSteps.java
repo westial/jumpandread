@@ -41,6 +41,9 @@ public class RetrieveParagraphsSteps
     private ForwardUseCase nextUseCase;
     private BackwardUseCase repeatUseCase;
     private int defaultParagraphsGroup;
+    private ForwardUseCase forwardUseCase;
+    private int defaultJumpingFactor;
+    private BackwardUseCase backwardUseCase;
 
     @Given("^A candidate factory for parsing$")
     public void aCandidateFactory() throws Throwable
@@ -231,5 +234,47 @@ public class RetrieveParagraphsSteps
     public void aNewStateWithUserIdAsSessionIdAs(String userId, String sessionId) throws Throwable
     {
         state = new DynamoDbState(stateRepository, userId, sessionId);
+    }
+
+    @Given("^A configuration value for default jumping factor as \"([^\"]*)\"$")
+    public void aConfigurationValueForDefaultJumpingFactorAs(String rawFactor) throws Throwable
+    {
+        defaultJumpingFactor = Integer.parseInt(rawFactor);
+    }
+
+    @Given("^A forward created use case for reading as times as default jumping factor after next$")
+    public void aForwardCreatedUseCaseForReadingAfterNext()
+    {
+        forwardUseCase = useCaseFactory.createForward();
+    }
+
+    @When("^I invoke forward candidate use case for intent name as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokeForwardCandidateUseCaseForIntentNameAsParagraphsGroupAs(String intentName, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = forwardUseCase.invoke(
+                intentName,
+                null,
+                1,
+                defaultJumpingFactor,
+                Integer.parseInt(rawParagraphsGroup)
+        );
+    }
+
+    @Given("^A backward created use case for reading as times as default jumping factor after last$")
+    public void aBackwardCreatedUseCaseForReadingAsTimesAsDefaultJumpingFactorAfterLast()
+    {
+        backwardUseCase = useCaseFactory.createBackward();
+    }
+
+    @When("^I invoke backward candidate use case for intent name as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokeBackwardCandidateUseCaseForIntentNameAsParagraphsGroupAs(String intentName, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = backwardUseCase.invoke(
+                intentName,
+                null,
+                1,
+                defaultJumpingFactor,
+                Integer.parseInt(rawParagraphsGroup)
+        );
     }
 }
