@@ -1,7 +1,8 @@
 package com.westial.alexa.jumpandread.domain;
 
 import java.util.Calendar;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public abstract class Candidate
 {
@@ -16,10 +17,10 @@ public abstract class Candidate
 
     protected String url;
     protected String description;
-    protected List<Paragraph> paragraphs;
+    protected LinkedHashMap<Integer, Paragraph> paragraphs;
     protected Integer paragraphPosition;
     protected String content;
-    protected Calendar updatedAt;
+    private Calendar updatedAt;
 
     private final CandidateGetter getter;
     private final CandidateParser parser;
@@ -175,7 +176,15 @@ public abstract class Candidate
 
     public void parse()
     {
-        paragraphs = parser.parse(content);
+        paragraphs = new LinkedHashMap<>();
+        LinkedList<Paragraph> parsedParagraphs =
+                new LinkedList<>(parser.parse(content));
+        int index = 0;
+        while (!parsedParagraphs.isEmpty())
+        {
+            paragraphs.put(index, parsedParagraphs.removeFirst());
+            index ++;
+        }
     }
 
     public void provideContent()
@@ -183,7 +192,7 @@ public abstract class Candidate
         content = getter.getContent(this);
     }
 
-    public List<Paragraph> getParagraphs()
+    public LinkedHashMap<Integer, Paragraph> getParagraphs()
     {
         return paragraphs;
     }

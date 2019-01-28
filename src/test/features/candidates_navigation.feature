@@ -24,7 +24,8 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And The current state candidate index is as "1"
 
 
-  Scenario: Pause and Continue command, pause when reading and point paragraph index behind current reading    Given An html candidate parser
+  Scenario: Pause and Continue command, pause when reading and point paragraph index behind current reading
+    Given An html candidate parser
     And A user state repository for parsing
     And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A candidate document getter with forced and queued contents as in files as follows
