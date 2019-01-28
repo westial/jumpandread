@@ -27,7 +27,7 @@ public class MockCandidatesSearch implements CandidatesSearch
             return null;
         }
 
-        List<Candidate> candidates = new ArrayList<Candidate>();
+        List<Candidate> candidates = new ArrayList<>();
         String title;
         String description;
         String url;

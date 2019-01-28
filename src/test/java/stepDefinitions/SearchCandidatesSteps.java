@@ -231,9 +231,10 @@ public class SearchCandidatesSteps
     @Then("^Candidate repository contains exactly \"([^\"]*)\" candidates$")
     public void candidateRepositoryContainsExactlyCandidates(String expected) throws Throwable
     {
+        String searchId = ((MockCandidateRepository)candidateRepository).testOnlyGetLastSearchId();
         Assert.assertEquals(
                 Integer.parseInt(expected),
-                candidateRepository.countBySearch("no matters")
+                (candidateRepository.countBySearch(searchId))
         );
     }
 

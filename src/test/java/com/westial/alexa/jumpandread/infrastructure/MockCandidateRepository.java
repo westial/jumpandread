@@ -5,19 +5,17 @@ import com.westial.alexa.jumpandread.domain.CandidateRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MockCandidateRepository implements CandidateRepository
 {
 
-    private final HashMap<Pair<Integer, String>, Candidate> candidates;
+    private final LinkedHashMap<Pair<Integer, String>, Candidate> candidates;
     private final HashMap<String, List<Candidate>> candidatesBySearchId = new HashMap<>();
 
     public MockCandidateRepository()
     {
-        candidates = new HashMap<>();
+        candidates = new LinkedHashMap<>();
     }
 
     private void addCandidateBySearchId(String searchId, Candidate candidate)
@@ -81,6 +79,10 @@ public class MockCandidateRepository implements CandidateRepository
                 ),
                 candidate
         );
+        addCandidateBySearchId(
+                candidate.getSearchId(),
+                candidate
+        );
     }
 
     public Candidate get(String searchId, Integer index)
@@ -96,5 +98,19 @@ public class MockCandidateRepository implements CandidateRepository
             return 0;
         }
         return candidatesBySearchId.get(searchId).size();
+    }
+
+    public String testOnlyGetLastSearchId()
+    {
+        Candidate last = null;
+        for (Candidate candidate : candidates.values())
+        {
+            last = candidate;
+        }
+        if (null == last)
+        {
+            return null;
+        }
+        return last.getSearchId();
     }
 }
