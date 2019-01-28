@@ -14,11 +14,14 @@ public class Pause implements RequestHandler {
 
     public static final String INTENT_NAME = "Pause";
     private final PauseUseCase pauseUseCase;
+    private final int defaultParagraphsGroup;
 
     public Pause(
-            PauseUseCase pauseUseCase)
+            PauseUseCase pauseUseCase,
+            int defaultParagraphsGroup)
     {
         this.pauseUseCase = pauseUseCase;
+        this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     @Override
@@ -29,7 +32,11 @@ public class Pause implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        View view = pauseUseCase.invoke(INTENT_NAME);
+        View view = pauseUseCase.invoke(
+                INTENT_NAME,
+                1,
+                defaultParagraphsGroup
+                );
 
         return input.getResponseBuilder()
                 .withSpeech(view.getSpeech())

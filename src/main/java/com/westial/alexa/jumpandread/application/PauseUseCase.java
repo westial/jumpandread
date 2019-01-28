@@ -3,6 +3,8 @@ package com.westial.alexa.jumpandread.application;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.structure.PresenterView;
 
+import static java.lang.Math.abs;
+
 public class PauseUseCase
 {
     private final State state;
@@ -20,7 +22,11 @@ public class PauseUseCase
         this.candidateFactory = candidateFactory;
     }
 
-    public View invoke(String intentName)
+    public View invoke(
+            String intentName,
+            int unsignedParagraphsMoveFactor,
+            int paragraphsGroup
+    )
     {
         state.updateIntent(intentName);
 
@@ -30,7 +36,9 @@ public class PauseUseCase
                 state.getSearchId()
         );
 
-        candidate.rewind(1);
+        candidate.rewind(
+                paragraphsGroup * abs(unsignedParagraphsMoveFactor)
+        );
 
         candidate.persist();
 

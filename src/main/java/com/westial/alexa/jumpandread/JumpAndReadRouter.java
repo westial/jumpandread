@@ -126,7 +126,10 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
                         ),
                         new Launch(launchUseCase),
-                        new Pause(pauseUseCase),
+                        new Pause(
+                                pauseUseCase,
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                        ),
                         new Read(
                                 currentUseCase,
                                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))

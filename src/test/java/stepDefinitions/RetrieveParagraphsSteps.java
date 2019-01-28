@@ -1,9 +1,6 @@
 package stepDefinitions;
 
-import com.westial.alexa.jumpandread.application.BackwardUseCase;
-import com.westial.alexa.jumpandread.application.CurrentUseCase;
-import com.westial.alexa.jumpandread.application.ForwardUseCase;
-import com.westial.alexa.jumpandread.application.View;
+import com.westial.alexa.jumpandread.application.*;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockPresenter;
@@ -44,6 +41,7 @@ public class RetrieveParagraphsSteps
     private ForwardUseCase forwardUseCase;
     private int defaultJumpingFactor;
     private BackwardUseCase backwardUseCase;
+    private PauseUseCase pauseUseCase;
 
     @Given("^A candidate factory for parsing$")
     public void aCandidateFactory() throws Throwable
@@ -275,6 +273,33 @@ public class RetrieveParagraphsSteps
                 1,
                 defaultJumpingFactor,
                 Integer.parseInt(rawParagraphsGroup)
+        );
+    }
+
+    @Then("^The current state candidate paragraph position is as \"([^\"]*)\"$")
+    public void theCurrentStateCandidateParagraphPositionIsAs(String expected) throws Throwable
+    {
+        Candidate candidate = candidateRepository.get(
+                state.getSearchId(),
+                state.getCandidateIndex()
+        );
+        int currentPosition = candidate.getParagraphPosition();
+        Assert.assertEquals(expected, String.valueOf(currentPosition));
+    }
+
+    @Given("^A newly created use case for pause candidate reading$")
+    public void aNewlyCreatedUseCaseForPauseCandidateReading()
+    {
+        pauseUseCase = useCaseFactory.createPause();
+    }
+
+    @When("^I invoke pause candidate use case for intent name as \"([^\"]*)\", paragraphs group as \"([^\"]*)\"$")
+    public void iInvokePauseCandidateUseCaseForIntentNameAsParagraphsGroupAs(String intentName, String rawParagraphsGroup) throws Throwable
+    {
+        resultView = pauseUseCase.invoke(
+                intentName,
+                Integer.parseInt(rawParagraphsGroup),
+                defaultJumpingFactor
         );
     }
 }

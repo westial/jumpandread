@@ -24,6 +24,30 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And The current state candidate index is as "1"
 
 
+  Scenario: Pause and Continue command, pause when reading and point paragraph index behind current reading    Given An html candidate parser
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A candidate document getter with forced and queued contents as in files as follows
+      | sample_7_paragraphs.html           |
+      | sample_7_paragraphs_following.html |
+    And A searching result candidate list as follows
+      | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
+      | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
+      | 2     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | Second candidate title | http://second.candidate.com | second bla bla desc | 0              |
+    And A multiple candidate repository for jumping
+    And A candidate factory for parsing
+    And A Mock Presenter service
+    And A configuration value for default candidates factor as "1"
+    And A configuration value for default jumping factor as "1"
+    And A Use Case Factory for reading only
+    And A newly created use case for pause candidate reading
+    When I invoke pause candidate use case for intent name as "Pause", paragraphs group as "2"
+    Then The result after invocation is not null
+    And The current state candidate index is as "1"
+    And The current state candidate paragraph position is as "4"
+    And The speech contained in result is as "notice.after.pause"
+
+
   Scenario: Read command, try reading the first paragraphs for an empty candidate goes to read first paragraphs of the next one
     Given An html candidate parser
     And A user state repository for parsing
