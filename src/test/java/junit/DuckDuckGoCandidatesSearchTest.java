@@ -49,7 +49,7 @@ public class DuckDuckGoCandidatesSearchTest
         candidateRepository = new MockCandidateRepository();
         contentGetter = new UnirestContentGetter("fakebrowser");
         presenter = new AlexaPresenter(new MockTranslator());
-        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
+        contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,

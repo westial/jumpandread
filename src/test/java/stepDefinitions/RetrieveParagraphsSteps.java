@@ -310,6 +310,6 @@ public class RetrieveParagraphsSteps
     @Given("^A mock text content provider for retrieval$")
     public void aMockContentProvider()
     {
-        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
+        contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
     }
 }

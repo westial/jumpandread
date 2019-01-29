@@ -93,7 +93,7 @@ function deploy_lambda
     fi
 }
 
-deploy_lambda "$MAIN_REGION" "$LAMBDA_FUNCTION" "$LAMBDA_JAR" "$HANDLER_CLASS" "$SCRIPT_DIR/environment.json" "$AWS_ACCOUNT" "$LAMBDA_ROLE" "$DEPLOY_TAG"
+deploy_lambda "$MAIN_REGION" "$LAMBDA_FUNCTION" "$LAMBDA_JAR" "$HANDLER_CLASS" "$SCRIPT_DIR/environment.es.json" "$AWS_ACCOUNT" "$LAMBDA_ROLE" "$DEPLOY_TAG"
 
 
 if [[ $? -eq 0 ]]; then

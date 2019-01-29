@@ -13,8 +13,11 @@ public class GoogleCandidatesSearchFactory implements CandidatesSearchFactory
                 Integer.parseInt(config.retrieve("STARTING_CANDIDATE_INDEX")),
                 config.retrieve("GOOGLE_KEY"),
                 config.retrieve("GOOGLE_CX"),
+                config.retrieve("GOOGLE_APP_NAME"),
                 config.retrieve("ISO4_LANGUAGE"),
-                candidateFactory
+                candidateFactory,
+                Integer.parseInt(config.retrieve("GOOGLE_RESULTS_BY_SEARCH")),
+                config.retrieve("GOOGLE_DORK", null)
         );
     }
 }

@@ -68,7 +68,8 @@ public class SearchCandidatesSteps
                 headersProvider,
                 duckLocaleProvider,
                 iso4Locale,
-                candidateFactory
+                candidateFactory,
+                "filetype:html OR filetype:htm"
         );
     }
 
@@ -263,6 +264,6 @@ public class SearchCandidatesSteps
     @Given("^A mock text content provider$")
     public void aMockContentProvider()
     {
-        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
+        contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
     }
 }

@@ -15,15 +15,15 @@ public class FromJsonFileTranslator implements Translator
     private final Map<String, String> locales;
     private final String currentLocale;
 
-    public FromJsonFileTranslator(String iso4Locale, String context)
+    public FromJsonFileTranslator(String iso4Locale, String filename)
     {
         iso4Locale = iso4Locale.toLowerCase();
         iso4Locale = iso4Locale.replace("_", "-");
         currentLocale = iso4Locale;
         String resourceFilePath = String.format(
-                "i18n/%s/%s.json",
+                "i18n/%s/%s",
                 iso4Locale,
-                context
+                filename
         );
         try
         {

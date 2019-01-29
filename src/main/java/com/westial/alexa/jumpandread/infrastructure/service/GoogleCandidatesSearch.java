@@ -1,6 +1,8 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.customsearch.Customsearch;
 import com.google.api.services.customsearch.model.Result;
@@ -8,6 +10,7 @@ import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateFactory;
 import com.westial.alexa.jumpandread.domain.CandidatesSearch;
 import com.westial.alexa.jumpandread.domain.User;
+import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,15 +25,22 @@ public class GoogleCandidatesSearch implements CandidatesSearch
     private final String googleKey;
     private final String googleCx;
     private final CandidateFactory candidateFactory;
-    private final static int GOOGLE_RESULTS_BY_QUERY = 10;
+    private final int resultsBySearch;
     private final String googleLr;
+    private final String dork;
+
+    // Immutable, see https://developers.google.com/custom-search/json-api/v1/reference/cse/list#num
+    private final static int GOOGLE_RESULTS_BY_QUERY = 10;
 
     public GoogleCandidatesSearch(
             int startingIndex,
             String googleKey,
             String googleCx,
+            String googleAppName,
             String iso4Language,
-            CandidateFactory candidateFactory)
+            CandidateFactory candidateFactory,
+            int resultsBySearch,
+            String dork)
     {
         this.startingIndex = startingIndex;
         this.googleKey = googleKey;
@@ -38,9 +48,17 @@ public class GoogleCandidatesSearch implements CandidatesSearch
         this.googleLr = formatLanguage(iso4Language);
 
         this.candidateFactory = candidateFactory;
-        NetHttpTransport.Builder netBuilder = new NetHttpTransport.Builder();
-        this.customsearch = new Customsearch(netBuilder.build(), new JacksonFactory(), httpRequest -> {
-        });
+        this.resultsBySearch = resultsBySearch;
+
+        HttpTransport httpTransport = new NetHttpTransport();
+        JsonFactory jsonFactory = new JacksonFactory();
+        this.customsearch = new Customsearch.Builder(
+                httpTransport,
+                jsonFactory,
+                null
+        ).setApplicationName(googleAppName).build();
+
+        this.dork = (null == dork) ? "" : String.format(" AND (%s)", dork);
     }
 
     private static String formatLanguage(String iso4Language)
@@ -57,8 +75,19 @@ public class GoogleCandidatesSearch implements CandidatesSearch
         try
         {
             LinkedList<Result> results = new LinkedList<>(
-                    search(terms, GOOGLE_RESULTS_BY_QUERY)
+                    search(
+                            String.format("%s%s", terms, dork),
+                            resultsBySearch
+                    )
             );
+            if (results.isEmpty())
+            {
+                System.out.printf(
+                        "WARNING: %s\n",
+                        "No result in Google searching results page"
+                );
+                return null;
+            }
             for (int resultsIndex = startingIndex; !results.isEmpty() ; resultsIndex ++)
             {
                 result = results.pop();
@@ -72,14 +101,18 @@ public class GoogleCandidatesSearch implements CandidatesSearch
                 );
                 candidates.add(candidate);
             }
-        } catch (IOException e)
+        } catch (IOException sdkException)
         {
-            // FIXME exceptions management
-            e.printStackTrace();
-        } catch (URISyntaxException e)
+            System.out.printf(
+                    "WARNING: %s\n",
+                    sdkException.getMessage()
+            );
+            return null;
+        } catch (URISyntaxException confException)
         {
-            // FIXME exceptions management
-            e.printStackTrace();
+            throw new WebClientSearchException(
+                    confException.getMessage()
+            );
         }
         return candidates;
     }
@@ -103,8 +136,8 @@ public class GoogleCandidatesSearch implements CandidatesSearch
         list.setLr(googleLr);
 
         //Exact terms
-        for(long i = 1 ; i < numOfResults ; i += GOOGLE_RESULTS_BY_QUERY){
-            list.setStart(i);
+        for(long index = 1 ; index < numOfResults ; index += GOOGLE_RESULTS_BY_QUERY){
+            list.setStart(index);
             lastResults = list.execute().getItems();
             if (null == lastResults)
             {

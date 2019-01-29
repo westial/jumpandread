@@ -17,6 +17,7 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
     private final DuckDuckGoLocaleProvider duckGoLocaleProvider;
     private final String iso4Language;
     private final CandidateFactory candidateFactory;
+    private final String dork;
 
     public DuckDuckGoCandidatesSearch(
             int startingIndex,
@@ -26,7 +27,8 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
             HeadersProvider headersProvider,
             DuckDuckGoLocaleProvider duckGoLocaleProvider,
             String iso4Language,
-            CandidateFactory candidateFactory
+            CandidateFactory candidateFactory,
+            String dork
     )
     {
         this.startingIndex = startingIndex;
@@ -37,6 +39,7 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
         this.duckGoLocaleProvider = duckGoLocaleProvider;
         this.iso4Language = iso4Language;
         this.candidateFactory = candidateFactory;
+        this.dork = (null == dork) ? "" : String.format(" AND (%s)", dork);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
         List<Candidate> candidates = new ArrayList<>();
         Candidate candidate;
         Map<String, String> payload = new HashMap<>();
-        payload.put("q", String.format("%s filetype:html", terms));
+        payload.put("q", String.format("%s%s", terms, dork));
         payload.put("b", "");
         payload.put("kl", duckGoLocaleProvider.provide());
 
@@ -67,7 +70,6 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
         catch (SearchException searchException)
         {
             System.out.printf("WARNING: %s\n", searchException.getMessage());
-            searchException.printStackTrace();
             return null;
         }
 

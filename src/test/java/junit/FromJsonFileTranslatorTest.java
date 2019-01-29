@@ -18,7 +18,7 @@ public class FromJsonFileTranslatorTest
     {
         translator = new FromJsonFileTranslator(
                 "es_ES",
-                "test"
+                "test.json"
         );
     }
 

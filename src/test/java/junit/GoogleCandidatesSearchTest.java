@@ -37,7 +37,7 @@ public class GoogleCandidatesSearchTest
         candidateRepository = new MockCandidateRepository();
         contentGetter = new UnirestContentGetter("fakebrowser");
         presenter = new AlexaPresenter(new MockTranslator());
-        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
+        contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
@@ -49,8 +49,12 @@ public class GoogleCandidatesSearchTest
                 STARTING_CANDIDATE_INDEX,
                 getConfig("google.key"),
                 getConfig("google.cx"),
+                "Jump and Read Junit Test",
                 "es-ES",
-                candidateFactory);
+                candidateFactory,
+                10,
+                "filetype:html OR filetype:htm"
+        );
     }
 
     private String getConfig(String filePath) throws URISyntaxException, IOException

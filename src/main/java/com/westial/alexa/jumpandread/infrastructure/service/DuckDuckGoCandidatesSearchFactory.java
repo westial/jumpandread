@@ -21,7 +21,8 @@ public class DuckDuckGoCandidatesSearchFactory implements CandidatesSearchFactor
                 ),
                 new RandomDuckDuckGoLocaleProvider(config.retrieve("DUCK_LOCALE_RESOURCE_PATH")),
                 config.retrieve("ISO4_LANGUAGE"),
-                candidateFactory
+                candidateFactory,
+                config.retrieve("DUCK_DORK", null)
         );
     }
 }

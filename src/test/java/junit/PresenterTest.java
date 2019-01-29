@@ -17,7 +17,7 @@ public class PresenterTest
     {
         Translator translator = new FromJsonFileTranslator(
                 "es-ES",
-                "test"
+                "test.json"
         );
 
         presenter = new AlexaPresenter(translator);

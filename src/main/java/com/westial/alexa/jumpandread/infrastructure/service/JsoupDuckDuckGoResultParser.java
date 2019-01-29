@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
 import com.westial.alexa.jumpandread.infrastructure.exception.NoSearchingResults;
-import com.westial.alexa.jumpandread.infrastructure.exception.UnexpectedSearchingResultsPageContent;
+import com.westial.alexa.jumpandread.infrastructure.exception.UnexpectedSearchingResult;
 import com.westial.alexa.jumpandread.infrastructure.structure.DuckDuckGoResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,7 +25,7 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
         Elements nodes = document.select("div.result__body");
         if (null == nodes || nodes.isEmpty())
         {
-            throw new UnexpectedSearchingResultsPageContent(
+            throw new UnexpectedSearchingResult(
                     String.format(
                             "Expecting %s in DuckDuckGo searching results is not found",
                             "div.result__body"
