@@ -4,14 +4,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 DEPLOY_TAG="$(date +%Y%m%d%H%M%S)"
 
-export AWS_PROFILE=westial
+source "$SCRIPT_DIR/conf/global.sh"
+source "$SCRIPT_DIR/conf/duck.websearch.es.sh"
 
-LAMBDA_FUNCTION="DuckDuckGoJumpAndReadRouter"
-LAMBDA_JAR="jumpandread-0.2.jar"
-HANDLER_CLASS="com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter"
-MAIN_REGION="eu-west-1"
-AWS_ACCOUNT="018128475095"
-LAMBDA_ROLE="service-role/lambda"
 
 cd "/home/jaume/workspace/alexa-jumpandread"
 
@@ -93,7 +88,7 @@ function deploy_lambda
     fi
 }
 
-deploy_lambda "$MAIN_REGION" "$LAMBDA_FUNCTION" "$LAMBDA_JAR" "$HANDLER_CLASS" "$SCRIPT_DIR/environment.es.json" "$AWS_ACCOUNT" "$LAMBDA_ROLE" "$DEPLOY_TAG"
+deploy_lambda "$MAIN_REGION" "$LAMBDA_FUNCTION" "$LAMBDA_JAR" "$HANDLER_CLASS" "$SCRIPT_DIR/conf/$ENVIRONMENT_VARS_FILENAME" "$AWS_ACCOUNT" "$LAMBDA_ROLE" "$DEPLOY_TAG"
 
 
 if [[ $? -eq 0 ]]; then

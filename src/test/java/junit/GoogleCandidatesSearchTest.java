@@ -75,7 +75,7 @@ public class GoogleCandidatesSearchTest
         List<Candidate> candidates = engine.find(
                 new User("user id", "session id"),
                 "search id",
-                "japan rail pass"
+                "hola"
         );
         Assert.assertEquals(10, candidates.size());
     }
