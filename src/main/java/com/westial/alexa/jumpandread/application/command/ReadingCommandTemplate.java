@@ -77,7 +77,6 @@ public abstract class ReadingCommandTemplate
 
         try
         {
-            parse(candidate);
             moveParagraphsPoint(candidate, paragraphsGroupFactor, paragraphsGroup);
             if (0 == candidate.getParagraphPosition())
             {
@@ -140,24 +139,11 @@ public abstract class ReadingCommandTemplate
             int paragraphsGroup
     );
 
-    protected void parse(Candidate candidate) throws NoParagraphsException
-    {
-        if (null == candidate.getParagraphs())
-        {
-            candidate.provideContent();
-        }
-        candidate.parse();
-    }
-
     String dump(
             int paragraphsGroup,
             Candidate candidate
     )
     {
-        if (candidate.isFinished())
-        {
-            throw new IteratingNoParagraphsException("Finished Candidate");
-        }
         return candidate.dump(
                 paragraphsGroup,
                 Presenter.STRONG_TOKEN

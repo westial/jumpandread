@@ -3,9 +3,9 @@ package com.westial.alexa.jumpandread.infrastructure.service;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.westial.alexa.jumpandread.application.exception.GettingCandidateContentException;
-import com.westial.alexa.jumpandread.domain.Candidate;
-import com.westial.alexa.jumpandread.domain.CandidateGetter;
+import com.westial.alexa.jumpandread.application.exception.GettingContentException;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import com.westial.alexa.jumpandread.domain.content.ContentAddress;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -19,11 +19,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 
-public class UnirestCandidateGetter implements CandidateGetter
+public class UnirestContentGetter implements ContentGetter
 {
     private final String userAgent;
 
-    public UnirestCandidateGetter(String userAgent)
+    public UnirestContentGetter(String userAgent)
     {
         this.userAgent = userAgent;
     }
@@ -37,9 +37,9 @@ public class UnirestCandidateGetter implements CandidateGetter
     }
 
     @Override
-    public String getContent(Candidate candidate) throws GettingCandidateContentException
+    public String getContent(ContentAddress address) throws GettingContentException
     {
-        String url = fixUrl(candidate.getUrl());
+        String url = fixUrl(address.getUrl());
         SSLContext sslcontext;
 
         try
@@ -58,7 +58,7 @@ public class UnirestCandidateGetter implements CandidateGetter
             return response.getBody();
         } catch (UnirestException | NoSuchAlgorithmException | KeyManagementException | KeyStoreException exception)
         {
-            throw new GettingCandidateContentException(exception.getMessage());
+            throw new GettingContentException(exception.getMessage());
         }
     }
 }

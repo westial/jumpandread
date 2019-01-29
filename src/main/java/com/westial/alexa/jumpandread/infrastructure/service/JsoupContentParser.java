@@ -1,24 +1,22 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
-import com.westial.alexa.jumpandread.domain.CandidateParser;
-import com.westial.alexa.jumpandread.domain.Paragraph;
-import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
+import com.westial.alexa.jumpandread.domain.content.TextContent;
+import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
-public class JsoupCandidateParser implements CandidateParser
+public class JsoupContentParser extends TextContentParser
 {
-    public List<Paragraph> parse(String content)
+    public LinkedList<TextContent> parse(String content)
     {
-        List<Paragraph> paragraphs = new ArrayList<Paragraph>();
+        LinkedList<TextContent> contents = new LinkedList<>();
         Document document = Jsoup.parse(content);
         Elements readElements = document.select("h1, h2, h3, h4, h5, h6, p, pre, li");
         if (0 < readElements.size())
@@ -32,13 +30,14 @@ public class JsoupCandidateParser implements CandidateParser
         readElements = sort(readElements);
         for (Element readElement: readElements)
         {
-            paragraphs.add(
-                    new DynamoDbParagraph(
-                            readElement.tagName(), readElement.text()
+            contents.add(
+                    new HtmlTextContent(
+                            readElement.tagName(),
+                            readElement.text()
                     )
             );
         }
-        return paragraphs;
+        return contents;
     }
 
     private static Elements filter(Elements elements)

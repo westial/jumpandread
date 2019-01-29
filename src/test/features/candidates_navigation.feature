@@ -3,11 +3,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Read command, read the first paragraphs for the given candidate index even when paragraphs index is not the candidate starting point
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -26,11 +27,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Pause and Continue command, pause when reading and point paragraph index behind current reading
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -51,11 +53,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Read command, try reading the first paragraphs for an empty candidate goes to read first paragraphs of the next one
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_0_paragraphs.html |
       | sample_7_paragraphs.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -74,11 +77,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Next command, read next paragraphs when current candidate has them
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -97,11 +101,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Repeat command, repeat reading last read paragraphs
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -120,11 +125,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Trying to read a candidate with a number out of range asks user to find again
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -143,11 +149,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Trying to read a candidate index in a new session having this user deprecated search candidates from other session asks user to search for something
     Given An html candidate parser
-    And A user state repository for parsing
-    And A new state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "99999999-1234-4ea6-bfca-347ca7612345"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A new state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "99999999-1234-4ea6-bfca-347ca7612345"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -165,12 +172,13 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Trying to read next paragraphs when candidate has no more paragraphs notices user and goes to next candidate and reads first paragraphs group
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_0_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -190,11 +198,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Forward command, jump forwards as value of jumping factor and read paragraphs when current candidate has them
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 3              |
@@ -214,11 +223,12 @@ Feature: All movements between candidates and paragraphs with their exceptions p
 
   Scenario: Backward command, jump backwards as value of jumping factor and read paragraphs when current candidate has them
     Given An html candidate parser
-    And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
-    And A candidate document getter with forced and queued contents as in files as follows
+    And An address document getter with forced and queued contents as in files as follows
       | sample_7_paragraphs.html           |
       | sample_7_paragraphs_following.html |
+    And A mock text content provider for retrieval
+    And A user state repository for parsing
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 5              |

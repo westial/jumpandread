@@ -1,6 +1,7 @@
 package utils;
 
 import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -89,6 +90,34 @@ public class RandomContent
         return new DynamoDbParagraph(label, text.toString().trim());
     }
 
+    public static TextContent createTextContent(int minPhrases, int maxPhrases)
+    {
+        String label = "p";
+        StringBuilder text = new StringBuilder();
+        Random random = new Random();
+        int phrasesCount = random.nextInt(maxPhrases + 1 - minPhrases) + minPhrases;
+
+        for (int i = 0; i < phrasesCount; i++)
+        {
+            text.append(createPhrase(4, 9) + ". ");
+        }
+
+        return new TextContent(label, text.toString().trim())
+        {
+            @Override
+            public String getLabel()
+            {
+                return super.getLabel();
+            }
+
+            @Override
+            public String getContent()
+            {
+                return super.getContent();
+            }
+        };
+    }
+
     public static List<Paragraph> createParagraphs(int minParagr, int maxParagr)
     {
         List<Paragraph> paragraphs = new ArrayList<>();
@@ -101,5 +130,19 @@ public class RandomContent
         }
 
         return paragraphs;
+    }
+
+    public static List<TextContent> createContents(int minParagr, int maxParagr)
+    {
+        List<TextContent> contents = new ArrayList<>();
+        Random random = new Random();
+        int phrasesCount = random.nextInt(maxParagr + 1 - minParagr) + minParagr;
+
+        for (int i = 0; i < phrasesCount; i++)
+        {
+            contents.add(createTextContent(5, 9));
+        }
+
+        return contents;
     }
 }

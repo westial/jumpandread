@@ -2,6 +2,9 @@ package stepDefinitions;
 
 import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
 import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import cucumber.api.java.en.Given;
@@ -23,9 +26,9 @@ public class SearchCandidatesSteps
     private SearchCandidatesCommand searchCandidates;
     private String foundCandidates;
     private CandidateFactory candidateFactory;
-    private CandidateParser candidateParser;
+    private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
-    private CandidateGetter candidateGetter;
+    private ContentGetter contentGetter;
     private Presenter presenter;
     private StateFactory stateFactory;
     private State state;
@@ -35,6 +38,7 @@ public class SearchCandidatesSteps
     private List<Candidate> candidates;
     private HeadersProvider headersProvider;
     private DuckDuckGoLocaleProvider duckLocaleProvider;
+    private TextContentProvider contentProvider;
 
     @Given("^A local web client service with a forced content as in file as \"([^\"]*)\"$")
     public void anHtmlSearchResultPageAsInFileAs(String fileName) throws Throwable
@@ -143,10 +147,10 @@ public class SearchCandidatesSteps
         stateRepository = new MockStateRepository();
     }
 
-    @Given("^A mock candidate parser$")
+    @Given("^A mock text content parser$")
     public void aMockPageParser() throws Throwable
     {
-        candidateParser = new MockCandidateParser();
+        contentParser = new MockContentParser();
     }
 
     @Given("^A searching step command$")
@@ -188,16 +192,16 @@ public class SearchCandidatesSteps
     public void aCandidateFactory() throws Throwable
     {
         candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
+                contentProvider,
+                candidateRepository,
+                100
         );
     }
 
-    @Given("^A candidate document getter$")
+    @Given("^An address document getter$")
     public void aCandidateDocumentGetter() throws Throwable
     {
-        candidateGetter = new MockCandidateGetter("<html></html>");
+        contentGetter = new MockContentGetter("<html></html>");
     }
 
     @Given("^An Alexa output formatter for searching$")
@@ -254,5 +258,11 @@ public class SearchCandidatesSteps
     public void theServiceReturnedNoCandidates()
     {
         Assert.assertNull(candidates);
+    }
+
+    @Given("^A mock text content provider$")
+    public void aMockContentProvider()
+    {
+        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
     }
 }

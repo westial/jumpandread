@@ -1,8 +1,12 @@
 package com.westial.alexa.jumpandread.infrastructure.structure;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.domain.Candidate;
+import com.westial.alexa.jumpandread.domain.CandidateRepository;
+import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedHashMap;
 
@@ -14,22 +18,48 @@ public class DynamoDbCandidate extends Candidate
         super(null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
-    public DynamoDbCandidate(String id, Integer index, String userId, String sessionId, String searchId, String title, String url, String description, CandidateGetter getter, CandidateParser parser, CandidateRepository repository, Integer paragraphPosition)
+    public DynamoDbCandidate(
+            String id,
+            Integer index,
+            String userId,
+            String sessionId,
+            String searchId,
+            String title,
+            String url,
+            String description,
+            TextContentProvider contentProvider,
+            CandidateRepository repository,
+            Integer paragraphPosition,
+            int maxParagraphsNumber
+    )
     {
-        super(id, index, userId, sessionId, searchId, title, url, description, getter, parser, repository, paragraphPosition);
-    }
-
-    public DynamoDbCandidate(String id, int index, String userId, String sessionId, String searchId, CandidateGetter getter, CandidateParser parser, CandidateRepository repository)
-    {
-        super(id, index, userId, sessionId, searchId, getter, parser, repository);
+        super(id, index, userId, sessionId, searchId, title, url, description, contentProvider, repository, paragraphPosition, maxParagraphsNumber);
     }
 
     @Override
+    protected Paragraph buildParagraph(int index, Pair<String, String> content)
+    {
+        return new DynamoDbParagraph(content.getKey(), content.getValue());
+    }
+
+    public DynamoDbCandidate(
+            String id,
+            int index,
+            String userId,
+            String sessionId,
+            String searchId,
+            TextContentProvider contentProvider,
+            CandidateRepository repository,
+            int maxParagraphsNumber)
+    {
+        super(id, index, userId, sessionId, searchId, contentProvider, repository, maxParagraphsNumber);
+    }
+
     @DynamoDBTypeConverted(converter = DynamoDbParagraphListConverter.class)
     @DynamoDBAttribute(attributeName = "paragraphs")
     public LinkedHashMap<Integer, Paragraph> getParagraphs()
     {
-        return super.getParagraphs();
+        return super.paragraphs;
     }
 
     public void setParagraphs(LinkedHashMap<Integer, Paragraph> paragraphs)

@@ -1,8 +1,11 @@
 package junit;
 
 import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.MockCandidateParser;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
+import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,10 +20,11 @@ public class DuckDuckGoCandidatesSearchTest
 {
     private CandidatesSearch engine;
     private CandidateFactory candidateFactory;
-    private CandidateGetter candidateGetter;
+    private ContentGetter contentGetter;
     private Presenter presenter;
-    private CandidateParser candidateParser;
+    private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
+    private TextContentProvider contentProvider;
 
     private static void configure() throws Exception
     {
@@ -41,15 +45,16 @@ public class DuckDuckGoCandidatesSearchTest
         configure();
         Configuration config = new EnvironmentConfiguration();
 
-        candidateParser = new MockCandidateParser();
+        contentParser = new MockContentParser();
         candidateRepository = new MockCandidateRepository();
-        candidateGetter = new UnirestCandidateGetter("fakebrowser");
+        contentGetter = new UnirestContentGetter("fakebrowser");
         presenter = new AlexaPresenter(new MockTranslator());
+        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
 
         candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
+                contentProvider,
+                candidateRepository,
+                100
         );
 
         CandidatesSearchFactory factory = new DuckDuckGoCandidatesSearchFactory();

@@ -33,9 +33,9 @@ public class SearchAndReadTest
     private String candidatesList;
     private User user;
     private CandidateFactory candidateFactory;
-    private CandidateParser candidateParser;
+    private CandidateParser contentParser;
     private CandidateRepository candidateRepository;
-    private CandidateGetter candidateGetter;
+    private CandidateGetter contentGetter;
     private Presenter presenter;
     private StateFactory stateFactory;
 
@@ -47,7 +47,7 @@ public class SearchAndReadTest
 
     private void resetDependencies()
     {
-        candidateParser = new JsoupCandidateParser();
+        contentParser = new JsoupCandidateParser();
         presenter = new AlexaPresenter(new MockTranslator());
 
         user = new User("user234", "session455");
@@ -57,8 +57,8 @@ public class SearchAndReadTest
         stateRepository = new DynamoDbStateRepository("jnr_state");
         stateFactory = new DynamoDbStateFactory(stateRepository);
         candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
+                contentGetter,
+                contentParser,
                 candidateRepository
         );
     }
@@ -68,7 +68,7 @@ public class SearchAndReadTest
     {
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_7_paragraphs.html"),
@@ -80,7 +80,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_7_paragraphs.html"),
@@ -99,7 +99,7 @@ public class SearchAndReadTest
         final int paragraphsCount = 2;
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -111,7 +111,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -125,7 +125,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -139,7 +139,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -153,7 +153,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -167,7 +167,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -181,7 +181,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -195,7 +195,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -209,7 +209,7 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new LocalCandidateGetter();
+        contentGetter = new LocalCandidateGetter();
 
         candidatesSearch = new MockOneCandidateSearch(
                 htmlFileCandidate("sample_11_jump_only.html"),
@@ -248,13 +248,13 @@ public class SearchAndReadTest
     {
         resetDependencies();
 
-        candidateGetter = new UnirestCandidateGetter(
+        contentGetter = new UnirestCandidateGetter(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
         );
 
         candidatesSearch = new GoogleCandidatesSearch(
                 STARTING_CANDIDATE_INDEX,
-                getConfig("google.key"),
+                getConfig("google.label"),
                 getConfig("google.cx"),
                 "es-ES",
                 candidateFactory);
@@ -264,13 +264,13 @@ public class SearchAndReadTest
 
         resetDependencies();
 
-        candidateGetter = new UnirestCandidateGetter(
+        contentGetter = new UnirestCandidateGetter(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
         );
 
         candidatesSearch = new GoogleCandidatesSearch(
                 STARTING_CANDIDATE_INDEX,
-                getConfig("google.key"),
+                getConfig("google.label"),
                 getConfig("google.cx"),
                 "es-ES",
                 candidateFactory);

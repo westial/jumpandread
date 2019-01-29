@@ -5,8 +5,9 @@ Feature: Search some terms with a searching service
     And A random headers provider service for agents file as "useragent.pc.list", languages file as "languages.list", referrers file as "referrers.list"
     And A random duckduckgo locale provider service for available locales file as "duckduckgo.kl.lang.es.list"
     And A DuckDuckGo page parser service
-    And A mock candidate parser
-    And A candidate document getter
+    And A mock text content parser
+    And An address document getter
+    And A mock text content provider
     And An Alexa output formatter for searching
     And A candidate repository
     And A candidate factory
@@ -24,8 +25,8 @@ Feature: Search some terms with a searching service
     And A random headers provider service for agents file as "useragent.pc.list", languages file as "languages.list", referrers file as "referrers.list"
     And A random duckduckgo locale provider service for available locales file as "duckduckgo.kl.lang.es.list"
     And A DuckDuckGo page parser service
-    And A mock candidate parser
-    And A candidate document getter
+    And A mock text content parser
+    And An address document getter
     And An Alexa output formatter for searching
     And A candidate repository
     And A candidate factory
@@ -34,9 +35,9 @@ Feature: Search some terms with a searching service
     Then The service returned no candidates
 
   Scenario: Search engine is invoked with some terms and returns a candidates collection with some items
-    Given A mock candidate parser
+    Given A mock text content parser
+    And An address document getter
     And An Alexa output formatter for searching
-    And A candidate document getter
     And A user state repository
     And A user state factory
     And A state with the user as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session as "12345678-1234-4ea6-bfca-347ca7612345" and intent as "SearchCandidates"
@@ -50,9 +51,9 @@ Feature: Search some terms with a searching service
     And Candidate repository contains exactly "3" candidates
 
   Scenario: Search engine is invoked with some terms and returns a candidates collection with only one item
-    Given A mock candidate parser
+    Given A mock text content parser
+    And An address document getter
     And An Alexa output formatter for searching
-    And A candidate document getter
     And A user state repository
     And A user state factory
     And A state with the user as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session as "12345678-1234-4ea6-bfca-347ca7612345" and intent as "SearchCandidates"
@@ -66,9 +67,9 @@ Feature: Search some terms with a searching service
     And Candidate repository contains exactly "1" candidates
 
   Scenario: Search engine is invoked with some terms and returns nothing
-    Given A mock candidate parser
+    Given A mock text content parser
+    And An address document getter
     And An Alexa output formatter for searching
-    And A candidate document getter
     And A user state repository
     And A user state factory
     And A state with the user as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session as "12345678-1234-4ea6-bfca-347ca7612345" and intent as "SearchCandidates"

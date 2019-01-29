@@ -1,7 +1,11 @@
 package junit;
 
 import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.infrastructure.*;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
+import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -20,23 +24,25 @@ public class GoogleCandidatesSearchTest
     private static int STARTING_CANDIDATE_INDEX = 1;
     private CandidatesSearch engine;
     private CandidateFactory candidateFactory;
-    private CandidateGetter candidateGetter;
+    private ContentGetter contentGetter;
     private Presenter presenter;
-    private CandidateParser candidateParser;
+    private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
+    private TextContentProvider contentProvider;
 
     @Before
     public void setUp() throws Exception
     {
-        candidateParser = new MockCandidateParser();
+        contentParser = new MockContentParser();
         candidateRepository = new MockCandidateRepository();
-        candidateGetter = new UnirestCandidateGetter("fakebrowser");
+        contentGetter = new UnirestContentGetter("fakebrowser");
         presenter = new AlexaPresenter(new MockTranslator());
+        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
 
         candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
+                contentProvider,
+                candidateRepository,
+                100
         );
 
         engine = new GoogleCandidatesSearch(

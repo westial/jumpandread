@@ -1,5 +1,12 @@
 package com.westial.alexa.jumpandread.domain;
 
+import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
+import com.westial.alexa.jumpandread.domain.content.ContentAddress;
+import com.westial.alexa.jumpandread.domain.content.ContentCounter;
+import com.westial.alexa.jumpandread.domain.content.EmptyContent;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -17,13 +24,15 @@ public abstract class Candidate
 
     protected String url;
     protected String description;
-    protected LinkedHashMap<Integer, Paragraph> paragraphs;
+    protected LinkedHashMap<Integer, Paragraph> paragraphs =
+            new LinkedHashMap<>();
+    protected Integer totalContentParagraphsCount;
     protected Integer paragraphPosition;
+    private final Integer maxParagraphsNumber;
     protected String content;
     private Calendar updatedAt;
 
-    private final CandidateGetter getter;
-    private final CandidateParser parser;
+    private final TextContentProvider contentProvider;
     private final CandidateRepository repository;
 
     public Candidate(
@@ -35,10 +44,10 @@ public abstract class Candidate
             String title,
             String url,
             String description,
-            CandidateGetter getter,
-            CandidateParser parser,
+            TextContentProvider contentProvider,
             CandidateRepository repository,
-            Integer paragraphPosition
+            Integer paragraphPosition,
+            Integer maxParagraphsNumber
     )
     {
         this.id = id;
@@ -49,10 +58,10 @@ public abstract class Candidate
         this.title = title;
         this.url = url;
         this.description = description;
-        this.getter = getter;
-        this.parser = parser;
+        this.contentProvider = contentProvider;
         this.repository = repository;
         this.paragraphPosition = paragraphPosition;
+        this.maxParagraphsNumber = maxParagraphsNumber;
     }
 
     public Candidate(
@@ -61,9 +70,9 @@ public abstract class Candidate
             String userId,
             String sessionId,
             String searchId,
-            CandidateGetter getter,
-            CandidateParser parser,
-            CandidateRepository repository
+            TextContentProvider contentProvider,
+            CandidateRepository repository,
+            Integer maxParagraphsNumber
     )
     {
         this(
@@ -75,10 +84,10 @@ public abstract class Candidate
                 null,
                 null,
                 null,
-                getter,
-                parser,
+                contentProvider,
                 repository,
-                null
+                null,
+                maxParagraphsNumber
         );
         Candidate candidate = repository.get(
                 searchId,
@@ -113,15 +122,17 @@ public abstract class Candidate
 
     private int adjustNextParagraphIndex(int index)
     {
-        if (paragraphs.size() < index)
+        parse();
+        if (totalContentParagraphsCount < index)
         {
-            return paragraphs.size();
+            return totalContentParagraphsCount;
         }
         return index;
     }
 
     private int adjustLastParagraphIndex(int index)
     {
+        parse();
         if (0 > index)
         {
             return 0;
@@ -142,12 +153,79 @@ public abstract class Candidate
         persist();
     }
 
+    private String buildCandidateCounterId()
+    {
+        return String.format("%s:%s", getSearchId(), getUrl());
+    }
+
+    private void createParagraphs(
+            int position,
+            int maxItemsNumber
+    )
+    {
+        contentProvider.initCache();
+        updateParagraphs(position, maxItemsNumber);
+    }
+
+
+    private void updateParagraphs(
+            int position,
+            int maxItemsNumber
+    )
+    {
+        LinkedList<Pair<String, String>> providedContents;
+        ContentAddress address = new CandidateContentAddress(this);
+        try
+        {
+            ContentCounter contentCounter = new CandidateContentCounter(
+                buildCandidateCounterId()
+            );
+            providedContents = contentProvider.provide(
+                    contentCounter,
+                    address,
+                    position,
+                    maxItemsNumber
+            );
+            totalContentParagraphsCount = contentCounter.tally();
+
+        } catch (EmptyContent emptyContent)
+        {
+            throw new IteratingNoParagraphsException("Empty Candidate");
+        }
+        while (!providedContents.isEmpty())
+        {
+            Pair<String, String> content = providedContents.removeFirst();
+            paragraphs.put(position, buildParagraph(position, content));
+            position ++;
+        }
+    }
+
+    public void parse()
+    {
+        if (null == totalContentParagraphsCount)
+        {
+            createParagraphs(paragraphPosition, maxParagraphsNumber);
+        }
+
+        if (paragraphPosition > totalContentParagraphsCount / 2)
+        {
+            updateParagraphs(paragraphPosition, maxParagraphsNumber);
+        }
+    }
+
+    protected abstract Paragraph buildParagraph(int index, Pair<String, String> content);
+
     public String dump(int number, String pauseToken)
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();
 
         int ending = adjustNextParagraphIndex(paragraphPosition + number);
+
+        if (paragraphPosition >= ending)
+        {
+            throw new IteratingNoParagraphsException("Finished Candidate");
+        }
 
         for (int index = paragraphPosition; index < ending; index ++)
         {
@@ -163,38 +241,10 @@ public abstract class Candidate
         return text.toString();
     }
 
-    public boolean isFinished()
-    {
-        return paragraphPosition >= paragraphs.size();
-    }
-
     public void persist()
     {
         updatedAt = Calendar.getInstance();
         repository.update(this);
-    }
-
-    public void parse()
-    {
-        paragraphs = new LinkedHashMap<>();
-        LinkedList<Paragraph> parsedParagraphs =
-                new LinkedList<>(parser.parse(content));
-        int index = 0;
-        while (!parsedParagraphs.isEmpty())
-        {
-            paragraphs.put(index, parsedParagraphs.removeFirst());
-            index ++;
-        }
-    }
-
-    public void provideContent()
-    {
-        content = getter.getContent(this);
-    }
-
-    public LinkedHashMap<Integer, Paragraph> getParagraphs()
-    {
-        return paragraphs;
     }
 
     public Integer getParagraphPosition()

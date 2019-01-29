@@ -2,9 +2,12 @@ package stepDefinitions;
 
 import com.westial.alexa.jumpandread.application.*;
 import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockPresenter;
-import com.westial.alexa.jumpandread.infrastructure.MockQueueCandidateGetter;
+import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
@@ -22,9 +25,9 @@ import java.util.Queue;
 
 public class RetrieveParagraphsSteps
 {
-    private CandidateParser candidateParser;
+    private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
-    private CandidateGetter candidateGetter;
+    private ContentGetter contentGetter;
     private Presenter presenter;
     private StateRepository stateRepository;
     private static final String INTENT_NAME = "RetrievingParagraphs";
@@ -42,14 +45,15 @@ public class RetrieveParagraphsSteps
     private int defaultJumpingFactor;
     private BackwardUseCase backwardUseCase;
     private PauseUseCase pauseUseCase;
+    private TextContentProvider contentProvider;
 
     @Given("^A candidate factory for parsing$")
     public void aCandidateFactory() throws Throwable
     {
         candidateFactory = new DynamoDbCandidateFactory(
-                candidateGetter,
-                candidateParser,
-                candidateRepository
+                contentProvider,
+                candidateRepository,
+                100
         );
     }
 
@@ -73,10 +77,10 @@ public class RetrieveParagraphsSteps
                 candidateData.get(index).get(4),
                 candidateData.get(index).get(5),
                 candidateData.get(index).get(6),
-                candidateGetter,
-                candidateParser,
+                contentProvider,
                 candidateRepository,
-                Integer.parseInt(candidateData.get(index).get(7))
+                Integer.parseInt(candidateData.get(index).get(7)),
+                100
         );
     }
 
@@ -93,7 +97,7 @@ public class RetrieveParagraphsSteps
         }
     }
 
-    @Given("^A candidate document getter with forced and queued contents as in files as follows$")
+    @Given("^An address document getter with forced and queued contents as in files as follows$")
     public void aCandidateDocumentGetterWithForcedAndQueuedContentsAsInFilesAsFollows(DataTable dataTable) throws Throwable
     {
         List<List<String>> dataTableList = dataTable.raw();
@@ -105,7 +109,7 @@ public class RetrieveParagraphsSteps
             );
             contents.add(content);
         }
-        candidateGetter = new MockQueueCandidateGetter(contents);
+        contentGetter = new MockQueueContentGetter(contents);
     }
 
     @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
@@ -124,7 +128,7 @@ public class RetrieveParagraphsSteps
     @Given("^An html candidate parser$")
     public void anHtmlFormatCandidateParser() throws Throwable
     {
-        candidateParser = new JsoupCandidateParser();
+        contentParser = new JsoupContentParser();
     }
 
     @Given("^An Alexa Presenter service$")
@@ -301,5 +305,11 @@ public class RetrieveParagraphsSteps
                 Integer.parseInt(rawParagraphsGroup),
                 defaultJumpingFactor
         );
+    }
+
+    @Given("^A mock text content provider for retrieval$")
+    public void aMockContentProvider()
+    {
+        contentProvider = new MockTextContentProvider(contentGetter, contentParser);
     }
 }
