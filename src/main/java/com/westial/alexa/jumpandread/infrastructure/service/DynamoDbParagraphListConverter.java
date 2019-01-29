@@ -6,13 +6,13 @@ import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
 
 import java.util.*;
 
-public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<Integer, Map<String, String>>, LinkedHashMap<Integer, Paragraph>>
+public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<Integer, Map<String, String>>, Map<Integer, Paragraph>>
 {
     private static final String TAG_KEY = "tag";
     private static final String CONTENT_KEY = "content";
     
     @Override
-    public Map<Integer, Map<String, String>> convert(LinkedHashMap<Integer, Paragraph> paragraphsMap)
+    public Map<Integer, Map<String, String>> convert(Map<Integer, Paragraph> paragraphsMap)
     {
         Map<Integer, Map<String, String>> items = new HashMap<>();
         Map<String, String> item;
@@ -27,9 +27,9 @@ public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map
     }
 
     @Override
-    public LinkedHashMap<Integer, Paragraph> unconvert(Map<Integer, Map<String, String>> items)
+    public Map<Integer, Paragraph> unconvert(Map<Integer, Map<String, String>> items)
     {
-        LinkedHashMap<Integer, Paragraph> paragraphs = new LinkedHashMap<>();
+        Map<Integer, Paragraph> paragraphs = new LinkedHashMap<>();
         for (Map.Entry<Integer, Map<String, String>> entry : items.entrySet())
         {
             paragraphs.put(
