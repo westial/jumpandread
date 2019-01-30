@@ -1,18 +1,8 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "busca y lee",
+      "invocationName": "salta y lee",
       "intents": [
-        {
-          "name": "Jump",
-          "slots": [],
-          "samples": [
-            "salta",
-            "pasa",
-            "pega un salto",
-            "salto"
-          ]
-        },
         {
           "name": "ReadCandidate",
           "slots": [
@@ -87,13 +77,6 @@
           ]
         },
         {
-          "name": "AMAZON.ResumeIntent",
-          "samples": [
-            "venga",
-            "continúa"
-          ]
-        },
-        {
           "name": "AMAZON.NavigateHomeIntent",
           "samples": [
             "menú",
@@ -101,6 +84,15 @@
             "vuelve al inicio",
             "inicio",
             "atrás"
+          ]
+        },
+
+
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": [
+            "venga",
+            "continúa"
           ]
         },
         {
@@ -127,6 +119,19 @@
             "continuar"
           ]
         },
+
+        {
+          "name": "Forward",
+          "slots": [],
+          "samples": [
+            "salta",
+            "pasa",
+            "pega un salto",
+            "salto"
+          ]
+        },
+
+
         {
           "name": "AMAZON.PreviousIntent",
           "samples": []
@@ -145,6 +150,8 @@
             "atrás"
           ]
         },
+
+
         {
           "name": "AMAZON.RepeatIntent",
           "samples": []
@@ -199,7 +206,8 @@
             }
           ]
         }
-      ]
+      ],
+      "delegationStrategy": "SKILL_RESPONSE"
     },
     "prompts": [
       {
