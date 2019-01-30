@@ -6,34 +6,34 @@ import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
 
 import java.util.*;
 
-public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<Integer, Map<String, String>>, Map<Integer, Paragraph>>
+public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<String, Map<String, String>>, Map<Integer, Paragraph>>
 {
     private static final String TAG_KEY = "tag";
     private static final String CONTENT_KEY = "content";
     
     @Override
-    public Map<Integer, Map<String, String>> convert(Map<Integer, Paragraph> paragraphsMap)
+    public Map<String, Map<String, String>> convert(Map<Integer, Paragraph> paragraphsMap)
     {
-        Map<Integer, Map<String, String>> items = new HashMap<>();
+        Map<String, Map<String, String>> items = new HashMap<>();
         Map<String, String> item;
         for (Map.Entry<Integer, Paragraph> entry : paragraphsMap.entrySet())
         {
             item = new HashMap<>();
             item.put(TAG_KEY, entry.getValue().getTag());
             item.put(CONTENT_KEY, entry.getValue().getContent());
-            items.put(entry.getKey(), item);
+            items.put(String.valueOf(entry.getKey()), item);
         }
         return items;
     }
 
     @Override
-    public Map<Integer, Paragraph> unconvert(Map<Integer, Map<String, String>> items)
+    public Map<Integer, Paragraph> unconvert(Map<String, Map<String, String>> items)
     {
         Map<Integer, Paragraph> paragraphs = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Map<String, String>> entry : items.entrySet())
+        for (Map.Entry<String, Map<String, String>> entry : items.entrySet())
         {
             paragraphs.put(
-                    entry.getKey(),
+                    Integer.parseInt(entry.getKey()),
                     new DynamoDbParagraph(
                             entry.getValue().get(TAG_KEY),
                             entry.getValue().get(CONTENT_KEY)

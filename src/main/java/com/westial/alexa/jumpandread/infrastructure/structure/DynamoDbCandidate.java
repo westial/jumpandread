@@ -8,7 +8,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 @DynamoDBDocument
 public class DynamoDbCandidate extends Candidate
@@ -57,12 +57,12 @@ public class DynamoDbCandidate extends Candidate
 
     @DynamoDBTypeConverted(converter = DynamoDbParagraphListConverter.class)
     @DynamoDBAttribute(attributeName = "paragraphs")
-    public LinkedHashMap<Integer, Paragraph> getParagraphs()
+    public Map<Integer, Paragraph> getParagraphs()
     {
         return super.paragraphs;
     }
 
-    public void setParagraphs(LinkedHashMap<Integer, Paragraph> paragraphs)
+    public void setParagraphs(Map<Integer, Paragraph> paragraphs)
     {
         this.paragraphs = paragraphs;
     }

@@ -5,12 +5,17 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 
-public abstract class DynamoDbRepository
+abstract class DynamoDbRepository
 {
-    protected static DynamoDBMapper buildMapper(String tableName)
-    {
-        AmazonDynamoDB dynamoDBClient = AmazonDynamoDBClientBuilder.defaultClient();
+    final DynamoDBMapper dbMapper;
 
+    DynamoDbRepository(String tableName)
+    {
+        this(tableName, AmazonDynamoDBClientBuilder.defaultClient());
+    }
+
+    DynamoDbRepository(String tableName, AmazonDynamoDB dynamoDBClient)
+    {
         DynamoDBMapperConfig mapperConfig = new DynamoDBMapperConfig.Builder()
                 .withTableNameOverride(
                         DynamoDBMapperConfig
@@ -19,6 +24,6 @@ public abstract class DynamoDbRepository
                 .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.APPEND_SET)
                 .build();
 
-        return new DynamoDBMapper(dynamoDBClient,mapperConfig);
+        dbMapper = new DynamoDBMapper(dynamoDBClient, mapperConfig);
     }
 }

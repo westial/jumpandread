@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateRepository;
@@ -10,11 +10,14 @@ public class DynamoDbCandidateRepository
         extends DynamoDbRepository
         implements CandidateRepository
 {
-    private static DynamoDBMapper dbMapper;
-
     public DynamoDbCandidateRepository(String tableName)
     {
-        dbMapper = buildMapper(tableName);
+        super(tableName);
+    }
+
+    public DynamoDbCandidateRepository(String tableName, AmazonDynamoDB dynamoDBClient)
+    {
+        super(tableName, dynamoDBClient);
     }
 
     @Override

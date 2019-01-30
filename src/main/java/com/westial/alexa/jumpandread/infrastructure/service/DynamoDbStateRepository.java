@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.westial.alexa.jumpandread.domain.State;
 import com.westial.alexa.jumpandread.domain.StateRepository;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
@@ -10,11 +10,14 @@ public class DynamoDbStateRepository
         extends DynamoDbRepository
         implements StateRepository
 {
-    private static DynamoDBMapper dbMapper;
-
     public DynamoDbStateRepository(String tableName)
     {
-        dbMapper = buildMapper(tableName);
+        super(tableName);
+    }
+
+    public DynamoDbStateRepository(String tableName, AmazonDynamoDB dynamoDBClient)
+    {
+        super(tableName, dynamoDBClient);
     }
 
     public void update(State state)

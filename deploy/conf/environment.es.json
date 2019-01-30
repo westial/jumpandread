@@ -13,11 +13,11 @@
         "GOOGLE_DORK": "ext:html OR ext:htm",
         "GOOGLE_RESULTS_BY_SEARCH": "10",
         "STATE_TABLE_NAME": "jnr_state",
+        "CANDIDATE_TABLE_NAME": "jnr_candidate",
         "REFERRERS_RESOURCE_PATH": "referrers.list",
         "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
         "LANGUAGES_RESOURCE_PATH": "languages.list",
         "STARTING_CANDIDATE_INDEX": "1",
-        "CANDIDATE_TABLE_NAME": "jnr_candidate",
         "MAX_PARAGRAPHS_PROVIDED": "300"
     }
 }
