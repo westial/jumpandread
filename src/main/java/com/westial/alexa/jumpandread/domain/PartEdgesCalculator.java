@@ -6,7 +6,14 @@ package com.westial.alexa.jumpandread.domain;
  */
 public abstract class PartEdgesCalculator
 {
-    protected int partStart;
+    private int partStart;
+    protected final int totalWidth;
+
+    protected PartEdgesCalculator(int partStart, int totalWidth)
+    {
+        this.partStart = partStart;
+        this.totalWidth = totalWidth;
+    }
 
     public Integer movePosition(int newPosition)
     {

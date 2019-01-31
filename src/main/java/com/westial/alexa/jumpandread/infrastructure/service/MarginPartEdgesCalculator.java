@@ -4,7 +4,6 @@ import com.westial.alexa.jumpandread.domain.PartEdgesCalculator;
 
 public class MarginPartEdgesCalculator extends PartEdgesCalculator
 {
-    private final int totalWidth;
     private final int marginWidth;
     private final int partWidth;
 
@@ -15,8 +14,7 @@ public class MarginPartEdgesCalculator extends PartEdgesCalculator
             int marginWidth
     )
     {
-        this.totalWidth = totalWidth;
-        super.partStart = partStart;
+        super(partStart, totalWidth);
         this.marginWidth = marginWidth;
         this.partWidth = partWidth;
     }
