@@ -6,13 +6,15 @@ import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
 
 import java.util.*;
 
-public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<String, Map<String, String>>, Map<Integer, Paragraph>>
+import static java.util.stream.Collectors.toMap;
+
+public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map<String, Map<String, String>>, LinkedHashMap<Integer, Paragraph>>
 {
     private static final String TAG_KEY = "tag";
     private static final String CONTENT_KEY = "content";
     
     @Override
-    public Map<String, Map<String, String>> convert(Map<Integer, Paragraph> paragraphsMap)
+    public Map<String, Map<String, String>> convert(LinkedHashMap<Integer, Paragraph> paragraphsMap)
     {
         Map<String, Map<String, String>> items = new HashMap<>();
         Map<String, String> item;
@@ -27,9 +29,9 @@ public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map
     }
 
     @Override
-    public Map<Integer, Paragraph> unconvert(Map<String, Map<String, String>> items)
+    public LinkedHashMap<Integer, Paragraph> unconvert(Map<String, Map<String, String>> items)
     {
-        Map<Integer, Paragraph> paragraphs = new LinkedHashMap<>();
+        Map<Integer, Paragraph> paragraphs = new HashMap<>();
         for (Map.Entry<String, Map<String, String>> entry : items.entrySet())
         {
             paragraphs.put(
@@ -40,6 +42,17 @@ public class DynamoDbParagraphListConverter implements DynamoDBTypeConverter<Map
                     )
             );
         }
-        return paragraphs;
+        return paragraphs
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(
+                        toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (e1, e2) -> e2,
+                                LinkedHashMap::new
+                        )
+                );
     }
 }

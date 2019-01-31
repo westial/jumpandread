@@ -12,24 +12,28 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class Backward implements RequestHandler
+public class Previous implements RequestHandler
 {
-    public static final String INTENT_NAME = "Backward";
-    private final BackwardUseCase rewindUseCase;
+    public static final String INTENT_NAME = "Previous";
+    private final BackwardUseCase previousUseCase;
     private final int defaultParagraphsGroup;
 
-    public Backward(
-            BackwardUseCase rewindUseCase,
+    public Previous(
+            BackwardUseCase previousUseCase,
             int defaultParagraphsGroup
     )
     {
-        this.rewindUseCase = rewindUseCase;
+        this.previousUseCase = previousUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
     }
 
     public boolean canHandle(HandlerInput input)
     {
-        return input.matches(intentName(INTENT_NAME));
+        return input.matches(
+                intentName(INTENT_NAME)
+                        .or(intentName("AMAZON.PreviousIntent")
+                        )
+        );
     }
 
     @Override
@@ -43,11 +47,11 @@ public class Backward implements RequestHandler
                 INTENT_NAME
         );
 
-        View view = rewindUseCase.invoke(
+        View view = previousUseCase.invoke(
                 INTENT_NAME,
                 null,
                 1,
-                4,
+                1,
                 defaultParagraphsGroup
         );
 

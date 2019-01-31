@@ -9,7 +9,7 @@ import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphLis
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Calendar;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 @DynamoDBDocument
 public class DynamoDbCandidate extends Candidate
@@ -58,12 +58,12 @@ public class DynamoDbCandidate extends Candidate
 
     @DynamoDBTypeConverted(converter = DynamoDbParagraphListConverter.class)
     @DynamoDBAttribute(attributeName = "paragraphs")
-    public Map<Integer, Paragraph> getParagraphs()
+    public LinkedHashMap<Integer, Paragraph> getParagraphs()
     {
         return super.getParagraphs();
     }
 
-    public void setParagraphs(Map<Integer, Paragraph> paragraphs)
+    public void setParagraphs(LinkedHashMap<Integer, Paragraph> paragraphs)
     {
         this.paragraphs = paragraphs;
     }

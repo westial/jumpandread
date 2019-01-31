@@ -7,10 +7,7 @@ import com.westial.alexa.jumpandread.domain.content.EmptyContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Candidate
 {
@@ -25,7 +22,7 @@ public abstract class Candidate
 
     protected String url;
     protected String description;
-    protected Map<Integer, Paragraph> paragraphs;
+    protected LinkedHashMap<Integer, Paragraph> paragraphs;
 
     protected Integer totalContentParagraphsCount;
     protected Integer paragraphPosition;
@@ -165,7 +162,7 @@ public abstract class Candidate
     private void initParagraphs()
     {
         contentProvider.initCache();
-        paragraphs = new HashMap<>();
+        paragraphs = new LinkedHashMap<>();
     }
 
 
@@ -210,7 +207,7 @@ public abstract class Candidate
             initParagraphs();
             upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
 
-        } else if (paragraphPosition > totalContentParagraphsCount / 2)
+        } else if (paragraphPosition > maxParagraphsNumber / 2)
         {
             upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
         }
@@ -300,7 +297,7 @@ public abstract class Candidate
         return searchId;
     }
 
-    public Map<Integer, Paragraph> getParagraphs()
+    public LinkedHashMap<Integer, Paragraph> getParagraphs()
     {
         return paragraphs;
     }

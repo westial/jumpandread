@@ -136,14 +136,22 @@
           "samples": []
         },
         {
-          "name": "Backward",
+          "name": "Previous",
           "slots": [],
           "samples": [
             "anterior",
             "el anterior",
             "previo",
             "el previo",
-            "el de antes",
+            "el de antes"
+          ]
+        },
+
+        {
+          "name": "Backward",
+          "slots": [],
+          "samples": [
+            "rebobina",
             "hacia atrás",
             "tira atrás",
             "atrás"

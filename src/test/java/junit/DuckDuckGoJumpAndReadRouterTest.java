@@ -31,9 +31,13 @@ import java.util.*;
  */
 public class DuckDuckGoJumpAndReadRouterTest
 {
+    private static final String USER_SESSION_PARAM_SEPARATOR = ":";
+
     private Context context;
 
     private final static String AWS_PROFILE = "westial";
+
+    private final static String LAZY_EXPECTED_PATTERN = "^<speak>.+</speak>$";
 
     private final static String SAMPLE_INTENTS_PATH = "intents/websearch";
     private final static String SAMPLE_INTENTS_EXPECTED_FILENAME = "ssml_expected.json";
@@ -49,6 +53,7 @@ public class DuckDuckGoJumpAndReadRouterTest
         forward,
         launch,
         next,
+        previous,
         pause,
         readthis,
         repeat,
@@ -70,7 +75,7 @@ public class DuckDuckGoJumpAndReadRouterTest
         if (null != System.getProperty("userSession"))
         {
             List<String> userSessionItems = Arrays.asList(
-                    System.getProperty("userSession").split("<:>")
+                    System.getProperty("userSession").split(USER_SESSION_PARAM_SEPARATOR)
             );
             userId = userSessionItems.get(0);
             sessionId = userSessionItems.get(1);
@@ -121,18 +126,27 @@ public class DuckDuckGoJumpAndReadRouterTest
             runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentRepeat("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
+            runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentPause(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
         }
     }
 
     private void recycledFlow()
     {
-        String lazyExpectedPattern = "^<speak>.+</speak>$";
-        runAndCheckIntentRead(lazyExpectedPattern);
-        runAndCheckIntentNext(lazyExpectedPattern);
-        runAndCheckIntentNext(lazyExpectedPattern);
-        runAndCheckIntentRepeat(lazyExpectedPattern);
-        runAndCheckIntentForward(lazyExpectedPattern);
-        runAndCheckIntentBackward(lazyExpectedPattern);
+        runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentRepeat(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentPause(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
     }
 
     private void runAndCheckIntentLaunch(String expectedPattern)
@@ -174,6 +188,18 @@ public class DuckDuckGoJumpAndReadRouterTest
     private void runAndCheckIntentBackward(String expectedPattern)
     {
         runIntent(INTENT.backward);
+        assertSsmlRegex(expectedPattern);
+    }
+
+    private void runAndCheckIntentPause(String expectedPattern)
+    {
+        runIntent(INTENT.pause);
+        assertSsmlRegex(expectedPattern);
+    }
+
+    private void runAndCheckIntentPrevious(String expectedPattern)
+    {
+        runIntent(INTENT.previous);
         assertSsmlRegex(expectedPattern);
     }
 
