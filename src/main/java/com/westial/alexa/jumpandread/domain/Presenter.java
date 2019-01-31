@@ -3,19 +3,31 @@ package com.westial.alexa.jumpandread.domain;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Presenter
 {
     private final Translator translator;
     public final static String WEAK_TOKEN = "{{ , }}";
     public final static String STRONG_TOKEN = "{{ . }}";
+    public final static String LONGEST_TOKEN = "{{ . }}{{ . }}";
     public final static String WHISPER_START_TOKEN = "{{ whisper }}";
     public final static String WHISPER_END_TOKEN = "{{ end whisper }}";
     public final static String EMPHASIS_START_TOKEN = "{{ emphasis }}";
     public final static String EMPHASIS_END_TOKEN = "{{ end emphasis }}";
+
+    Set<String> TOKENS = new HashSet<>(
+            Arrays.asList(
+                    WEAK_TOKEN,
+                    STRONG_TOKEN,
+                    LONGEST_TOKEN,
+                    WHISPER_START_TOKEN,
+                    WHISPER_END_TOKEN,
+                    EMPHASIS_START_TOKEN,
+                    EMPHASIS_END_TOKEN
+            )
+    );
+
     private LinkedList<Object[]> textKits = new LinkedList<>();
 
     public Presenter(Translator translator)
@@ -33,14 +45,25 @@ public abstract class Presenter
 
     protected abstract String wrap(String output);
 
-    protected String translate(String format)
+    private String translate(String format)
     {
+        if (TOKENS.contains(format))
+        {
+            return format;
+        }
         return translator.translate(format);
     }
 
     public boolean isEmpty()
     {
-        return textKits.isEmpty();
+        if (textKits.isEmpty())
+            return true;
+
+        for (Object[] obj : textKits){
+            if (obj.length > 0)
+                return false;
+        }
+        return true;
     }
 
     protected abstract String clean(String text);

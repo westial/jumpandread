@@ -39,7 +39,7 @@ public class SearchUseCase
                 presenter.addText("notice.no.search.results");
 
                 presenter.addText("dialog.search.want.other");
-                presenter.addText("{{ . }}");
+                presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.what");
             }
         }

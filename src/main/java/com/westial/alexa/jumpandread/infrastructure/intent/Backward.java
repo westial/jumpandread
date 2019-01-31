@@ -51,7 +51,7 @@ public class Backward implements RequestHandler
                 INTENT_NAME,
                 null,
                 1,
-                1,
+                4,
                 defaultParagraphsGroup
         );
 

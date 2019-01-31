@@ -22,11 +22,10 @@ public class StopUseCase
     {
         state.updateIntent(intentName);
 
-        presenter.addText("{{ whisper }}");
+        presenter.addText(Presenter.WHISPER_START_TOKEN);
         presenter.addText("salutation.bye.2");
-        presenter.addText("{{ . }}");
         presenter.addText("presentation.title");
-        presenter.addText("{{ end whisper }}");
+        presenter.addText(Presenter.WHISPER_END_TOKEN);
 
         return new PresenterView(presenter);
     }

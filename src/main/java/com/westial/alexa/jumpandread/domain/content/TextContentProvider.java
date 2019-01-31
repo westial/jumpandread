@@ -26,7 +26,7 @@ public abstract class TextContentProvider implements ContentProvider<String, Str
             throw new EmptyContent();
         }
         counter.sum(contents.size());
-        for (int index = startIndex; index <= startIndex + itemsNumber; index ++)
+        for (int index = startIndex; index < startIndex + itemsNumber; index ++)
         {
             if (index >= contents.size())
             {

@@ -33,6 +33,8 @@ public class UnirestWebClient implements WebClient
         {
             case POST:
                 return post(url, headers, params, payload);
+            case GET:
+                return get(url, headers, params);
             default:
                 throw new RuntimeException("Still not implemented!!");
         }
@@ -66,6 +68,25 @@ public class UnirestWebClient implements WebClient
                     .headers(headers)
                     .queryString(params)
                     .body(body)
+                    .asString();
+            return response.getBody();
+        } catch (UnirestException e)
+        {
+            throw new WebClientSearchException(e.getMessage());
+        }
+    }
+
+    private String get(
+            String url,
+            Map<String, String> headers,
+            Map<String, Object> params
+    )
+    {
+        try
+        {
+            HttpResponse<String> response = Unirest.get(url)
+                    .headers(headers)
+                    .queryString(params)
                     .asString();
             return response.getBody();
         } catch (UnirestException e)

@@ -49,8 +49,6 @@ public class Read implements RequestHandler
         View view = currentUseCase.invoke(
                 INTENT_NAME,
                 candidateIndex,
-                1,
-                1,
                 defaultParagraphsGroup
         );
 

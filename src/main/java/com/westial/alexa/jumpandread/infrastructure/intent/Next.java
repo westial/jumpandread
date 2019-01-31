@@ -53,7 +53,7 @@ public class Next implements RequestHandler
                 INTENT_NAME,
                 null,
                 1,
-                0,
+                1,
                 defaultParagraphsGroup
         );
 

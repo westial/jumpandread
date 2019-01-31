@@ -86,6 +86,7 @@ public abstract class ReadingCommandTemplate
                         String.valueOf(candidateIndex),
                         candidate.getTitle()
                 );
+                appendResult(results, Presenter.STRONG_TOKEN);
             }
             String content = dump(paragraphsGroup, candidate);
             appendResult(results, content);

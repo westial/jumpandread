@@ -17,7 +17,6 @@ public class Forward implements RequestHandler
     public static final String INTENT_NAME = "Forward";
     private final ForwardUseCase forwardUseCase;
     private final int defaultParagraphsGroup;
-    private static final int DEFAULT_FORWARD_FACTOR = 2;
 
     public Forward(
             ForwardUseCase forwardUseCase,
@@ -49,7 +48,7 @@ public class Forward implements RequestHandler
                 INTENT_NAME,
                 null,
                 1,
-                DEFAULT_FORWARD_FACTOR,
+                4,
                 defaultParagraphsGroup
         );
 

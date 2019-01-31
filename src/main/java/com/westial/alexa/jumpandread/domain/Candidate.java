@@ -26,11 +26,12 @@ public abstract class Candidate
     protected String url;
     protected String description;
     protected Map<Integer, Paragraph> paragraphs;
-    private Integer totalContentParagraphsCount;
+
+    protected Integer totalContentParagraphsCount;
     protected Integer paragraphPosition;
     private final Integer maxParagraphsNumber;
     protected String content;
-    private Calendar updatedAt;
+    protected Calendar updatedAt;
 
     private final TextContentProvider contentProvider;
     private final CandidateRepository repository;
@@ -106,6 +107,9 @@ public abstract class Candidate
         this.url = candidate.getUrl();
         this.description = candidate.getDescription();
         this.paragraphPosition = candidate.getParagraphPosition();
+        this.paragraphs = candidate.getParagraphs();
+        this.totalContentParagraphsCount =
+                candidate.getTotalContentParagraphsCount();
     }
 
     public static String buildId(String searchId, int index)
@@ -158,18 +162,14 @@ public abstract class Candidate
         return String.format("%s:%s", getSearchId(), getUrl());
     }
 
-    private void createParagraphs(
-            int position,
-            int maxItemsNumber
-    )
+    private void initParagraphs()
     {
         contentProvider.initCache();
         paragraphs = new HashMap<>();
-        updateParagraphs(position, maxItemsNumber);
     }
 
 
-    private void updateParagraphs(
+    private void upgradeParagraphs(
             int position,
             int maxItemsNumber
     )
@@ -199,18 +199,20 @@ public abstract class Candidate
             paragraphs.put(position, buildParagraph(position, content));
             position ++;
         }
+
+        persist();
     }
 
     public void parse()
     {
         if (null == totalContentParagraphsCount)
         {
-            createParagraphs(paragraphPosition, maxParagraphsNumber);
-        }
+            initParagraphs();
+            upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
 
-        if (paragraphPosition > totalContentParagraphsCount / 2)
+        } else if (paragraphPosition > totalContentParagraphsCount / 2)
         {
-            updateParagraphs(paragraphPosition, maxParagraphsNumber);
+            upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
         }
     }
 
@@ -298,6 +300,11 @@ public abstract class Candidate
         return searchId;
     }
 
+    public Map<Integer, Paragraph> getParagraphs()
+    {
+        return paragraphs;
+    }
+
     public String getId()
     {
         return id;
@@ -306,5 +313,10 @@ public abstract class Candidate
     public Calendar getUpdatedAt()
     {
         return updatedAt;
+    }
+
+    public Integer getTotalContentParagraphsCount()
+    {
+        return totalContentParagraphsCount;
     }
 }

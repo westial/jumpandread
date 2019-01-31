@@ -302,8 +302,8 @@ public class RetrieveParagraphsSteps
     {
         resultView = pauseUseCase.invoke(
                 intentName,
-                Integer.parseInt(rawParagraphsGroup),
-                defaultJumpingFactor
+                defaultJumpingFactor,
+                Integer.parseInt(rawParagraphsGroup)
         );
     }
 

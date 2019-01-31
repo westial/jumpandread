@@ -8,6 +8,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Calendar;
 import java.util.Map;
 
 @DynamoDBDocument
@@ -59,7 +60,7 @@ public class DynamoDbCandidate extends Candidate
     @DynamoDBAttribute(attributeName = "paragraphs")
     public Map<Integer, Paragraph> getParagraphs()
     {
-        return super.paragraphs;
+        return super.getParagraphs();
     }
 
     public void setParagraphs(Map<Integer, Paragraph> paragraphs)
@@ -168,11 +169,35 @@ public class DynamoDbCandidate extends Candidate
     @DynamoDBHashKey(attributeName = "id")
     public String getId()
     {
-        return id;
+        return super.getId();
     }
 
     public void setId(String id)
     {
         super.id = id;
+    }
+
+    @Override
+    @DynamoDBAttribute(attributeName = "totalContentParagraphsCount")
+    public Integer getTotalContentParagraphsCount()
+    {
+        return super.getTotalContentParagraphsCount();
+    }
+
+    public void setTotalContentParagraphsCount(Integer totalContentParagraphsCount)
+    {
+        this.totalContentParagraphsCount = totalContentParagraphsCount;
+    }
+
+    @Override
+    @DynamoDBAttribute(attributeName = "updatedAt")
+    public Calendar getUpdatedAt()
+    {
+        return super.getUpdatedAt();
+    }
+
+    public Calendar setUpdatedAt(Calendar updatedAt)
+    {
+        return this.updatedAt = updatedAt;
     }
 }
