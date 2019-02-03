@@ -13,5 +13,5 @@ interface ContentProvider<K, C>
             int itemsNumber
     ) throws EmptyContent;
 
-    void initCache();
+    void clean();
 }

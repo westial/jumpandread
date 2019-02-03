@@ -18,7 +18,8 @@
         "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
         "LANGUAGES_RESOURCE_PATH": "languages.list",
         "STARTING_CANDIDATE_INDEX": "1",
-        "MAX_PARAGRAPHS_PROVIDED": "50"
+        "MAX_PARAGRAPHS_PROVIDED": "50",
+        "CONTENT_PROVIDER_MARGIN": "20"
     }
 }
 

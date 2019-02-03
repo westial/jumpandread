@@ -71,10 +71,16 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 config.retrieve("CANDIDATE_TABLE_NAME")
         );
 
+        PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+                Integer.parseInt(config.retrieve("MAX_PARAGRAPHS_PROVIDED")),
+                Integer.parseInt(config.retrieve("CONTENT_PROVIDER_MARGIN"))
+        );
+
         CandidateFactory candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                Integer.parseInt(config.retrieve("MAX_PARAGRAPHS_PROVIDED"))
+                Integer.parseInt(config.retrieve("MAX_PARAGRAPHS_PROVIDED")),
+                partCalculator
         );
 
         CandidatesSearch candidatesSearch = searchFactory.create(

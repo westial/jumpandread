@@ -3,6 +3,7 @@ package junit;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.Customization;
@@ -29,7 +30,7 @@ import java.util.*;
  *     User and session values are separated by a colon character ":"
  *     Command option example: `-DuserSession=myuserid:mysessionId`
  */
-public class DuckDuckGoJumpAndReadRouterTest
+public class WebSearchFlowsTest
 {
     private static final String USER_SESSION_PARAM_SEPARATOR = ":";
 
@@ -126,17 +127,19 @@ public class DuckDuckGoJumpAndReadRouterTest
             runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentRepeat("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
-            runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentPause(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentForward("^<speak>.+Those standards which are given explicit conceptual development are shown in the chart below.{200,}</speak>$");
+            runAndCheckIntentBackward("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
+            runAndCheckIntentPause("^<speak>.+Alexa.+</speak>$");
+            runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
+            runAndCheckIntentNext("^<speak>Brainstorming: Temperature and Temperature Changes.{200,}</speak>$");
+            runAndCheckIntentPrevious("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
+            runAndCheckIntentPrevious("^<speak>.+(?=received funding from the National Science Foundation to prepare a middle school mathematics module incorporating real-time weather data).{200,}</speak>$");
         }
     }
 
     private void recycledFlow()
     {
+        String witness;
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
@@ -147,6 +150,19 @@ public class DuckDuckGoJumpAndReadRouterTest
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+        witness = outputStreamResult.toString();
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+        Assert.assertNotEquals(witness, outputStreamResult.toString());
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+        Assert.assertEquals(witness, outputStreamResult.toString());
     }
 
     private void runAndCheckIntentLaunch(String expectedPattern)

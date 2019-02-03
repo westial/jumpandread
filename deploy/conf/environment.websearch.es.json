@@ -15,10 +15,11 @@
         "STATE_TABLE_NAME": "jnr_state",
         "CANDIDATE_TABLE_NAME": "jnr_candidate",
         "REFERRERS_RESOURCE_PATH": "referrers.list",
-        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
+        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "30",
         "LANGUAGES_RESOURCE_PATH": "languages.list",
         "STARTING_CANDIDATE_INDEX": "1",
-        "MAX_PARAGRAPHS_PROVIDED": "300"
+        "MAX_PARAGRAPHS_PROVIDED": "300",
+        "CONTENT_PROVIDER_MARGIN": "100"
     }
 }
 

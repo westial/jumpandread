@@ -39,7 +39,7 @@ public abstract class TextContentProvider implements ContentProvider<String, Str
     }
 
     @Override
-    public void initCache()
+    public void clean()
     {
         contents = null;
     }

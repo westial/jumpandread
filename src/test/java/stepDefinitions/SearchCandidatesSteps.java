@@ -192,10 +192,15 @@ public class SearchCandidatesSteps
     @Given("^A candidate factory$")
     public void aCandidateFactory() throws Throwable
     {
+        PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+                50,
+                20
+        );
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                100
+                100,
+                partCalculator
         );
     }
 

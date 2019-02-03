@@ -36,6 +36,8 @@ public class DuckDuckGoCandidatesSearchTest
         testEnv.put("REFERRERS_RESOURCE_PATH", "referrers.list");
         testEnv.put("DUCK_LOCALE_RESOURCE_PATH", "duckduckgo.kl.lang.es.list");
         testEnv.put("ISO4_LANGUAGE", "es-ES");
+        testEnv.put("MAX_PARAGRAPHS_PROVIDED", "50");
+        testEnv.put("CONTENT_PROVIDER_MARGIN", "20");
         JvmEnvironment.setEnv(testEnv);
     }
 
@@ -51,10 +53,16 @@ public class DuckDuckGoCandidatesSearchTest
         presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
+        PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+                Integer.parseInt(config.retrieve("MAX_PARAGRAPHS_PROVIDED")),
+                Integer.parseInt(config.retrieve("CONTENT_PROVIDER_MARGIN"))
+        );
+
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                100
+                100,
+                partCalculator
         );
 
         CandidatesSearchFactory factory = new DuckDuckGoCandidatesSearchFactory();

@@ -1,7 +1,7 @@
 package stepDefinitions;
 
-import com.westial.alexa.jumpandread.domain.PartEdgesCalculator;
-import com.westial.alexa.jumpandread.infrastructure.service.MarginPartEdgesCalculator;
+import com.westial.alexa.jumpandread.domain.PagerEdgesCalculator;
+import com.westial.alexa.jumpandread.infrastructure.service.MarginPagerEdgesCalculator;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -13,7 +13,7 @@ public class EdgesCalculator
     private int partWidth;
     private Integer partStart;
     private int marginWidth;
-    private PartEdgesCalculator edgesCalculator;
+    private PagerEdgesCalculator edgesCalculator;
     private final static String NULL_TOKEN = "[null]";
 
     @Given("^A total width as \"([^\"]*)\"$")
@@ -49,11 +49,13 @@ public class EdgesCalculator
     @Given("^An edges calculator service$")
     public void anEdgesCalculatorService()
     {
-        edgesCalculator = new MarginPartEdgesCalculator(
-                totalWidth,
-                partStart,
+        edgesCalculator = new MarginPagerEdgesCalculator(
                 partWidth,
                 marginWidth
+        );
+        edgesCalculator.init(
+                partStart,
+                totalWidth
         );
     }
 
@@ -67,8 +69,9 @@ public class EdgesCalculator
         else
         {
             Assert.assertEquals(
-                    0,
-                    partStart.compareTo(Integer.parseInt(expectedCachedStart))
+                    comment,
+                    Integer.parseInt(expectedCachedStart),
+                    (int) partStart
             );
         }
     }

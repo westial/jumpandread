@@ -1,22 +1,31 @@
 package com.westial.alexa.jumpandread.infrastructure.structure;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateRepository;
 import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.PagerEdgesCalculator;
+import com.westial.alexa.jumpandread.domain.content.ContentAddress;
+import com.westial.alexa.jumpandread.domain.content.ContentCounter;
+import com.westial.alexa.jumpandread.domain.content.EmptyContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 @DynamoDBDocument
 public class DynamoDbCandidate extends Candidate
 {
+    private final PagerEdgesCalculator partCalculator;
+
     public DynamoDbCandidate()
     {
         super(null, null, null, null, null, null, null, null, null, null, null, null);
+        partCalculator = null;
     }
 
     public DynamoDbCandidate(
@@ -31,10 +40,58 @@ public class DynamoDbCandidate extends Candidate
             TextContentProvider contentProvider,
             CandidateRepository repository,
             Integer paragraphPosition,
-            int maxParagraphsNumber
+            int maxParagraphsNumber,
+            PagerEdgesCalculator partCalculator
     )
     {
         super(id, index, userId, sessionId, searchId, title, url, description, contentProvider, repository, paragraphPosition, maxParagraphsNumber);
+        this.partCalculator = partCalculator;
+    }
+
+    @Override
+    @JsonIgnore
+    protected LinkedHashMap<Integer, Pair<String, String>> provideContents(
+            TextContentProvider provider,
+            ContentCounter contentCounter,
+            ContentAddress address,
+            Integer lastPosition,
+            int newPosition,
+            int contentsNumber,
+            Integer totalNumber
+    ) throws EmptyContent
+    {
+        if (null != totalNumber)
+        {
+            partCalculator.init(
+                    null == lastPosition ? 0 : lastPosition,
+                    totalNumber
+            );
+            Integer optimalPosition = partCalculator.movePosition(newPosition);
+            if (null != lastPosition && null == optimalPosition)
+            {
+                return null;
+            } else if (null != optimalPosition)
+            {
+                newPosition = optimalPosition;
+            }
+        }
+
+        LinkedList<Pair<String, String>> contents = provider.provide(
+                contentCounter,
+                address,
+                newPosition,
+                contentsNumber
+        );
+
+        LinkedHashMap<Integer, Pair<String, String>> results = new LinkedHashMap<>();
+
+        while (!contents.isEmpty())
+        {
+            Pair<String, String> content = contents.removeFirst();
+            results.put(newPosition, content);
+            newPosition ++;
+        }
+        return results;
     }
 
     @Override
@@ -51,9 +108,11 @@ public class DynamoDbCandidate extends Candidate
             String searchId,
             TextContentProvider contentProvider,
             CandidateRepository repository,
-            int maxParagraphsNumber)
+            int maxParagraphsNumber,
+            PagerEdgesCalculator partCalculator)
     {
         super(id, index, userId, sessionId, searchId, contentProvider, repository, maxParagraphsNumber);
+        this.partCalculator = partCalculator;
     }
 
     @DynamoDBTypeConverted(converter = DynamoDbParagraphListConverter.class)
@@ -77,7 +136,7 @@ public class DynamoDbCandidate extends Candidate
 
     public void setParagraphPosition(Integer paragraphPosition)
     {
-        this.paragraphPosition = paragraphPosition;
+        super.paragraphPosition = paragraphPosition;
     }
 
     @Override

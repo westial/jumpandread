@@ -7,7 +7,9 @@ import com.westial.alexa.jumpandread.domain.content.EmptyContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class Candidate
 {
@@ -109,6 +111,11 @@ public abstract class Candidate
                 candidate.getTotalContentParagraphsCount();
     }
 
+    private void updateParagraphPosition(int newPosition)
+    {
+        paragraphPosition = newPosition;
+    }
+
     public static String buildId(String searchId, int index)
     {
         return String.format("%d:%s", index, searchId);
@@ -116,15 +123,15 @@ public abstract class Candidate
 
     public void forward(int number)
     {
-        paragraphPosition += number;
-        paragraphPosition = adjustNextParagraphIndex(paragraphPosition);
+        updateParagraphPosition(paragraphPosition + number);
+        updateParagraphPosition(adjustNextParagraphIndex(paragraphPosition));
         persist();
     }
 
     private int adjustNextParagraphIndex(int index)
     {
-        parse();
-        if (totalContentParagraphsCount < index)
+        if (null != totalContentParagraphsCount
+                && totalContentParagraphsCount < index)
         {
             return totalContentParagraphsCount;
         }
@@ -133,7 +140,6 @@ public abstract class Candidate
 
     private int adjustLastParagraphIndex(int index)
     {
-        parse();
         if (0 > index)
         {
             return 0;
@@ -143,8 +149,8 @@ public abstract class Candidate
 
     public void rewind(int number)
     {
-        paragraphPosition -= number;
-        paragraphPosition = adjustLastParagraphIndex(paragraphPosition);
+        updateParagraphPosition(paragraphPosition - number);
+        updateParagraphPosition(adjustLastParagraphIndex(paragraphPosition));
         persist();
     }
 
@@ -159,59 +165,74 @@ public abstract class Candidate
         return String.format("%s:%s", getSearchId(), getUrl());
     }
 
-    private void initParagraphs()
-    {
-        contentProvider.initCache();
-        paragraphs = new LinkedHashMap<>();
-    }
-
 
     private void upgradeParagraphs(
             int position,
             int maxItemsNumber
     )
     {
-        LinkedList<Pair<String, String>> providedContents;
+        LinkedHashMap<Integer, Pair<String, String>> providedContents;
         ContentAddress address = new CandidateContentAddress(this);
+        int firstCachedParagraphIndex = 0;
+        if (null != paragraphs && !paragraphs.isEmpty())
+        {
+            firstCachedParagraphIndex = paragraphs.entrySet().iterator().next().getKey();
+        }
         try
         {
             ContentCounter contentCounter = new CandidateContentCounter(
                 buildCandidateCounterId()
             );
-            providedContents = contentProvider.provide(
+
+            // Returns null if update is not needed
+            // and throws an exception on empty
+            providedContents = provideContents(
+                    contentProvider,
                     contentCounter,
                     address,
+                    firstCachedParagraphIndex,
                     position,
-                    maxItemsNumber
+                    maxItemsNumber,
+                    totalContentParagraphsCount
             );
-            totalContentParagraphsCount = contentCounter.tally();
+
+            if (null != providedContents)       // update is not needed
+            {
+                totalContentParagraphsCount = contentCounter.tally();
+                paragraphs = new LinkedHashMap<>();
+
+                for (Map.Entry<Integer, Pair<String, String>> entry: providedContents.entrySet())
+                {
+                    Pair<String, String> content = entry.getValue();
+                    paragraphs.put(entry.getKey(), buildParagraph(position, content));
+                }
+
+                persist();
+            }
 
         } catch (EmptyContent emptyContent)
         {
             throw new IteratingNoParagraphsException("Empty Candidate");
         }
-        while (!providedContents.isEmpty())
-        {
-            Pair<String, String> content = providedContents.removeFirst();
-            paragraphs.put(position, buildParagraph(position, content));
-            position ++;
-        }
-
-        persist();
     }
 
-    public void parse()
-    {
-        if (null == totalContentParagraphsCount)
-        {
-            initParagraphs();
-            upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
-
-        } else if (paragraphPosition > maxParagraphsNumber / 2)
-        {
-            upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
-        }
-    }
+    /**
+     * Provide contents to fill paragraphs after.
+     *
+     * @return List of retrieved content objects or return null when the content
+     * provision is not needed, for example, when the provided contents would be
+     * the same as got before.
+     * @throws EmptyContent when there is no content to provide.
+     */
+    protected abstract LinkedHashMap<Integer, Pair<String, String>> provideContents(
+            TextContentProvider provider,
+            ContentCounter contentCounter,
+            ContentAddress address,
+            Integer lastPosition,
+            int firstCachedId,
+            int contentsNumber,
+            Integer totalNumber
+    ) throws EmptyContent;
 
     protected abstract Paragraph buildParagraph(int index, Pair<String, String> content);
 
@@ -219,6 +240,12 @@ public abstract class Candidate
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();
+
+        if (null == totalContentParagraphsCount)
+        {
+            contentProvider.clean();
+            upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
+        }
 
         int ending = adjustNextParagraphIndex(paragraphPosition + number);
 
@@ -229,6 +256,10 @@ public abstract class Candidate
 
         for (int index = paragraphPosition; index < ending; index ++)
         {
+            if (!paragraphs.containsKey(index))
+            {
+                upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
+            }
             paragraph = paragraphs.get(index);
             text.append(
                     String.format(

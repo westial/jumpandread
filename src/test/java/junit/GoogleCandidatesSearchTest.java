@@ -39,10 +39,16 @@ public class GoogleCandidatesSearchTest
         presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
+        PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+                50,
+                20
+        );
+
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                100
+                100,
+                partCalculator
         );
 
         engine = new GoogleCandidatesSearch(

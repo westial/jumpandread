@@ -46,6 +46,10 @@ public class RetrieveParagraphsSteps
     private BackwardUseCase backwardUseCase;
     private PauseUseCase pauseUseCase;
     private TextContentProvider contentProvider;
+    private PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+            50,
+            20
+    );
 
     @Given("^A candidate factory for parsing$")
     public void aCandidateFactory() throws Throwable
@@ -53,7 +57,8 @@ public class RetrieveParagraphsSteps
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                100
+                100,
+                partCalculator
         );
     }
 
@@ -80,7 +85,8 @@ public class RetrieveParagraphsSteps
                 contentProvider,
                 candidateRepository,
                 Integer.parseInt(candidateData.get(index).get(7)),
-                100
+                100,
+                partCalculator
         );
     }
 

@@ -53,10 +53,16 @@ public class DynamoDbCandidateRepositoryTest
         presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
+        PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(
+                50,
+                20
+        );
+
         candidateFactory = new DynamoDbCandidateFactory(
                 contentProvider,
                 candidateRepository,
-                100
+                100,
+                partCalculator
         );
         searchId = UUID.randomUUID().toString();
         candidateIndex = 2;
