@@ -26,7 +26,7 @@ public class UnirestWebClient implements WebClient
             Map<String, String> headers,
             Map<String, Object> params,
             Map<String, String> payload
-    )
+    ) throws WebClientSearchException
     {
         // TODO implement other methods on demand
         switch (method)
@@ -45,7 +45,7 @@ public class UnirestWebClient implements WebClient
             Map<String, String> headers,
             Map<String, Object> params,
             Map<String, String> payload
-    )
+    ) throws WebClientSearchException
     {
         try
         {
@@ -80,7 +80,7 @@ public class UnirestWebClient implements WebClient
             String url,
             Map<String, String> headers,
             Map<String, Object> params
-    )
+    ) throws WebClientSearchException
     {
         try
         {

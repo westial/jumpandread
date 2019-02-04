@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.structure.DuckDuckGoResult;
@@ -43,7 +44,7 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
     }
 
     @Override
-    public List<Candidate> find(User user, String searchId, String terms)
+    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultsException
     {
         LinkedList<DuckDuckGoResult> results;
         List<Candidate> candidates = new ArrayList<>();
@@ -61,17 +62,9 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
                 null
         );
 
-        try
-        {
-            results = new LinkedList<>(
-                    pageParser.parse(content)
-            );
-        }
-        catch (SearchException searchException)
-        {
-            System.out.printf("WARNING: %s\n", searchException.getMessage());
-            return null;
-        }
+        results = new LinkedList<>(
+                pageParser.parse(content)
+        );
 
         for (int resultsIndex = startingIndex; !results.isEmpty() ; resultsIndex ++)
         {

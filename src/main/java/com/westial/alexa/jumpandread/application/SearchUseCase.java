@@ -1,8 +1,10 @@
 package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.structure.PresenterView;
 
 public class SearchUseCase
@@ -32,12 +34,19 @@ public class SearchUseCase
         }
         else
         {
-            presenter.addText(searchCommand.execute(state, searchTerms));
+            try
+            {
+                presenter.addText(searchCommand.execute(state, searchTerms));
 
-            if (presenter.isEmpty())
+            } catch (SearchException e)
+            {
+                presenter.addText("warning.search.exception");
+                System.out.printf("ERROR: %s\n", e.getMessage());
+                e.printStackTrace();
+
+            } catch (NoSearchResultsException e)
             {
                 presenter.addText("notice.no.search.results");
-
                 presenter.addText("dialog.search.want.other");
                 presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.what");

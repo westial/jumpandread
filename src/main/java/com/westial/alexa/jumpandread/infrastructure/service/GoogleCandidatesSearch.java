@@ -6,14 +6,16 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.customsearch.Customsearch;
 import com.google.api.services.customsearch.model.Result;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateFactory;
 import com.westial.alexa.jumpandread.domain.CandidatesSearch;
 import com.westial.alexa.jumpandread.domain.User;
+import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultsException;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,7 +69,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
     }
 
     @Override
-    public List<Candidate> find(User user, String searchId, String terms)
+    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultsException
     {
         List<Candidate> candidates = new ArrayList<>();
         Result result;
@@ -82,11 +84,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
             );
             if (results.isEmpty())
             {
-                System.out.printf(
-                        "WARNING: %s\n",
-                        "No result in Google searching results page"
-                );
-                return null;
+                throw new EngineNoSearchResultsException("No result in Google searching results page");
             }
             for (int resultsIndex = startingIndex; !results.isEmpty() ; resultsIndex ++)
             {
@@ -103,15 +101,8 @@ public class GoogleCandidatesSearch implements CandidatesSearch
             }
         } catch (IOException sdkException)
         {
-            System.out.printf(
-                    "WARNING: %s\n",
-                    sdkException.getMessage()
-            );
-            return null;
-        } catch (URISyntaxException confException)
-        {
             throw new WebClientSearchException(
-                    confException.getMessage()
+                    sdkException.getMessage()
             );
         }
         return candidates;
@@ -124,7 +115,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
      * @return List of results
      * @throws IOException
      */
-    private List<Result> search(String query, int numOfResults) throws IOException, URISyntaxException
+    private List<Result> search(String query, int numOfResults) throws IOException
     {
         List<Result> results = new ArrayList<>();
         List<Result> lastResults;
@@ -135,7 +126,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
         list.setCx(googleCx);
         list.setLr(googleLr);
 
-        //Exact terms
+        // Exact terms
         for(long index = 1 ; index < numOfResults ; index += GOOGLE_RESULTS_BY_QUERY){
             list.setStart(index);
             lastResults = list.execute().getItems();

@@ -1,11 +1,13 @@
 package junit;
 
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -70,7 +72,7 @@ public class DuckDuckGoCandidatesSearchTest
     }
 
     @Test
-    public void find()
+    public void find() throws SearchException, NoSearchResultsException
     {
         List<Candidate> candidates = engine.find(
                 new User("user id", "session id"),
@@ -78,5 +80,23 @@ public class DuckDuckGoCandidatesSearchTest
                 "japan rail pass"
         );
         Assert.assertNotNull(candidates);
+    }
+
+    @Test
+    public void doNotFindTest() throws SearchException, NoSearchResultsException
+    {
+        try
+        {
+            List<Candidate> candidates = engine.find(
+                    new User("user id", "session id"),
+                    "search id",
+                    "dfgdfjjfdghlkjflghflhjflhkjfliftolirouyoriutyoiruooriutyoriutyorituosals"
+            );
+            assert false;
+        }
+        catch (NoSearchResultsException exc)
+        {
+            assert true;
+        }
     }
 }

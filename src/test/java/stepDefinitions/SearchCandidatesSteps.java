@@ -1,11 +1,13 @@
 package stepDefinitions;
 
 import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.*;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -39,6 +41,7 @@ public class SearchCandidatesSteps
     private HeadersProvider headersProvider;
     private DuckDuckGoLocaleProvider duckLocaleProvider;
     private TextContentProvider contentProvider;
+    private Exception exception;
 
     @Given("^A local web client service with a forced content as in file as \"([^\"]*)\"$")
     public void anHtmlSearchResultPageAsInFileAs(String fileName) throws Throwable
@@ -77,7 +80,8 @@ public class SearchCandidatesSteps
     public void aRandomHeadersProviderServiceForAgentsFileAsLanguagesFileAsReferrersFileAs(
             String agentsFileName,
             String languagesFileName,
-            String referrersFileName) throws Throwable
+            String referrersFileName
+    ) throws Throwable
     {
         headersProvider = new RandomDuckDuckGoHeadersProvider(
                 agentsFileName,
@@ -93,13 +97,19 @@ public class SearchCandidatesSteps
     }
 
     @When("^I ask to find candidates to search service for user with ID as \"([^\"]*)\", session ID as \"([^\"]*)\", search ID as \"([^\"]*)\", terms as \"([^\"]*)\"$")
-    public void iAskToFindCandidatesToSearchServiceForUserWithIDAsSessionIDAsSearchIDAsTermsAs(String userId, String sessionId, String searchId, String terms) throws Throwable
+    public void iAskToFindCandidatesToSearchServiceForUserWithIDAsSessionIDAsSearchIDAsTermsAs(String userId, String sessionId, String searchId, String terms)
     {
-        candidates = searchEngine.find(
-                new User(userId, sessionId),
-                searchId,
-                terms
-        );
+        try
+        {
+            candidates = searchEngine.find(
+                    new User(userId, sessionId),
+                    searchId,
+                    terms
+            );
+        } catch (SearchException | NoSearchResultsException e)
+        {
+            exception = e;
+        }
     }
 
     @Then("^The service returned a list with \"([^\"]*)\" candidates$")
@@ -163,9 +173,15 @@ public class SearchCandidatesSteps
     }
 
     @When("^I execute the step command with the terms \"([^\"]*)\"$")
-    public void iExecuteTheCommandWithTheTerms(String searchTerms) throws Throwable
+    public void iExecuteTheCommandWithTheTerms(String searchTerms)
     {
-        foundCandidates = searchCandidates.execute(state, searchTerms);
+        try
+        {
+            foundCandidates = searchCandidates.execute(state, searchTerms);
+        } catch (SearchException | NoSearchResultsException e)
+        {
+            exception = e;
+        }
     }
 
     @Then("^Command returns nothing$")
@@ -219,7 +235,7 @@ public class SearchCandidatesSteps
     @Then("^Searching command returned a text with points \"([^\"]*)\" to \"([^\"]*)\"$")
     public void searchingCommandReturnedATextWithPointsTo(String from, String to) throws Throwable
     {
-        for (int number = Integer.parseInt(from); number <= Integer.parseInt(to); number ++)
+        for (int number = Integer.parseInt(from); number <= Integer.parseInt(to); number++)
         {
             Assert.assertThat(
                     foundCandidates,
@@ -241,7 +257,7 @@ public class SearchCandidatesSteps
     @Then("^Candidate repository contains exactly \"([^\"]*)\" candidates$")
     public void candidateRepositoryContainsExactlyCandidates(String expected) throws Throwable
     {
-        String searchId = ((MockCandidateRepository)candidateRepository).testOnlyGetLastSearchId();
+        String searchId = ((MockCandidateRepository) candidateRepository).testOnlyGetLastSearchId();
         Assert.assertEquals(
                 Integer.parseInt(expected),
                 (candidateRepository.countBySearch(searchId))
@@ -270,5 +286,11 @@ public class SearchCandidatesSteps
     public void aMockContentProvider()
     {
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
+    }
+
+    @Then("^Command threw a no results exception$")
+    public void commandThrewAExceptionTypeAs() throws Throwable
+    {
+        Assert.assertTrue(exception instanceof NoSearchResultsException);
     }
 }

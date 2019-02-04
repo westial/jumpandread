@@ -1,7 +1,9 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.westial.alexa.jumpandread.infrastructure.exception.NoSearchingResults;
-import com.westial.alexa.jumpandread.infrastructure.exception.UnexpectedSearchingResult;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultsException;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
+import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 import com.westial.alexa.jumpandread.infrastructure.structure.DuckDuckGoResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,14 +20,14 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
      * if no result is found.
      */
     @Override
-    public List<DuckDuckGoResult> parse(String content)
+    public List<DuckDuckGoResult> parse(String content) throws SearchException, NoSearchResultsException
     {
         Document document = Jsoup.parse(content);
         List<DuckDuckGoResult> results = new ArrayList<>();
         Elements nodes = document.select("div.result__body");
         if (null == nodes || nodes.isEmpty())
         {
-            throw new UnexpectedSearchingResult(
+            throw new WebClientSearchException(
                     String.format(
                             "Expecting %s in DuckDuckGo searching results is not found",
                             "div.result__body"
@@ -41,7 +43,7 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
             }
             catch (NullPointerException missingNode)
             {
-                throw new NoSearchingResults("No result in DuckDuckGo searching results page");
+                throw new EngineNoSearchResultsException("No result in DuckDuckGo searching results page");
             }
         }
         return results;

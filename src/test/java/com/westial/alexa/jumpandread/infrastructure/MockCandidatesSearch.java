@@ -1,6 +1,8 @@
 package com.westial.alexa.jumpandread.infrastructure;
 
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import utils.RandomContent;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class MockCandidatesSearch implements CandidatesSearch
         this.candidateFactory = candidateFactory;
     }
 
-    public List<Candidate> find(User user, String searchId, String terms)
+    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultsException
     {
         if (0 == forcedResults)
         {

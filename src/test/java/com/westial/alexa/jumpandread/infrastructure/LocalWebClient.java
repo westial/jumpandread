@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure;
 
+import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.FileSystemService;
 import com.westial.alexa.jumpandread.infrastructure.service.WebClient;
 import com.westial.alexa.jumpandread.infrastructure.structure.HttpMethod;
@@ -23,7 +24,7 @@ public class LocalWebClient implements WebClient
             Map<String, String> headers,
             Map<String, Object> params,
             Map<String, String> payload
-    )
+    ) throws WebClientSearchException
     {
         try
         {

@@ -1,11 +1,13 @@
 package junit;
 
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
+import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -76,7 +78,7 @@ public class GoogleCandidatesSearchTest
     }
 
     @Test
-    public void findTest()
+    public void findTest() throws SearchException, NoSearchResultsException
     {
         List<Candidate> candidates = engine.find(
                 new User("user id", "session id"),
@@ -84,5 +86,23 @@ public class GoogleCandidatesSearchTest
                 "hola"
         );
         Assert.assertEquals(10, candidates.size());
+    }
+
+    @Test
+    public void doNotFindTest() throws SearchException, NoSearchResultsException
+    {
+        try
+        {
+            List<Candidate> candidates = engine.find(
+                    new User("user id", "session id"),
+                    "search id",
+                    "dfgdfjjfdghlkjflghflhjflhkjfliftolirouyoriutyoiruooriutyoriutyorituosals"
+            );
+            assert false;
+        }
+        catch (NoSearchResultsException exc)
+        {
+            assert true;
+        }
     }
 }

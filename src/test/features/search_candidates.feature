@@ -32,7 +32,7 @@ Feature: Search some terms with a searching service
     And A candidate factory
     And A DuckDuckGo candidates search service for url as "http://duck.dot", iso 4-letters locale as "es-ES"
     When I ask to find candidates to search service for user with ID as "userid1234-1234-1234", session ID as "sessionid1234-1234-1234", search ID as "searchid1234-1234-1234", terms as "word1 word2 word3"
-    Then The service returned no candidates
+    Then Command threw a no results exception
 
   Scenario: Search engine is invoked with some terms and returns a candidates collection with some items
     Given A mock text content parser
@@ -78,5 +78,5 @@ Feature: Search some terms with a searching service
     And A candidates search service with "0" forced results
     And A searching step command
     When I execute the step command with the terms "mis palabras de búsqueda"
-    Then Command returns nothing
+    Then Command threw a no results exception
     And The current intent in state repository is "SearchCandidates"
