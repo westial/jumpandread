@@ -95,7 +95,7 @@ public class RetrieveParagraphsSteps
     {
         List<List<String>> candidateData = candidateTable.raw();
         candidates = new ArrayList<>();
-        for (int i = 1; i < candidateData.size(); i ++)
+        for (int i = 1; i < candidateData.size(); i++)
         {
             candidates.add(
                     buildCandidate(i, candidateData)
@@ -108,7 +108,7 @@ public class RetrieveParagraphsSteps
     {
         List<List<String>> dataTableList = dataTable.raw();
         Queue<String> contents = new LinkedList<>();
-        for (int i = 0; i < dataTableList.size(); i ++)
+        for (int i = 0; i < dataTableList.size(); i++)
         {
             String content = FileSystemService.readResourceFile(
                     dataTableList.get(i).get(0)
@@ -131,10 +131,10 @@ public class RetrieveParagraphsSteps
         stateRepository = new MockStateRepository();
     }
 
-    @Given("^An html candidate parser$")
+    @Given("^A web search candidate parser$")
     public void anHtmlFormatCandidateParser() throws Throwable
     {
-        contentParser = new JsoupContentParser();
+        contentParser = new WebSearchContentParser();
     }
 
     @Given("^An Alexa Presenter service$")

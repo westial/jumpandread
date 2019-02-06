@@ -2,7 +2,7 @@ package junit;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter;
+import com.westial.alexa.jumpandread.WebSearchDuckDuckGoJumpAndReadRouter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -286,7 +286,7 @@ public class WebSearchFlowsTest
     {
         InputStream inputStream = new ByteArrayInputStream(inputEvent.getBytes());
         OutputStream outputStream = new ByteArrayOutputStream();
-        RequestStreamHandler handler = new DuckDuckGoJumpAndReadRouter();
+        RequestStreamHandler handler = new WebSearchDuckDuckGoJumpAndReadRouter();
         handler.handleRequest(inputStream, outputStream, context);
         return outputStream;
     }

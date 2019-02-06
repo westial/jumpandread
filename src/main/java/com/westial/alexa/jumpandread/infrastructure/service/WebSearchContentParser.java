@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class JsoupContentParser extends TextContentParser
+public class WebSearchContentParser extends TextContentParser
 {
     public LinkedList<TextContent> parse(String content)
     {

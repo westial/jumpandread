@@ -13,7 +13,8 @@ public class LocalContentGetter implements ContentGetter
     public String getContent(ContentAddress address) throws GettingContentException
     {
         try {
-            return FileSystemService.readFileByUrl(address.getUrl());
+            String content = FileSystemService.readFileByUrl(address.getUrl());
+            return StringService.utf8Encode(content);
         } catch (IOException exception) {
             throw new GettingContentException(exception.getMessage());
         }

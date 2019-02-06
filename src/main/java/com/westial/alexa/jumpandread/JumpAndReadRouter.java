@@ -33,7 +33,9 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
     private static final StateManager stateManager = new StateManager(stateFactory);
 
-    protected CandidatesSearchFactory searchFactory;
+    CandidatesSearchFactory searchFactory;
+
+    TextContentParser contentParser;
 
     private static final int DEFAULT_CANDIDATES_FACTOR = 1;
     private static final int DEFAULT_PARAGRAPHS_GROUP_FACTOR = 1;
@@ -57,7 +59,6 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         // Define dependencies
 
-        TextContentParser contentParser = new JsoupContentParser();
         ContentGetter contentGetter = new UnirestContentGetter(
                 config.retrieve("HTTP_USER_AGENT")
         );

@@ -10,13 +10,18 @@ import org.junit.Test;
 public class UnirestContentGetterTest
 {
     private UnirestContentGetter getter;
-    private ContentAddress address;
+    private ContentAddress utf8Address;
+    private MockContentAddress win1252Address;
 
     @Before
     public void setUp() throws Exception
     {
-        address = new MockContentAddress(
+        utf8Address = new MockContentAddress(
                 "https://www.laylita.com/recetas/pastel-de-manzana-receta/"
+        );
+
+        win1252Address = new MockContentAddress(
+                "https://gutenberg.jumpandread.com/etext96/50bab10h.htm"
         );
 
         getter = new UnirestContentGetter(
@@ -27,7 +32,10 @@ public class UnirestContentGetterTest
     @Test
     public void getContent()
     {
-        String body = getter.getContent(address);
+        String body = getter.getContent(utf8Address);
+        Assert.assertTrue(body.length() > 0);
+
+        body = getter.getContent(win1252Address);
         Assert.assertTrue(body.length() > 0);
     }
 }

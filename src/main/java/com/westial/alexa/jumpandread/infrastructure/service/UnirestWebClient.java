@@ -69,8 +69,8 @@ public class UnirestWebClient implements WebClient
                     .queryString(params)
                     .body(body)
                     .asString();
-            return response.getBody();
-        } catch (UnirestException e)
+            return StringService.utf8Encode(response.getBody());
+        } catch (UnirestException | IOException e)
         {
             throw new WebClientSearchException(e.getMessage());
         }
@@ -88,8 +88,8 @@ public class UnirestWebClient implements WebClient
                     .headers(headers)
                     .queryString(params)
                     .asString();
-            return response.getBody();
-        } catch (UnirestException e)
+            return StringService.utf8Encode(response.getBody());
+        } catch (UnirestException | IOException e)
         {
             throw new WebClientSearchException(e.getMessage());
         }
