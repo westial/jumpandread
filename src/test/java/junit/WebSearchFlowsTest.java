@@ -2,6 +2,7 @@ package junit;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.westial.alexa.jumpandread.WebNarrativeDuckDuckGoJumpAndReadRouter;
 import com.westial.alexa.jumpandread.WebSearchDuckDuckGoJumpAndReadRouter;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,6 +48,7 @@ public class WebSearchFlowsTest
     private OutputStream outputStreamResult;
     private static String userId;
     private static String sessionId;
+    private RequestStreamHandler handler;
 
     enum INTENT
     {
@@ -113,8 +115,22 @@ public class WebSearchFlowsTest
     }
 
     @Test
-    public void basicIntentsFlow()
+    public void fastCheckIntentsFlowWebNarrative()
     {
+        handler = new WebNarrativeDuckDuckGoJumpAndReadRouter();
+        String witness;
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
+        witness = outputStreamResult.toString();
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+        Assert.assertEquals(witness, outputStreamResult.toString());
+    }
+
+    @Test
+    public void basicIntentsFlowWebSearch()
+    {
+        handler = new WebSearchDuckDuckGoJumpAndReadRouter();
         if (null != System.getProperty("userSession"))
         {
             // It has to be lazy checked and avoid first intents when recycling session.
@@ -226,6 +242,8 @@ public class WebSearchFlowsTest
             outputStreamResult = handle(buildInputEvent(intent));
         } catch (Exception e)
         {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw new RuntimeException();
         }
         System.out.println(outputStreamResult.toString());
@@ -286,7 +304,6 @@ public class WebSearchFlowsTest
     {
         InputStream inputStream = new ByteArrayInputStream(inputEvent.getBytes());
         OutputStream outputStream = new ByteArrayOutputStream();
-        RequestStreamHandler handler = new WebSearchDuckDuckGoJumpAndReadRouter();
         handler.handleRequest(inputStream, outputStream, context);
         return outputStream;
     }
