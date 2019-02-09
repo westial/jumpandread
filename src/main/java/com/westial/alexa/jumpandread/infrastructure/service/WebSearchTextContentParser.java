@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class WebSearchContentParser extends TextContentParser
+public class WebSearchTextContentParser extends TextContentParser
 {
     public LinkedList<TextContent> parse(String content)
     {
@@ -96,17 +96,5 @@ public class WebSearchContentParser extends TextContentParser
                 )
         );
         return sortedElements;
-    }
-
-    private static Boolean isChildOf(Element child, Element parent)
-    {
-        for (Element parentElement: parent.getAllElements())
-        {
-            if (parentElement.equals(child))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

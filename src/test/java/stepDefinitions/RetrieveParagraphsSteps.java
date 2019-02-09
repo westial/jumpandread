@@ -134,7 +134,7 @@ public class RetrieveParagraphsSteps
     @Given("^A web search candidate parser$")
     public void anHtmlFormatCandidateParser() throws Throwable
     {
-        contentParser = new WebSearchContentParser();
+        contentParser = new WebSearchTextContentParser();
     }
 
     @Given("^An Alexa Presenter service$")

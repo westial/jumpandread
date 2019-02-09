@@ -48,7 +48,7 @@ public class DynamoDbCandidateRepositoryTest
                 "jnr_candidate",
                 createDynamoDbClient()
         );
-        contentParser = new WebSearchContentParser();
+        contentParser = new WebSearchTextContentParser();
         contentGetter = buildMockContentGetter();
         presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);

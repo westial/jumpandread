@@ -13,10 +13,8 @@ import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
-import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
 import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
-import com.westial.alexa.jumpandread.infrastructure.structure.ParserType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,32 +62,13 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 config.retrieve("HTTP_USER_AGENT")
         );
 
-        ParserType parserType = ParserType.valueOf(
-                config.retrieve("PARSER_TYPE")
-        );
-
-        switch (parserType)
-        {
-            case WebSearch:
-                contentParser = new WebSearchContentParser();
-                break;
-            case WebNarrative:
-                contentParser = new WebNarrativeTextContentParser();
-                break;
-            default:
-                throw new InitializationError(
-                        String.format(
-                                "Missing appropriate content parser for " +
-                                        "configuration PARSER_TYPE as %s",
-                                config.retrieve("PARSER_TYPE")
-                        )
+        ByConfigurationTextContentProviderFactory contentProviderFactory =
+                new ByConfigurationTextContentProviderFactory(
+                        contentGetter,
+                        new WebSearchTextContentParser()
                 );
-        }
 
-        TextContentProvider contentProvider = new RemoteTextContentProvider(
-                contentGetter,
-                contentParser
-        );
+        TextContentProvider contentProvider = contentProviderFactory.create(config);
 
         CandidateRepository candidateRepository = new DynamoDbCandidateRepository(
                 config.retrieve("CANDIDATE_TABLE_NAME")
