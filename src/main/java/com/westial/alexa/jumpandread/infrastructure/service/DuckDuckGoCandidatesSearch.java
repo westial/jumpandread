@@ -49,17 +49,18 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
         LinkedList<DuckDuckGoResult> results;
         List<Candidate> candidates = new ArrayList<>();
         Candidate candidate;
-        Map<String, Object> params = new HashMap<>();
-        params.put("q", String.format("%s%s", terms, dork));
-        params.put("b", "");
-        params.put("kl", duckGoLocaleProvider.provide());
+
+        Map<String, String> payload = new HashMap<>();
+        payload.put("q", String.format("%s%s", terms, dork));
+        payload.put("b", "");
+        payload.put("kl", duckGoLocaleProvider.provide());
 
         String content = pageClient.request(
-                HttpMethod.GET,
+                HttpMethod.POST,
                 duckUrl,
                 headersProvider.provide(iso4Language),
-                params,
-                null
+                null,
+                payload
         );
 
         results = new LinkedList<>(

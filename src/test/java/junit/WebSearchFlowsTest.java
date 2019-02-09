@@ -2,8 +2,7 @@ package junit;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.westial.alexa.jumpandread.WebNarrativeDuckDuckGoJumpAndReadRouter;
-import com.westial.alexa.jumpandread.WebSearchDuckDuckGoJumpAndReadRouter;
+import com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -117,7 +116,7 @@ public class WebSearchFlowsTest
     @Test
     public void fastCheckIntentsFlowWebNarrative()
     {
-        handler = new WebNarrativeDuckDuckGoJumpAndReadRouter();
+        handler = new DuckDuckGoJumpAndReadRouter();
         String witness;
         runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
@@ -130,7 +129,7 @@ public class WebSearchFlowsTest
     @Test
     public void basicIntentsFlowWebSearch()
     {
-        handler = new WebSearchDuckDuckGoJumpAndReadRouter();
+        handler = new DuckDuckGoJumpAndReadRouter();
         if (null != System.getProperty("userSession"))
         {
             // It has to be lazy checked and avoid first intents when recycling session.

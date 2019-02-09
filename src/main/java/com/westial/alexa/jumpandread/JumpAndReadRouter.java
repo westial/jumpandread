@@ -13,8 +13,10 @@ import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
 import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.structure.ParserType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +37,6 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
     CandidatesSearchFactory searchFactory;
 
-    TextContentParser contentParser;
-
     private static final int DEFAULT_CANDIDATES_FACTOR = 1;
     private static final int DEFAULT_PARAGRAPHS_GROUP_FACTOR = 1;
 
@@ -44,6 +44,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
     {
         ResponseEnvelope response;
         Skill skill;
+        TextContentParser contentParser;
 
         RequestEnvelope request = serializer.deserialize(input, RequestEnvelope.class);
 
@@ -62,6 +63,28 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
         ContentGetter contentGetter = new UnirestContentGetter(
                 config.retrieve("HTTP_USER_AGENT")
         );
+
+        ParserType parserType = ParserType.valueOf(
+                config.retrieve("PARSER_TYPE")
+        );
+
+        switch (parserType)
+        {
+            case WebSearch:
+                contentParser = new WebSearchContentParser();
+                break;
+            case WebNarrative:
+                contentParser = new WebNarrativeTextContentParser();
+                break;
+            default:
+                throw new InitializationError(
+                        String.format(
+                                "Missing appropriate content parser for " +
+                                        "configuration PARSER_TYPE as %s",
+                                config.retrieve("PARSER_TYPE")
+                        )
+                );
+        }
 
         TextContentProvider contentProvider = new RemoteTextContentProvider(
                 contentGetter,
