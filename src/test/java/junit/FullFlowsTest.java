@@ -30,7 +30,7 @@ import java.util.*;
  *     User and session values are separated by a colon character ":"
  *     Command option example: `-DuserSession=myuserid:mysessionId`
  */
-public class WebSearchFlowsTest
+public class FullFlowsTest
 {
     private static final String USER_SESSION_PARAM_SEPARATOR = ":";
 
@@ -43,7 +43,7 @@ public class WebSearchFlowsTest
     private final static String SAMPLE_INTENTS_PATH = "intents/websearch";
     private final static String SAMPLE_INTENTS_EXPECTED_FILENAME = "ssml_expected.json";
     private final static String SAMPLE_INTENTS_EXTENSION = ".json";
-    private final static String SAMPLE_ENVIRONMENT_VARS = "environment_websearch_es.json";
+    private final static String SAMPLE_ENVIRONMENT_VARS = "environment_bypattern_es.json";
     private OutputStream outputStreamResult;
     private static String userId;
     private static String sessionId;
@@ -59,7 +59,8 @@ public class WebSearchFlowsTest
         pause,
         readthis,
         repeat,
-        searchthat,
+        searchmath,
+        searchmedium,
         stop
     }
 
@@ -67,11 +68,16 @@ public class WebSearchFlowsTest
     public void setUp() throws Exception
     {
         context = new SampleAwsContext();
-        String rawConfig = FileSystemHelper.readResourceFile(SAMPLE_ENVIRONMENT_VARS);
+    }
+
+    private void setEnvironment(String rawConfigFile) throws Exception
+    {
+        String rawConfig = FileSystemHelper.readResourceFile(rawConfigFile);
 
         Map<String, String> configuration = (HashMap<String, String>) JsonService.loads(rawConfig).get("Variables");
         configuration.put("AWS_PROFILE", AWS_PROFILE);
         JvmEnvironment.setEnv(configuration);
+
         String token = UUID.randomUUID().toString();
 
         if (null != System.getProperty("userSession"))
@@ -114,21 +120,24 @@ public class WebSearchFlowsTest
     }
 
     @Test
-    public void fastCheckIntentsFlowWebNarrative()
+    public void fastCheckIntentsFlowWebNarrative() throws Throwable
     {
+        setEnvironment("environment_bypattern_force_mediumwebnarrative_es.json");
         handler = new DuckDuckGoJumpAndReadRouter();
         String witness;
-        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchmedium);
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         witness = outputStreamResult.toString();
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+        Assert.assertNotNull(witness);
         Assert.assertEquals(witness, outputStreamResult.toString());
     }
 
     @Test
-    public void basicIntentsFlowWebSearch()
+    public void basicIntentsFlowWebSearch() throws Throwable
     {
+        setEnvironment(SAMPLE_ENVIRONMENT_VARS);
         handler = new DuckDuckGoJumpAndReadRouter();
         if (null != System.getProperty("userSession"))
         {
@@ -137,7 +146,7 @@ public class WebSearchFlowsTest
         }
         else {
             runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
-            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards.).{200,}</speak>$");
+            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards.).{200,}</speak>$", INTENT.searchmath);
             runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making Mathematical Connections).{200,}</speak>$");
             runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
@@ -186,9 +195,9 @@ public class WebSearchFlowsTest
         assertSsmlRegex(expectedPattern);
     }
 
-    private void runAndCheckIntentSearchThat(String expectedPattern)
+    private void runAndCheckIntentSearchThat(String expectedPattern, INTENT testIntent)
     {
-        runIntent(INTENT.searchthat);
+        runIntent(testIntent);
         assertSsmlRegex(expectedPattern);
     }
 
