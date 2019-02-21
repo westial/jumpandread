@@ -12,14 +12,17 @@ public class ByConfigurationTextContentProviderFactory implements TextContentPro
 {
     private final ContentGetter contentGetter;
     private TextContentParser parser;
+    private ParserFactory parserFactory;
 
     public ByConfigurationTextContentProviderFactory(
             ContentGetter contentGetter,
-            TextContentParser defaultParser
+            TextContentParser defaultParser,
+            ParserFactory parserFactory
     )
     {
         this.contentGetter = contentGetter;
         this.parser = defaultParser;
+        this.parserFactory = parserFactory;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class ByConfigurationTextContentProviderFactory implements TextContentPro
 
         else if (null != parserType)
         {
-            parser = ParserFactory.createParserByType(parserType);
+            parser = parserFactory.createParserByType(parserType);
         }
 
         return new RemoteTextContentProvider(
@@ -55,7 +58,7 @@ public class ByConfigurationTextContentProviderFactory implements TextContentPro
     private TextContentProvider createParsersByPatternProvider(String rawParsersByPattern)
     {
         ByPatternTextContentParser byPatternParser =
-                ParserFactory.createByPatternParser(
+                parserFactory.createByPatternParser(
                         rawParsersByPattern,
                         parser
                 );

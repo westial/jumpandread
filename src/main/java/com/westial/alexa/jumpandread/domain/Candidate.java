@@ -169,7 +169,7 @@ public abstract class Candidate
     private void upgradeParagraphs(
             int position,
             int maxItemsNumber
-    )
+    ) throws NoParagraphsException
     {
         LinkedHashMap<Integer, Pair<String, String>> providedContents;
         ContentAddress address = new CandidateContentAddress(this);
@@ -236,7 +236,7 @@ public abstract class Candidate
 
     protected abstract Paragraph buildParagraph(int index, Pair<String, String> content);
 
-    public String dump(int number, String pauseToken)
+    public String dump(int number, String pauseToken) throws NoParagraphsException
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();

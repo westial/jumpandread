@@ -24,6 +24,7 @@ public class TextContentFactorySteps
     private TextContentProvider provider;
     private String exceptionName;
     private ByPatternTextContentParser byPatternParser;
+    private ParserFactory parserFactory;
 
     @Given("^A parsers by pattern configuration as follows$")
     public void aParsersByPatternConfigurationAsFollows(String parsersByPattern)
@@ -72,7 +73,8 @@ public class TextContentFactorySteps
     {
         providerFactory = new ByConfigurationTextContentProviderFactory(
                 contentGetter,
-                defaultParser
+                defaultParser,
+                parserFactory
         );
     }
 
@@ -112,7 +114,7 @@ public class TextContentFactorySteps
     @When("^I create a by pattern parser according to configuration$")
     public void iCreateAByPatternParserAccordingToConfiguration()
     {
-        byPatternParser = ParserFactory.createByPatternParser(
+        byPatternParser = parserFactory.createByPatternParser(
                 configuration.retrieve("PARSER_TYPES_BY_PATTERN"),
                 defaultParser
         );
@@ -148,5 +150,11 @@ public class TextContentFactorySteps
                 break;
 
         }
+    }
+
+    @And("^A parser factory with null value for medium prefix filter regex$")
+    public void aParserFactoryWithNullValueForMediumPrefixFilterRegex()
+    {
+        parserFactory = new ParserFactory(null);
     }
 }

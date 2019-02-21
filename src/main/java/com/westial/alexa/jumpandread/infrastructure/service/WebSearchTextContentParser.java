@@ -1,6 +1,7 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
+import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
@@ -14,7 +15,7 @@ import java.util.Queue;
 
 public class WebSearchTextContentParser extends TextContentParser
 {
-    public LinkedList<TextContent> parse(String content)
+    public LinkedList<TextContent> parse(String content) throws NoParagraphsException
     {
         LinkedList<TextContent> contents = new LinkedList<>();
         Document document = Jsoup.parse(content);

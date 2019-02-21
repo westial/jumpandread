@@ -65,7 +65,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
         ByConfigurationTextContentProviderFactory contentProviderFactory =
                 new ByConfigurationTextContentProviderFactory(
                         contentGetter,
-                        new WebSearchTextContentParser()
+                        new WebSearchTextContentParser(),
+                        new ParserFactory(config.retrieve("MEDIUM_PREFIX_FILTER_REGEX"))
                 );
 
         TextContentProvider contentProvider = contentProviderFactory.create(config);

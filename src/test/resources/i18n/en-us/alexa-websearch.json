@@ -1,0 +1,38 @@
+{
+    "presentation.title": "IN ENGLISH  Salta y lee",
+    "presentation.abstract": "IN ENGLISH  Este es un servicio de búsqueda en internet que lista los resultados y entra a leerlos para tí.",
+    "command.search.no.terms": "IN ENGLISH  Para ir directamente al servicio de búsqueda, dime,{{ . }} Alexa, buscar.",
+    "presentation.getting.started.introduction": "IN ENGLISH  Voy a explicarte el funcionamiento básico brevemente.{{ . }}{{ . }} Memoriza bien los verbos más importantes de este servicio: buscar,{{ . }} leer,{{ . }} saltar.",
+    "presentation.getting.started.obvious": "IN ENGLISH  Buscar, busca{{ . }} leer, lee{{ . }} saltar, salta{{ . }}{{ . }}... {{ whisper }}ji, ji, ji{{ end whisper }}. Trataba de hacerte una broma que te servirá para memorizar buscar, leer y saltar.",
+    "presentation.getting.started.jocking": "IN ENGLISH  El conejo busca una receta de zanahoria pero no sabe leer, solo sabe saltar. Je, je, je, qué malos somos los autómatas haciendo bromas...",
+    "command.search.with.terms": "IN ENGLISH  Si quieres buscar algo concreto, dime,{{ . }} Alexa, busca, y las palabras de lo que quieras buscar",
+    "command.read.with.number": "IN ENGLISH  Cuando he buscado por las palabras que me has indicado, te devuelvo una lista numerada con los títulos de los resultados que he obtenido. Dime,{{ . }} Alexa, lee, y el número de resultado que quieras entrar a leer.",
+    "command.reading.next": "IN ENGLISH  Después de pedirme de entrar en uno de los resultados numerados, entro a leer su contenido. Selecciono los primeros párrafos del contenido y empiezo a leer. Cuando termino los párrafos que he seleccionado me paro. Puedes decirme,{{ . }} Alexa, siguiente,{{ . }} para que continúe en el siguiente contenido.",
+    "command.reading.jump": "IN ENGLISH  Si los párrafos del contenido que he seleccionado no te gustan y quieres ir hacia adelante rápidamente, dime,{{ . }} Alexa, salta.",
+    "command.reading.repeat": "IN ENGLISH  Puedes pedirme que te repita los últimos párrafos del contenido que te he leído, dime,{{ . }} Alexa, repetir.",
+    "command.reading.back": "IN ENGLISH  Para ir hacia atrás entre los grupos de párrafos del contenido que te he leído, dime,{{ . }} Alexa, atrás.",
+    "presentation.finish": "IN ENGLISH  Y bien, esta era mi introducción, ya puedes empezar a buscar. Te toca a tí, dime,{{ . }} Alexa, buscar",
+
+    "notice.after.pause": "IN ENGLISH  {{ whisper }}Pausa.{{ end whisper }}. Para continuar dime,{{ . }} Alexa, continuar",
+    "notice.no.search.results": "IN ENGLISH  Lo siento mucho, pero no he encontrado ningun resultado con por las palabras que me has pedido.",
+
+    "warning.no.more.paragraphs": "IN ENGLISH  Disculpa, no puedo continuar leyendo porque sigo sin encontrar texto para leer en el resultado seleccionado. Puedes pedirme de saltar otra vez con la orden,{{ . }} Alexa salta. O también puedes volver leer cualquier otro resultado con la orden,{{ . }} Alexa lee, y el número de resultado que quieras leer. O, también puedes volver a buscar otra cosa con la orden,{{ . }} Alexa buscar, y las palabras que quieras buscar.",
+    "warning.something.unexpected": "IN ENGLISH  Disculpa, algo raro ha pasado... o no encuentro tu última búsqueda, o no veo que queden más resultados en ella,  o has pedido leer un número de resultado que no está dentro del rango de búsqueda. Si quieres buscar otra cosa, dame la orden: Alexa buscar, y las palabras que quieras buscar.",
+
+    "warning.search.exception": "IN ENGLISH  Ups..., ha ocurrido un error inesperado durante la búsqueda. Te recomiendo repetir la búsqueda.",
+
+    "dialog.search.what": "IN ENGLISH  ¿Qué quieres buscar?",
+    "dialog.search.want.other": "IN ENGLISH  ¿Quieres probar a buscar otra cosa?",
+
+    "notice.session.exit.due.error": "IN ENGLISH  Ha ocurrido un error y la sesión se va a cerrar.",
+
+    "salutation.bye.1": "IN ENGLISH  Hasta pronto.",
+    "salutation.bye.2": "IN ENGLISH  Adiós.",
+
+    "notice.candidate.has.no.elements.(index(%s))": "IN ENGLISH  El resultado de búsqueda número %s o no dispone de contenido legible o ya se ha leído todo. Salto a leer el siguiente resultado.",
+
+    "response.search.result.listing.(index(%s),title(%s))": "IN ENGLISH  Resultado de búsqueda número %s, titulado, %s",
+
+    "notice.no.candidate.for.this.index.(index(%s),start(%s),end(%s))": "IN ENGLISH  No recuerdo haberte dado el número %s en la lista de resultados. La lista de resultados empieza en el número %s y tiene un total de %s resultados.",
+    "notice.no.search.in.this.session.yet": "IN ENGLISH  En esta sesión todavía no has buscado nada y por lo tanto no puedo ofrecerte ningún resultado."
+}

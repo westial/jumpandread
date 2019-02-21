@@ -124,7 +124,7 @@ public class DynamoDbCandidateRepositoryTest
     }
 
     @Test
-    public void updateAndGetTest()
+    public void updateAndGetTest() throws NoParagraphsException
     {
         Candidate createdCandidate = createNewCandidate();
         createdCandidate.dump(3, Presenter.STRONG_TOKEN);

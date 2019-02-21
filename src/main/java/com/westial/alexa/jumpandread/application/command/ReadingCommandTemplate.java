@@ -1,7 +1,6 @@
 package com.westial.alexa.jumpandread.application.command;
 
 import com.westial.alexa.jumpandread.application.exception.CannotContinueMandatoryReadException;
-import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.*;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -25,7 +24,7 @@ public abstract class ReadingCommandTemplate
             int signedCandidateMovingFactor,
             int paragraphsGroup,
             int paragraphsGroupFactor
-    ) throws IteratingNoParagraphsException
+    )
     {
         List<Object[]> results = new ArrayList<>();
         return execute(
@@ -60,7 +59,7 @@ public abstract class ReadingCommandTemplate
             int paragraphsGroup,
             int paragraphsGroupFactor,
             List<Object[]> results
-    ) throws IteratingNoParagraphsException
+    )
     {
         System.out.printf(
                 "DEBUG: Executing Paragraphs Retrieval. Context: candidateIndex %d, user ID as %s, session ID as %s, search ID as %s\n",
@@ -143,7 +142,7 @@ public abstract class ReadingCommandTemplate
     String dump(
             int paragraphsGroup,
             Candidate candidate
-    )
+    ) throws NoParagraphsException
     {
         return candidate.dump(
                 paragraphsGroup,

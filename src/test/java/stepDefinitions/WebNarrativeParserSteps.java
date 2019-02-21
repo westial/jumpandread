@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.ContentAddress;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
@@ -41,7 +42,7 @@ public class WebNarrativeParserSteps
     }
 
     @When("^I parse the narrative file content$")
-    public void iParseTheNarrativeFileContent()
+    public void iParseTheNarrativeFileContent() throws NoParagraphsException
     {
         ContentAddress address = new MockContentAddress(contentFilePath);
         results = parser.parse(contentGetter.getContent(address));

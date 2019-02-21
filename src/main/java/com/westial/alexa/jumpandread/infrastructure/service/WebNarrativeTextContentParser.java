@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
+import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
@@ -16,10 +17,11 @@ import java.util.List;
 public class WebNarrativeTextContentParser extends TextContentParser
 {
     @Override
-    public LinkedList<TextContent> parse(String content)
+    public LinkedList<TextContent> parse(String content) throws NoParagraphsException
     {
         LinkedList<TextContent> contents = new LinkedList<>();
         Document document = Jsoup.parse(content);
+        // TODO check if there is any child else throw an exception
         buildContents(document.body().children(), contents);
         return contents;
     }

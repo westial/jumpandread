@@ -17,6 +17,7 @@ Feature: Proves for text content providers factory
     And A parsers by pattern configuration as in file "parsers_by_pattern_sample.json"
     And An empty mock content getter
     And A mock web search parser as default
+    And A parser factory with null value for medium prefix filter regex
     And A mock text content providers factory by configuration with the test only method to get the parser
     When I create the text content provider
     Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.ParserByPatternTextContentProvider"
@@ -27,6 +28,7 @@ Feature: Proves for text content providers factory
     And A parser type configuration value as "WebNarrative"
     And An empty mock content getter
     And A mock web search parser as default
+    And A parser factory with null value for medium prefix filter regex
     And A mock text content providers factory by configuration with the test only method to get the parser
     When I create the text content provider
     Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.RemoteTextContentProvider"

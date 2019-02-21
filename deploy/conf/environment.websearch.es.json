@@ -20,7 +20,8 @@
         "STARTING_CANDIDATE_INDEX": "1",
         "MAX_PARAGRAPHS_PROVIDED": "300",
         "CONTENT_PROVIDER_MARGIN": "100",
-        "PARSER_TYPE": "WebSearch"
+        "PARSER_TYPE": "WebSearch",
+        "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})"
     }
 }
 

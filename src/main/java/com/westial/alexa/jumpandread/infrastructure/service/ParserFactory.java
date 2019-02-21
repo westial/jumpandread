@@ -11,7 +11,14 @@ import java.util.Map;
 
 public class ParserFactory
 {
-    public static TextContentParser createParserByType(String parserType)
+    private final String mediumFilterRegex;
+
+    public ParserFactory(String mediumFilterRegex)
+    {
+        this.mediumFilterRegex = mediumFilterRegex;
+    }
+
+    public TextContentParser createParserByType(String parserType)
     {
         switch (ParserType.valueOf(parserType))
         {
@@ -20,6 +27,9 @@ public class ParserFactory
 
             case WebNarrative:
                 return new WebNarrativeTextContentParser();
+
+            case CustomMedium:
+                return new MediumTextContentParser(mediumFilterRegex);
 
             default:
                 throw new InitializationError(
@@ -57,7 +67,7 @@ public class ParserFactory
         }
     }
 
-    public static ByPatternTextContentParser createByPatternParser(
+    public ByPatternTextContentParser createByPatternParser(
             String rawParsersByPattern,
             TextContentParser defaultParser
     )

@@ -60,7 +60,8 @@ public class FullFlowsTest
         readthis,
         repeat,
         searchmath,
-        searchmedium,
+        searchmediumnarrative,
+        searchcustommedium,
         stop
     }
 
@@ -120,12 +121,27 @@ public class FullFlowsTest
     }
 
     @Test
+    public void fastCheckIntentsFlowCustomMedium() throws Throwable
+    {
+        setEnvironment("environment_bypattern_force_custommedium_authorlist_en.json");
+        handler = new DuckDuckGoJumpAndReadRouter();
+        String witness;
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
+        runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
+        witness = outputStreamResult.toString();
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(witness, outputStreamResult.toString());
+    }
+
+    @Test
     public void fastCheckIntentsFlowWebNarrative() throws Throwable
     {
         setEnvironment("environment_bypattern_force_mediumwebnarrative_es.json");
         handler = new DuckDuckGoJumpAndReadRouter();
         String witness;
-        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchmedium);
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchmediumnarrative);
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         witness = outputStreamResult.toString();
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);

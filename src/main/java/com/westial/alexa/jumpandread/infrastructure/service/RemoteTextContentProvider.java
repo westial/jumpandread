@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
+import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.*;
 
 import java.util.LinkedList;
@@ -17,9 +18,15 @@ public class RemoteTextContentProvider extends TextContentProvider
         this.parser = parser;
     }
 
-    protected LinkedList<TextContent> retrieve(ContentAddress address)
+    protected LinkedList<TextContent> retrieve(ContentAddress address) throws EmptyContent
     {
         String content = getter.getContent(address);
-        return parser.parse(content);
+        try
+        {
+            return parser.parse(content);
+        } catch (NoParagraphsException e)
+        {
+            throw new EmptyContent(e.getMessage());
+        }
     }
 }
