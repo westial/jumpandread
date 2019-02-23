@@ -7,17 +7,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UnirestContentGetterTest
 {
     private UnirestContentGetter getter;
     private ContentAddress utf8Address;
-    private MockContentAddress win1252Address;
+    private ContentAddress win1252Address;
+    private ContentAddress redirect301Address;
 
     @Before
     public void setUp() throws Exception
     {
         utf8Address = new MockContentAddress(
                 "https://www.laylita.com/recetas/pastel-de-manzana-receta/"
+        );
+
+        redirect301Address = new MockContentAddress(
+                "http://www.medium.com/p/are-you-looking-to-buy-outer-lid-pressure-cooker-online-fd107be8a9b0"
         );
 
         win1252Address = new MockContentAddress(
@@ -37,5 +45,14 @@ public class UnirestContentGetterTest
 
         body = getter.getContent(win1252Address);
         Assert.assertTrue(body.length() > 0);
+
+        body = getter.getContent(redirect301Address);
+        Pattern checkPattern = Pattern.compile(
+                ".+It saves your important time and simplifies the " +
+                        "entire process of cooking.+",
+                Pattern.DOTALL | Pattern.MULTILINE
+        );
+        Matcher matcher = checkPattern.matcher(body);
+        Assert.assertTrue(matcher.matches());
     }
 }
