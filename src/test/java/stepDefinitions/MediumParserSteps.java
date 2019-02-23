@@ -6,7 +6,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.MockContentAddress;
 import com.westial.alexa.jumpandread.infrastructure.service.LocalContentGetter;
-import com.westial.alexa.jumpandread.infrastructure.service.MediumTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.MediumTextContentParser;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -40,10 +40,10 @@ public class MediumParserSteps
         contentGetter = new LocalContentGetter();
     }
 
-    @And("^A medium parser service implemented from TextContentParser with the regex pattern as \"([^\"]*)\"$")
-    public void aMediumParserServiceImplementedFromTextContentParser(String filterRegex)
+    @And("^A medium parser service implemented from TextContentParser with the regex pattern as \"([^\"]*)\", URI root as \"([^\"]*)\"$")
+    public void aMediumParserServiceImplementedFromTextContentParser(String filterRegex, String uriRoot)
     {
-        parser = new MediumTextContentParser(filterRegex);
+        parser = new MediumTextContentParser(filterRegex, uriRoot);
     }
 
     @When("^I parse the medium file content$")
@@ -71,12 +71,21 @@ public class MediumParserSteps
     {
         Assert.assertEquals(
                 expectedContent,
-                results.get(Integer.parseInt(index)).getContent()
+                results.get(Integer.parseInt(index)).getTag().getText()
         );
 
         Assert.assertEquals(
                 expectedLabel,
                 results.get(Integer.parseInt(index)).getLabel()
+        );
+    }
+
+    @And("^The medium parsed item indexed as \"([^\"]*)\" has \"([^\"]*)\" as \"([^\"]*)\"$")
+    public void theMediumParsedItemIndexedAsHasAttributeAs(String index, String attribute, String expectedValue) throws Throwable
+    {
+        Assert.assertEquals(
+                expectedValue,
+                results.get(Integer.parseInt(index)).getTag().get(attribute)
         );
     }
 

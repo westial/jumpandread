@@ -1,18 +1,22 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content;
 
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
 
 import java.util.LinkedList;
 
 
-public class RemoteTextContentProvider extends TextContentProvider
+public class ParserByPatternTextContentProvider extends TextContentProvider
 {
 
     private final ContentGetter getter;
-    private final TextContentParser parser;
+    private final ByPatternTextContentParser parser;
 
-    public RemoteTextContentProvider(ContentGetter getter, TextContentParser parser)
+    public ParserByPatternTextContentProvider(
+            ContentGetter getter,
+            ByPatternTextContentParser parser
+    )
     {
         this.getter = getter;
         this.parser = parser;
@@ -21,6 +25,7 @@ public class RemoteTextContentProvider extends TextContentProvider
     protected LinkedList<TextContent> retrieve(ContentAddress address) throws EmptyContent
     {
         String content = getter.getContent(address);
+        parser.configure(address.getUrl());
         try
         {
             return parser.parse(content);

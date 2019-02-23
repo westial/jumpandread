@@ -6,7 +6,7 @@ interface Content<K, C>
 {
     K getLabel();
 
-    C getContent();
+    C getTag();
 
     Pair<K, C> toPair();
 }

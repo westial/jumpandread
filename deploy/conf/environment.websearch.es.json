@@ -21,7 +21,8 @@
         "MAX_PARAGRAPHS_PROVIDED": "300",
         "CONTENT_PROVIDER_MARGIN": "100",
         "PARSER_TYPE": "WebSearch",
-        "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})"
+        "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})",
+        "MEDIUM_URI_ROOT": "http://www.medium.com/p"
     }
 }
 

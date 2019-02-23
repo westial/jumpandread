@@ -15,6 +15,9 @@ import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.ByConfigurationTextContentProviderFactory;
+import com.westial.alexa.jumpandread.infrastructure.service.content.ParserFactory;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +69,10 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 new ByConfigurationTextContentProviderFactory(
                         contentGetter,
                         new WebSearchTextContentParser(),
-                        new ParserFactory(config.retrieve("MEDIUM_PREFIX_FILTER_REGEX"))
+                        new ParserFactory(
+                                config.retrieve("MEDIUM_PREFIX_FILTER_REGEX"),
+                                config.retrieve("MEDIUM_URI_ROOT")
+                        )
                 );
 
         TextContentProvider contentProvider = contentProviderFactory.create(config);

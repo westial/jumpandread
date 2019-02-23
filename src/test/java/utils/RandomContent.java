@@ -1,8 +1,10 @@
 package utils;
 
 import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.content.HtmlTag;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
+import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
@@ -102,20 +104,7 @@ public class RandomContent
             text.append(createPhrase(4, 9) + ". ");
         }
 
-        return new TextContent(label, text.toString().trim())
-        {
-            @Override
-            public String getLabel()
-            {
-                return super.getLabel();
-            }
-
-            @Override
-            public String getContent()
-            {
-                return super.getContent();
-            }
-        };
+        return new HtmlTextContent(label, new HtmlTag(text.toString().trim()));
     }
 
     public static List<Paragraph> createParagraphs(int minParagr, int maxParagr)

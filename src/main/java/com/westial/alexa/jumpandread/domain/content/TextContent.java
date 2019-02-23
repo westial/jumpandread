@@ -3,15 +3,15 @@ package com.westial.alexa.jumpandread.domain.content;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-public abstract class TextContent implements Content<String, String>
+public abstract class TextContent implements Content<String, TextTag>
 {
     private final String label;
-    private final String content;
+    private final TextTag tag;
 
-    public TextContent(String label, String content)
+    public TextContent(String label, TextTag tag)
     {
         this.label = label;
-        this.content = content;
+        this.tag = tag;
     }
 
     @Override
@@ -21,14 +21,14 @@ public abstract class TextContent implements Content<String, String>
     }
 
     @Override
-    public String getContent()
+    public TextTag getTag()
     {
-        return content;
+        return tag;
     }
 
     @Override
-    public Pair<String, String> toPair()
+    public Pair<String, TextTag> toPair()
     {
-        return new ImmutablePair<>(getLabel(), getContent());
+        return new ImmutablePair<>(getLabel(), getTag());
     }
 }

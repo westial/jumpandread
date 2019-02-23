@@ -9,6 +9,7 @@ import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -10,6 +10,8 @@ import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

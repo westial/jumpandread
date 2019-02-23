@@ -10,6 +10,8 @@ import com.westial.alexa.jumpandread.infrastructure.MockPresenter;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
 import cucumber.api.DataTable;

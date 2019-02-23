@@ -7,7 +7,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.MockContentAddress;
 import com.westial.alexa.jumpandread.infrastructure.service.LocalContentGetter;
-import com.westial.alexa.jumpandread.infrastructure.service.WebNarrativeTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebNarrativeTextContentParser;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -59,7 +59,7 @@ public class WebNarrativeParserSteps
     {
         Assert.assertEquals(
                 expectedContent,
-                results.get(Integer.parseInt(index)).getContent()
+                results.get(Integer.parseInt(index)).getTag().getText()
         );
 
         Assert.assertEquals(

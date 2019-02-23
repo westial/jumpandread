@@ -120,6 +120,7 @@ public class FullFlowsTest
         );
     }
 
+    // FIXME it is not passing through Medium parser
     @Test
     public void fastCheckIntentsFlowCustomMedium() throws Throwable
     {
@@ -162,7 +163,7 @@ public class FullFlowsTest
         }
         else {
             runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
-            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards.).{200,}</speak>$", INTENT.searchmath);
+            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
             runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making Mathematical Connections).{200,}</speak>$");
             runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");

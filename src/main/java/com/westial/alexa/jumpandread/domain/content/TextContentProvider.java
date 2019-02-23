@@ -4,7 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedList;
 
-public abstract class TextContentProvider implements ContentProvider<Pair<String, String>>
+public abstract class TextContentProvider implements ContentProvider<Pair<String, TextTag>>
 {
     private LinkedList<TextContent> contents;
 
@@ -25,14 +25,14 @@ public abstract class TextContentProvider implements ContentProvider<Pair<String
     }
 
     @Override
-    public LinkedList<Pair<String, String>> provide(ContentCounter counter, ContentAddress address) throws EmptyContent
+    public LinkedList<Pair<String, TextTag>> provide(ContentCounter counter, ContentAddress address) throws EmptyContent
     {
         retrieveContents(address, counter);
         return provide(counter, address, 0, contents.size());
     }
 
     @Override
-    public LinkedList<Pair<String, String>> provide(
+    public LinkedList<Pair<String, TextTag>> provide(
             ContentCounter counter,
             ContentAddress address,
             int startIndex,
@@ -40,7 +40,7 @@ public abstract class TextContentProvider implements ContentProvider<Pair<String
     ) throws EmptyContent
     {
         retrieveContents(address, counter);
-        LinkedList<Pair<String, String>> results = new LinkedList<>();
+        LinkedList<Pair<String, TextTag>> results = new LinkedList<>();
         for (int index = startIndex; index < startIndex + itemsNumber; index ++)
         {
             if (index >= contents.size())

@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content;
 
 
 import com.westial.alexa.jumpandread.domain.Configuration;
@@ -7,6 +7,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.domain.content.TextContentProviderFactory;
 import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
 
 public class ByConfigurationTextContentProviderFactory implements TextContentProviderFactory
 {

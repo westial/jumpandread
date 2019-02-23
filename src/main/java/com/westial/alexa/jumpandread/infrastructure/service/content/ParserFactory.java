@@ -1,9 +1,13 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.MediumTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebNarrativeTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.ParserType;
 
 import java.io.IOException;
@@ -12,10 +16,12 @@ import java.util.Map;
 public class ParserFactory
 {
     private final String mediumFilterRegex;
+    private final String uriRoot;
 
-    public ParserFactory(String mediumFilterRegex)
+    public ParserFactory(String mediumFilterRegex, String uriRoot)
     {
         this.mediumFilterRegex = mediumFilterRegex;
+        this.uriRoot = uriRoot;
     }
 
     public TextContentParser createParserByType(String parserType)
@@ -29,7 +35,7 @@ public class ParserFactory
                 return new WebNarrativeTextContentParser();
 
             case CustomMedium:
-                return new MediumTextContentParser(mediumFilterRegex);
+                return new MediumTextContentParser(mediumFilterRegex, uriRoot);
 
             default:
                 throw new InitializationError(

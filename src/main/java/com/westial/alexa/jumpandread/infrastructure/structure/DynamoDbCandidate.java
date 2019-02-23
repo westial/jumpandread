@@ -4,12 +4,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateRepository;
-import com.westial.alexa.jumpandread.domain.Paragraph;
 import com.westial.alexa.jumpandread.domain.PagerEdgesCalculator;
-import com.westial.alexa.jumpandread.domain.content.ContentAddress;
-import com.westial.alexa.jumpandread.domain.content.ContentCounter;
-import com.westial.alexa.jumpandread.domain.content.EmptyContent;
-import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,7 +47,7 @@ public class DynamoDbCandidate extends Candidate
 
     @Override
     @JsonIgnore
-    protected LinkedHashMap<Integer, Pair<String, String>> provideContents(
+    protected LinkedHashMap<Integer, Pair<String, TextTag>> provideContents(
             TextContentProvider provider,
             ContentCounter contentCounter,
             ContentAddress address,
@@ -76,18 +73,18 @@ public class DynamoDbCandidate extends Candidate
             }
         }
 
-        LinkedList<Pair<String, String>> contents = provider.provide(
+        LinkedList<Pair<String, TextTag>> contents = provider.provide(
                 contentCounter,
                 address,
                 newPosition,
                 contentsNumber
         );
 
-        LinkedHashMap<Integer, Pair<String, String>> results = new LinkedHashMap<>();
+        LinkedHashMap<Integer, Pair<String, TextTag>> results = new LinkedHashMap<>();
 
         while (!contents.isEmpty())
         {
-            Pair<String, String> content = contents.removeFirst();
+            Pair<String, TextTag> content = contents.removeFirst();
             results.put(newPosition, content);
             newPosition ++;
         }
@@ -95,9 +92,9 @@ public class DynamoDbCandidate extends Candidate
     }
 
     @Override
-    protected Paragraph buildParagraph(int index, Pair<String, String> content)
+    protected Paragraph buildParagraph(String label, String text)
     {
-        return new DynamoDbParagraph(content.getKey(), content.getValue());
+        return new DynamoDbParagraph(label, text);
     }
 
     public DynamoDbCandidate(

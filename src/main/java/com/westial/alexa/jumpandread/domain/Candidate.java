@@ -1,10 +1,7 @@
 package com.westial.alexa.jumpandread.domain;
 
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
-import com.westial.alexa.jumpandread.domain.content.ContentAddress;
-import com.westial.alexa.jumpandread.domain.content.ContentCounter;
-import com.westial.alexa.jumpandread.domain.content.EmptyContent;
-import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import com.westial.alexa.jumpandread.domain.content.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Calendar;
@@ -57,7 +54,7 @@ public abstract class Candidate
         this.searchId = searchId;
         this.title = title;
         this.url = url;
-        this.description = description;
+        this.description = null == description || description.isEmpty() ? title : description;
         this.contentProvider = contentProvider;
         this.repository = repository;
         this.paragraphPosition = paragraphPosition;
@@ -171,7 +168,7 @@ public abstract class Candidate
             int maxItemsNumber
     ) throws NoParagraphsException
     {
-        LinkedHashMap<Integer, Pair<String, String>> providedContents;
+        LinkedHashMap<Integer, Pair<String, TextTag>> providedContents;
         ContentAddress address = new CandidateContentAddress(this);
         int firstCachedParagraphIndex = 0;
         if (null != paragraphs && !paragraphs.isEmpty())
@@ -201,10 +198,16 @@ public abstract class Candidate
                 totalContentParagraphsCount = contentCounter.tally();
                 paragraphs = new LinkedHashMap<>();
 
-                for (Map.Entry<Integer, Pair<String, String>> entry: providedContents.entrySet())
+                for (Map.Entry<Integer, Pair<String, TextTag>> entry: providedContents.entrySet())
                 {
-                    Pair<String, String> content = entry.getValue();
-                    paragraphs.put(entry.getKey(), buildParagraph(position, content));
+                    Pair<String, TextTag> content = entry.getValue();
+                    paragraphs.put(
+                            entry.getKey(),
+                            buildParagraph(
+                                    content.getKey(),
+                                    content.getValue().getText()
+                            )
+                    );
                 }
 
                 persist();
@@ -224,7 +227,7 @@ public abstract class Candidate
      * the same as got before.
      * @throws EmptyContent when there is no content to provide.
      */
-    protected abstract LinkedHashMap<Integer, Pair<String, String>> provideContents(
+    protected abstract LinkedHashMap<Integer, Pair<String, TextTag>> provideContents(
             TextContentProvider provider,
             ContentCounter contentCounter,
             ContentAddress address,
@@ -234,7 +237,7 @@ public abstract class Candidate
             Integer totalNumber
     ) throws EmptyContent;
 
-    protected abstract Paragraph buildParagraph(int index, Pair<String, String> content);
+    protected abstract Paragraph buildParagraph(String label, String text);
 
     public String dump(int number, String pauseToken) throws NoParagraphsException
     {

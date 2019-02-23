@@ -9,6 +9,7 @@ import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.*;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

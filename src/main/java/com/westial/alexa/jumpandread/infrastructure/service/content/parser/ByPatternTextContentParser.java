@@ -1,4 +1,4 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content.parser;
 
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.ConfigurableParser;

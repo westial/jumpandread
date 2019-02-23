@@ -7,6 +7,11 @@ import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.ByConfigurationTextContentProviderFactory;
+import com.westial.alexa.jumpandread.infrastructure.service.content.ParserFactory;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebNarrativeTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -155,6 +160,6 @@ public class TextContentFactorySteps
     @And("^A parser factory with null value for medium prefix filter regex$")
     public void aParserFactoryWithNullValueForMediumPrefixFilterRegex()
     {
-        parserFactory = new ParserFactory(null);
+        parserFactory = new ParserFactory(null, null);
     }
 }

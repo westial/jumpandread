@@ -1,12 +1,11 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content.parser;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westial.alexa.jumpandread.application.exception.FilteringNoParagraphsException;
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
-import com.westial.alexa.jumpandread.domain.content.TextContent;
-import com.westial.alexa.jumpandread.domain.content.TextContentParser;
+import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 
 import java.io.IOException;
@@ -20,14 +19,16 @@ import java.util.regex.Pattern;
 public class MediumTextContentParser extends TextContentParser
 {
     private final Pattern filterPattern;
+    private final String uriRoot;       // I got really good results with "https://medium.com/p".
     private final static int CONTENT_DEBUG_CHAR_NUMBER = 100;
 
-    public MediumTextContentParser(String filterRegex)
+    public MediumTextContentParser(String filterRegex, String uriRoot)
     {
         filterPattern = Pattern.compile(
                 filterRegex,
                 Pattern.DOTALL | Pattern.MULTILINE
         );
+        this.uriRoot = uriRoot;
     }
 
     private Map<String, Object> toMap(String content) throws IOException
@@ -41,10 +42,9 @@ public class MediumTextContentParser extends TextContentParser
         );
     }
 
-    private LinkedList<TextContent> extractTextContents(Map<String, Object> contentMap)
+    private LinkedList<TextContent> extractPost(Map payload)
     {
         LinkedList<TextContent> textContents = new LinkedList<>();
-        Map payload = (Map) contentMap.get("payload");
         Map value = (Map) payload.get("value");
         Map content = (Map) value.get("content");
         Map bodyModel = (Map) content.get("bodyModel");
@@ -66,11 +66,56 @@ public class MediumTextContentParser extends TextContentParser
             textContents.add(
                     new HtmlTextContent(
                             label,
-                            (String) paragraph.get("text")
+                            new HtmlTag((String) paragraph.get("text"))
                     )
             );
         }
         return textContents;
+    }
+
+    private LinkedList<TextContent> extractMultiplePost(Map payload)
+    {
+        LinkedList<TextContent> textContents = new LinkedList<>();
+
+        Map references = (Map) payload.get("references");
+        Map posts = (Map) references.get("Post");
+        for (Object item: posts.values())
+        {
+            Map post = (Map) item;
+            if (!post.get("type").equals("Post"))
+            {
+                continue;
+            }
+            String url = String.format(
+                    "%s/%s",
+                    uriRoot,
+                    post.get("uniqueSlug")
+            );
+            String title = (String) post.get("title");
+
+            HtmlTag tag = new HtmlTag(title);
+            tag.put("src", url);
+
+            textContents.add(
+                    new HtmlTextContent(
+                            XtraTagType.X_CANDIDATE.name(),
+                            tag
+                    )
+            );
+        }
+        return textContents;
+    }
+
+    private LinkedList<TextContent> extractTextContents(Map contentMap)
+    {
+        Map payload = (Map) contentMap.get("payload");
+
+        if (payload.containsKey("value"))
+        {
+            return extractPost(payload);
+        }
+
+        return extractMultiplePost(payload);
     }
 
     @Override

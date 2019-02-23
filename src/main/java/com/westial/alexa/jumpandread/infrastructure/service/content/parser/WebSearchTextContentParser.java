@@ -1,7 +1,8 @@
-package com.westial.alexa.jumpandread.infrastructure.service;
+package com.westial.alexa.jumpandread.infrastructure.service.content.parser;
 
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
+import com.westial.alexa.jumpandread.domain.content.HtmlTag;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
@@ -34,7 +35,7 @@ public class WebSearchTextContentParser extends TextContentParser
             contents.add(
                     new HtmlTextContent(
                             readElement.tagName(),
-                            readElement.text()
+                            new HtmlTag(readElement.text())
                     )
             );
         }
