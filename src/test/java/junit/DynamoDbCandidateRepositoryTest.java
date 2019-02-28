@@ -5,13 +5,11 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.google.api.client.util.Lists;
 import com.westial.alexa.jumpandread.domain.*;
-import com.westial.alexa.jumpandread.domain.content.ContentGetter;
-import com.westial.alexa.jumpandread.domain.content.TextContentParser;
-import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
+import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
-import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
+import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +20,7 @@ import java.util.*;
 
 public class DynamoDbCandidateRepositoryTest
 {
+    private static final String SAMPLE_SRC = "http://westial.com";
     private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
     private ContentGetter contentGetter;
@@ -50,7 +49,13 @@ public class DynamoDbCandidateRepositoryTest
                 "jnr_candidate",
                 createDynamoDbClient()
         );
-        contentParser = new WebSearchTextContentParser();
+        LinkHtmlTag link = new LinkHtmlTag("This is my url");
+        link.setSrc(SAMPLE_SRC);
+        TextContent forceXtraContent = new HtmlTextContent(
+                XtraTagType.X_CANDIDATE.name(),
+                link
+        );
+        contentParser = new WithAppendedMockWebSearchTextContentParser(forceXtraContent);
         contentGetter = buildMockContentGetter();
         presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
@@ -138,5 +143,9 @@ public class DynamoDbCandidateRepositoryTest
             Assert.assertEquals(entry.getKey(), index);
         }
         assertEqualCandidate(createdCandidate, gotCandidate);
+        Assert.assertEquals(
+                SAMPLE_SRC,
+                ((Paragraph)((Map.Entry)((LinkedHashMap)gotCandidate.getParagraphs()).entrySet().toArray()[7]).getValue()).getContent().get("src")
+        );
     }
 }

@@ -4,13 +4,12 @@ import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphs
 import com.westial.alexa.jumpandread.domain.content.*;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Candidate
 {
     public static int INDEX_START = 1;
+    public static final int FIRST_PARAGRAPH_POSITION = 0;
 
     protected String id;
     protected Integer index;
@@ -25,12 +24,17 @@ public abstract class Candidate
 
     protected Integer totalContentParagraphsCount;
     protected Integer paragraphPosition;
-    private final Integer maxParagraphsNumber;
     protected String content;
     protected Calendar updatedAt;
 
+    protected Map<String, Candidate> children;
+
+    private final Integer maxParagraphsNumber;
+
     private final TextContentProvider contentProvider;
     private final CandidateRepository repository;
+
+    private final Set<String> xtraTagTypes;
 
     public Candidate(
             String id,
@@ -59,6 +63,22 @@ public abstract class Candidate
         this.repository = repository;
         this.paragraphPosition = paragraphPosition;
         this.maxParagraphsNumber = maxParagraphsNumber;
+
+        xtraTagTypes = getXtraTagNames();
+
+    }
+
+    private static Set<String> getXtraTagNames()
+    {
+
+        Set<String> names = new HashSet<>();
+
+        for (XtraTagType xtraTagType : XtraTagType.values())
+        {
+            names.add(xtraTagType.name());
+        }
+
+        return names;
     }
 
     public Candidate(
@@ -178,7 +198,7 @@ public abstract class Candidate
         try
         {
             ContentCounter contentCounter = new CandidateContentCounter(
-                buildCandidateCounterId()
+                    buildCandidateCounterId()
             );
 
             // Returns null if update is not needed
@@ -198,14 +218,14 @@ public abstract class Candidate
                 totalContentParagraphsCount = contentCounter.tally();
                 paragraphs = new LinkedHashMap<>();
 
-                for (Map.Entry<Integer, Pair<String, TextTag>> entry: providedContents.entrySet())
+                for (Map.Entry<Integer, Pair<String, TextTag>> entry : providedContents.entrySet())
                 {
                     Pair<String, TextTag> content = entry.getValue();
                     paragraphs.put(
                             entry.getKey(),
                             buildParagraph(
                                     content.getKey(),
-                                    content.getValue().getText()
+                                    content.getValue()
                             )
                     );
                 }
@@ -237,7 +257,7 @@ public abstract class Candidate
             Integer totalNumber
     ) throws EmptyContent;
 
-    protected abstract Paragraph buildParagraph(String label, String text);
+    protected abstract Paragraph buildParagraph(String label, TextTag text);
 
     public String dump(int number, String pauseToken) throws NoParagraphsException
     {
@@ -257,13 +277,14 @@ public abstract class Candidate
             throw new IteratingNoParagraphsException("Finished Candidate");
         }
 
-        for (int index = paragraphPosition; index < ending; index ++)
+        for (int index = paragraphPosition; index < ending; index++)
         {
             if (!paragraphs.containsKey(index))
             {
                 upgradeParagraphs(paragraphPosition, maxParagraphsNumber);
             }
             paragraph = paragraphs.get(index);
+
             text.append(
                     String.format(
                             "%s%s",
@@ -273,6 +294,36 @@ public abstract class Candidate
             );
         }
         return text.toString();
+    }
+
+    /**
+     * Check if a paragraph is an xtra tag type paragraph and handle according
+     * the tag type behaviour if applies.
+     *
+     * @param paragraph Paragraph to check.
+     * @return return true if it is an xtra tag type paragraph and return false
+     * if it is not.
+     */
+    private boolean handleXtraTagParagraph(Paragraph paragraph)
+    {
+        if (xtraTagTypes.contains(paragraph.getTag()))
+        {
+            switch (XtraTagType.valueOf(paragraph.getTag()))
+            {
+                case X_CANDIDATE:
+                    addChild(
+                            paragraph.getContent().get("src"),
+                            paragraph.getContent().getText(),
+                            paragraph.getContent().get("description")
+                    );
+                    break;
+
+                default:
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void persist()
@@ -350,4 +401,50 @@ public abstract class Candidate
     {
         return totalContentParagraphsCount;
     }
+
+    public Map<String, Candidate> getChildren()
+    {
+        return children;
+    }
+
+    private void addChild(String url, String title, String description)
+    {
+        if (null == children)
+        {
+            children = new HashMap<>();
+        }
+        int nextIndex = repository.countBySearch(searchId);
+
+        Candidate child = create(
+                Candidate.buildId(searchId, nextIndex),
+                nextIndex,
+                userId,
+                sessionId,
+                searchId,
+                title,
+                url,
+                description,
+                contentProvider,
+                repository,
+                Candidate.FIRST_PARAGRAPH_POSITION,
+                maxParagraphsNumber
+        );
+
+        children.put(url, child);
+    }
+
+    protected abstract Candidate create(
+            String id,
+            Integer index,
+            String userId,
+            String sessionId,
+            String searchId,
+            String title,
+            String url,
+            String description,
+            TextContentProvider contentProvider,
+            CandidateRepository repository,
+            Integer paragraphPosition,
+            int maxParagraphsNumber
+    );
 }

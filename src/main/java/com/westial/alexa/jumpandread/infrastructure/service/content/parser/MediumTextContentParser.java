@@ -93,8 +93,8 @@ public class MediumTextContentParser extends TextContentParser
             );
             String title = (String) post.get("title");
 
-            HtmlTag tag = new HtmlTag(title);
-            tag.put("src", url);
+            LinkHtmlTag tag = new LinkHtmlTag(title);
+            tag.setSrc(url);
 
             textContents.add(
                     new HtmlTextContent(

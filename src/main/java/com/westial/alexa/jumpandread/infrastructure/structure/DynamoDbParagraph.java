@@ -1,38 +1,37 @@
 package com.westial.alexa.jumpandread.infrastructure.structure;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.content.HtmlTag;
+import com.westial.alexa.jumpandread.domain.content.TextTag;
+
+import java.util.Map;
 
 @DynamoDBDocument
 public class DynamoDbParagraph extends Paragraph
 {
-    public DynamoDbParagraph(String tag, String content)
+    private final static String TEXT_FIELD_NAME = "text";
+
+    public DynamoDbParagraph(String tag, TextTag content)
     {
-        super(tag, content);
+        super(tag, addTextField(content));
     }
 
-    @Override
-    public String getContent()
+    public DynamoDbParagraph(String tag, Map<String, String> contentMap)
     {
-        return super.getContent();
+        super(tag, createTextTag(contentMap));
     }
 
-    @DynamoDBAttribute(attributeName = "content")
-    public void setContent(String content)
+    private static TextTag addTextField(TextTag content)
     {
-        super.content = content;
+        content.put(TEXT_FIELD_NAME, content.getText());
+        return content;
     }
 
-    @Override
-    public String getTag()
+    private static TextTag createTextTag(Map<String, String> map)
     {
-        return super.getTag();
-    }
-
-    @DynamoDBAttribute(attributeName = "tag")
-    public void setTag(String tag)
-    {
-        super.tag = tag;
+        TextTag content = new HtmlTag(map.get(TEXT_FIELD_NAME));
+        content.putAll(map);
+        return content;
     }
 }

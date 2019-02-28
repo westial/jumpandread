@@ -9,7 +9,6 @@ public class DynamoDbCandidateFactory implements CandidateFactory
     private final CandidateRepository repository;
     private final int maxParagraphsNumber;
     private final PagerEdgesCalculator partCalculator;
-    private static final int FIRST_PARAGRAPH_POSITION = 0;
     private final TextContentProvider contentProvider;
 
     public DynamoDbCandidateFactory(
@@ -46,7 +45,7 @@ public class DynamoDbCandidateFactory implements CandidateFactory
                 description,
                 contentProvider,
                 repository,
-                FIRST_PARAGRAPH_POSITION,
+                Candidate.FIRST_PARAGRAPH_POSITION,
                 maxParagraphsNumber,
                 partCalculator
         );

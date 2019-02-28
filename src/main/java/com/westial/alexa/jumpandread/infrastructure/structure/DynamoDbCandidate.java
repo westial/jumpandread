@@ -10,9 +10,7 @@ import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 @DynamoDBDocument
 public class DynamoDbCandidate extends Candidate
@@ -92,9 +90,9 @@ public class DynamoDbCandidate extends Candidate
     }
 
     @Override
-    protected Paragraph buildParagraph(String label, String text)
+    protected Paragraph buildParagraph(String label, TextTag tag)
     {
-        return new DynamoDbParagraph(label, text);
+        return new DynamoDbParagraph(label, tag);
     }
 
     public DynamoDbCandidate(
@@ -252,8 +250,52 @@ public class DynamoDbCandidate extends Candidate
         return super.getUpdatedAt();
     }
 
-    public Calendar setUpdatedAt(Calendar updatedAt)
+    public void setUpdatedAt(Calendar updatedAt)
     {
-        return this.updatedAt = updatedAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    @DynamoDBAttribute(attributeName = "children")
+    public Map<String, Candidate> getChildren()
+    {
+        return super.getChildren();
+    }
+
+    public void setChildren(Map<String, Candidate> children)
+    {
+        this.children = children;
+    }
+
+    @Override
+    protected Candidate create(
+            String id,
+            Integer index,
+            String userId,
+            String sessionId,
+            String searchId,
+            String title,
+            String url,
+            String description,
+            TextContentProvider contentProvider,
+            CandidateRepository repository,
+            Integer paragraphPosition,
+            int maxParagraphsNumber)
+    {
+        return new DynamoDbCandidate(
+                id,
+                index,
+                userId,
+                sessionId,
+                searchId,
+                title,
+                url,
+                description,
+                contentProvider,
+                repository,
+                paragraphPosition,
+                maxParagraphsNumber,
+                partCalculator
+        );
     }
 }

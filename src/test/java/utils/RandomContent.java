@@ -89,7 +89,7 @@ public class RandomContent
             text.append(createPhrase(4, 9) + ". ");
         }
 
-        return new DynamoDbParagraph(label, text.toString().trim());
+        return new DynamoDbParagraph(label, new HtmlTag(text.toString().trim()));
     }
 
     public static TextContent createTextContent(int minPhrases, int maxPhrases)

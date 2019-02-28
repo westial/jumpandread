@@ -37,7 +37,7 @@ public class MockCandidatesSearch implements CandidatesSearch
         for (int i = 0; i < forcedResults; i++)
         {
             title = RandomContent.randomWord();
-            description = RandomContent.createParagraph(3, 5).getContent();
+            description = RandomContent.createParagraph(3, 5).getContent().getText();
             url = String.format(
                     "https://www.%s.%s/%s",
                     RandomContent.randomWord(),

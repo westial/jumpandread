@@ -6,4 +6,9 @@ public class HtmlTag extends TextTag
     {
         super(text);
     }
+
+    public void setDescription(String description)
+    {
+        this.put("description", description);
+    }
 }
