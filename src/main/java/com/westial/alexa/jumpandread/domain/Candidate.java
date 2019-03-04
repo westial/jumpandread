@@ -285,10 +285,15 @@ public abstract class Candidate
             }
             paragraph = paragraphs.get(index);
 
+            if (handleXtraTagParagraph(paragraph))
+            {
+                continue;
+            }
+
             text.append(
                     String.format(
                             "%s%s",
-                            paragraph.getContent(),
+                            paragraph.getContent().getText(),
                             pauseToken
                     )
             );
@@ -311,10 +316,13 @@ public abstract class Candidate
             switch (XtraTagType.valueOf(paragraph.getTag()))
             {
                 case X_CANDIDATE:
+                    LinkToCandidateDescriptor linkToCandidate =
+                            (LinkToCandidateDescriptor) paragraph.getContent();
+
                     addChild(
-                            paragraph.getContent().get("src"),
-                            paragraph.getContent().getText(),
-                            paragraph.getContent().get("description")
+                            linkToCandidate.getSrc(),
+                            linkToCandidate.getText(),
+                            linkToCandidate.getDescription()
                     );
                     break;
 

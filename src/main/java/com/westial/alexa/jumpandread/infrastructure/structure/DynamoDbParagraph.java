@@ -2,7 +2,7 @@ package com.westial.alexa.jumpandread.infrastructure.structure;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.westial.alexa.jumpandread.domain.Paragraph;
-import com.westial.alexa.jumpandread.domain.content.HtmlTag;
+import com.westial.alexa.jumpandread.infrastructure.service.content.HtmlTag;
 import com.westial.alexa.jumpandread.domain.content.TextTag;
 
 import java.util.Map;

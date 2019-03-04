@@ -8,6 +8,7 @@ import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.LinkHtmlTag;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 import org.junit.Assert;
@@ -24,7 +25,6 @@ public class DynamoDbCandidateRepositoryTest
     private TextContentParser contentParser;
     private CandidateRepository candidateRepository;
     private ContentGetter contentGetter;
-    private Presenter presenter;
     private TextContentProvider contentProvider;
     private CandidateFactory candidateFactory;
     private String searchId;
@@ -57,7 +57,6 @@ public class DynamoDbCandidateRepositoryTest
         );
         contentParser = new WithAppendedMockWebSearchTextContentParser(forceXtraContent);
         contentGetter = buildMockContentGetter();
-        presenter = new AlexaPresenter(new MockTranslator());
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
 
         PagerEdgesCalculator partCalculator = new MarginPagerEdgesCalculator(

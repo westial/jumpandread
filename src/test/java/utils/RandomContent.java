@@ -1,7 +1,7 @@
 package utils;
 
 import com.westial.alexa.jumpandread.domain.Paragraph;
-import com.westial.alexa.jumpandread.domain.content.HtmlTag;
+import com.westial.alexa.jumpandread.infrastructure.service.content.HtmlTag;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbParagraph;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;

@@ -6,6 +6,8 @@ import com.westial.alexa.jumpandread.application.exception.FilteringNoParagraphs
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
 import com.westial.alexa.jumpandread.domain.content.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.HtmlTag;
+import com.westial.alexa.jumpandread.infrastructure.service.content.LinkHtmlTag;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;
 
 import java.io.IOException;

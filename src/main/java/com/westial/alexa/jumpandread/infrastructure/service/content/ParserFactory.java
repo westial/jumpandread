@@ -1,7 +1,5 @@
 package com.westial.alexa.jumpandread.infrastructure.service.content;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
@@ -10,7 +8,6 @@ import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebNa
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.ParserType;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class ParserFactory
@@ -24,7 +21,7 @@ public class ParserFactory
         this.uriRoot = uriRoot;
     }
 
-    public TextContentParser createParserByType(String parserType)
+    TextContentParser createByType(String parserType)
     {
         switch (ParserType.valueOf(parserType))
         {
@@ -48,39 +45,11 @@ public class ParserFactory
         }
     }
 
-    private static Map<String, String> deserializeParsersByPatternConfig(String rawParsersByPattern)
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        try
-        {
-            return mapper.readValue(
-                    rawParsersByPattern,
-                    new TypeReference<Map<String, String>>()
-                    {
-                    }
-            );
-        } catch (IOException e)
-        {
-            throw new InitializationError(
-                    String.format(
-                            "%s. Bad formatted configuration json for " +
-                                    "PARSER_TYPES_BY_PATTERN as " +
-                                    "%s",
-                            e.getMessage(),
-                            rawParsersByPattern
-                    )
-            );
-        }
-    }
-
-    public ByPatternTextContentParser createByPatternParser(
-            String rawParsersByPattern,
+    public ByPatternTextContentParser buildByPatternParser(
+            Map<String, String> parsersByPatternConfig,
             TextContentParser defaultParser
     )
     {
-        Map<String, String> parsersByPatternConfig =
-                deserializeParsersByPatternConfig(rawParsersByPattern);
-
         ByPatternTextContentParser byPatternParser =
                 new ByPatternTextContentParser(defaultParser);
 
@@ -88,7 +57,7 @@ public class ParserFactory
         {
             byPatternParser.addParser(
                     entry.getKey(),
-                    createParserByType(entry.getValue())
+                    createByType(entry.getValue())
             );
         }
 

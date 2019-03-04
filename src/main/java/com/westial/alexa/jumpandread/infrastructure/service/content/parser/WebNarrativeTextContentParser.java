@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.infrastructure.service.content.parser;
 
 import com.westial.alexa.jumpandread.domain.NoParagraphsException;
-import com.westial.alexa.jumpandread.domain.content.HtmlTag;
+import com.westial.alexa.jumpandread.infrastructure.service.content.HtmlTag;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.infrastructure.structure.HtmlTextContent;

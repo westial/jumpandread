@@ -20,7 +20,7 @@
         "STARTING_CANDIDATE_INDEX": "1",
         "MAX_PARAGRAPHS_PROVIDED": "300",
         "CONTENT_PROVIDER_MARGIN": "100",
-        "PARSER_TYPES_BY_PATTERN": "{ \"^https?://(?:www\\\\.)?gutenberg\\\\..+\": \"WebNarrative\", \"^https?://(?:www\\\\.)?medium\\\\.com/@[^/]+/.+\": \"WebSearch\" }",
+        "PARSER_TYPES_BY_PATTERN": "{ \"^https?://(?:www\\\\.)?gutenberg\\\\..+\": \"WebNarrative\", \"^https?://(?:www\\\\.)?medium\\\\.com/.+\": \"CustomMedium\" }",
         "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})",
         "MEDIUM_URI_ROOT": "http://www.medium.com/p"
     }

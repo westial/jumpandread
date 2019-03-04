@@ -10,7 +10,7 @@ public abstract class TextTag implements Tag<String, String>
     private final String text;
     private final Map<String, String> attributes;
 
-    TextTag(String text)
+    public TextTag(String text)
     {
         this.text = text;
         attributes = new HashMap<>();

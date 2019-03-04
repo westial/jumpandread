@@ -5,7 +5,7 @@ import com.westial.alexa.jumpandread.domain.content.ContentAddress;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
-import com.westial.alexa.jumpandread.infrastructure.MockContentAddress;
+import com.westial.alexa.jumpandread.infrastructure.structure.SimpleContentAddress;
 import com.westial.alexa.jumpandread.infrastructure.service.LocalContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebNarrativeTextContentParser;
 import cucumber.api.java.en.And;
@@ -44,7 +44,7 @@ public class WebNarrativeParserSteps
     @When("^I parse the narrative file content$")
     public void iParseTheNarrativeFileContent() throws NoParagraphsException
     {
-        ContentAddress address = new MockContentAddress(contentFilePath);
+        ContentAddress address = new SimpleContentAddress(contentFilePath);
         results = parser.parse(contentGetter.getContent(address));
     }
 

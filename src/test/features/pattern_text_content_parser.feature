@@ -4,7 +4,7 @@ Feature: Proves with parsers by pattern
     Given An environment configuration service
     And A parsers by pattern configuration as in file "<filePath>"
     And A mock web search parser as default
-    And A parser factory with null value for medium prefix filter regex
+    And A parser factory with empty value for medium prefix filter regex
     When I create a by pattern parser according to configuration
     And I configure the by pattern parser for "<contentUrl>"
     Then The configured parser into by pattern parser is an instance of "<expectedParser>"
@@ -18,7 +18,7 @@ Feature: Proves with parsers by pattern
       | parsers_by_pattern_sample.json | https://noesgutenberg.com/4/f/index.html             | MockContentParser             |
       | parsers_by_pattern_sample.json | https://www.mediumnoes.com/@ertererte/f/index.html   | MockContentParser             |
       | parsers_by_pattern_sample.json | https://www.noesmedium.com/@ertererte/f/index.html   | MockContentParser             |
-      | parsers_by_pattern_sample.json | https://www.medium.com/noesmediumparsejable          | MockContentParser             |
+      | parsers_by_pattern_sample.json | https://www.medium.com/noesmediumparsejable          | MediumTextContentParser       |
       | parsers_by_pattern_sample.json | https://www.medium.com/@ertererte/f/index.html       | WebSearchTextContentParser    |
       | parsers_by_pattern_sample.json | https://medium.com/@ertererte/f/index.html           | WebSearchTextContentParser    |
       | parsers_by_pattern_sample.json | http://medium.com/@ertererte/f/index.html            | WebSearchTextContentParser    |

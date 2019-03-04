@@ -1,4 +1,6 @@
-package com.westial.alexa.jumpandread.domain.content;
+package com.westial.alexa.jumpandread.infrastructure.service.content;
+
+import com.westial.alexa.jumpandread.domain.content.TextTag;
 
 public class HtmlTag extends TextTag
 {

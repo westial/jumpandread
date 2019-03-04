@@ -7,6 +7,8 @@ Feature: Proves for text content providers factory
     And A parsers by pattern configuration as in file "parsers_by_pattern_sample.json"
     And An empty mock content getter
     And A mock web search parser as default
+    And A default address modifier
+    And A content getter factory
     And A mock text content providers factory by configuration with the test only method to get the parser
     When I create the text content provider
     Then The factory threw an exception with name as "com.westial.alexa.jumpandread.infrastructure.exception.InitializationError"
@@ -17,10 +19,12 @@ Feature: Proves for text content providers factory
     And A parsers by pattern configuration as in file "parsers_by_pattern_sample.json"
     And An empty mock content getter
     And A mock web search parser as default
-    And A parser factory with null value for medium prefix filter regex
+    And A default address modifier
+    And A content getter factory
+    And A parser factory with empty value for medium prefix filter regex
     And A mock text content providers factory by configuration with the test only method to get the parser
     When I create the text content provider
-    Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.ParserByPatternTextContentProvider"
+    Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.content.ParserByPatternTextContentProvider"
 
 
   Scenario: Create provider with fixed parser type according to configuration
@@ -28,7 +32,9 @@ Feature: Proves for text content providers factory
     And A parser type configuration value as "WebNarrative"
     And An empty mock content getter
     And A mock web search parser as default
-    And A parser factory with null value for medium prefix filter regex
+    And A default address modifier
+    And A content getter factory
+    And A parser factory with empty value for medium prefix filter regex
     And A mock text content providers factory by configuration with the test only method to get the parser
     When I create the text content provider
-    Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.RemoteTextContentProvider"
+    Then The providers factory parser class name is as "com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider"

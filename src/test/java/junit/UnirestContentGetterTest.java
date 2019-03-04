@@ -1,7 +1,7 @@
 package junit;
 
 import com.westial.alexa.jumpandread.domain.content.ContentAddress;
-import com.westial.alexa.jumpandread.infrastructure.MockContentAddress;
+import com.westial.alexa.jumpandread.infrastructure.structure.SimpleContentAddress;
 import com.westial.alexa.jumpandread.infrastructure.service.UnirestContentGetter;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,15 +20,15 @@ public class UnirestContentGetterTest
     @Before
     public void setUp() throws Exception
     {
-        utf8Address = new MockContentAddress(
+        utf8Address = new SimpleContentAddress(
                 "https://www.laylita.com/recetas/pastel-de-manzana-receta/"
         );
 
-        redirect301Address = new MockContentAddress(
+        redirect301Address = new SimpleContentAddress(
                 "http://www.medium.com/p/are-you-looking-to-buy-outer-lid-pressure-cooker-online-fd107be8a9b0"
         );
 
-        win1252Address = new MockContentAddress(
+        win1252Address = new SimpleContentAddress(
                 "https://gutenberg.jumpandread.com/etext96/50bab10h.htm"
         );
 

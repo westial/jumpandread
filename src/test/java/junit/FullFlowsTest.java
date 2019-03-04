@@ -120,14 +120,25 @@ public class FullFlowsTest
         );
     }
 
-    // FIXME it is not passing through Medium parser
+    /**
+     * Both with and without user and session. You, please, use without to get
+     * credentials and refresh session from time to time.
+     *
+     * Fast check with a given session and user with testing commandline
+     * parameters as:
+     * `-ea -DuserSession=amzn1.ask.account.test.7e262d31-1a62-4346-8d44-8000af92c8b1:amzn1.echo-api.session.test.7e262d31-1a62-4346-8d44-8000af92c8b1`
+     * @throws Throwable
+     */
     @Test
     public void fastCheckIntentsFlowCustomMedium() throws Throwable
     {
         setEnvironment("environment_bypattern_force_custommedium_authorlist_en.json");
         handler = new DuckDuckGoJumpAndReadRouter();
+        if (null != System.getProperty("userSession"))
+        {
+            runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
+        }
         String witness;
-        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         witness = outputStreamResult.toString();
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);

@@ -1,29 +1,37 @@
 package com.westial.alexa.jumpandread.infrastructure.service.content;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westial.alexa.jumpandread.domain.Configuration;
-import com.westial.alexa.jumpandread.domain.content.ContentGetter;
-import com.westial.alexa.jumpandread.domain.content.TextContentParser;
-import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
-import com.westial.alexa.jumpandread.domain.content.TextContentProviderFactory;
+import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.exception.InitializationError;
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.ByPatternTextContentParser;
 
+import java.io.IOException;
+import java.util.Map;
+
 public class ByConfigurationTextContentProviderFactory implements TextContentProviderFactory
 {
+    private final ContentGetterFactory contentGetterFactory;
     private final ContentGetter contentGetter;
     private TextContentParser parser;
     private ParserFactory parserFactory;
+    private final AddressModifier defaultModifier;
 
     public ByConfigurationTextContentProviderFactory(
             ContentGetter contentGetter,
+            ContentGetterFactory contentGetterFactory,
             TextContentParser defaultParser,
-            ParserFactory parserFactory
+            ParserFactory parserFactory,
+            AddressModifier defaultModifier
     )
     {
+        this.contentGetterFactory = contentGetterFactory;
         this.contentGetter = contentGetter;
         this.parser = defaultParser;
         this.parserFactory = parserFactory;
+        this.defaultModifier = defaultModifier;
     }
 
     @Override
@@ -42,12 +50,12 @@ public class ByConfigurationTextContentProviderFactory implements TextContentPro
 
         if (null != rawParsersByPattern)
         {
-            return createParsersByPatternProvider(rawParsersByPattern);
+            return createDependenciesByPatternProvider(rawParsersByPattern);
         }
 
         else if (null != parserType)
         {
-            parser = parserFactory.createParserByType(parserType);
+            parser = parserFactory.createByType(parserType);
         }
 
         return new RemoteTextContentProvider(
@@ -56,16 +64,51 @@ public class ByConfigurationTextContentProviderFactory implements TextContentPro
         );
     }
 
-    private TextContentProvider createParsersByPatternProvider(String rawParsersByPattern)
+    private static Map<String, String> deserializeParsersByPatternConfig(String rawParsersByPattern)
     {
+        ObjectMapper mapper = new ObjectMapper();
+        try
+        {
+            return mapper.readValue(
+                    rawParsersByPattern,
+                    new TypeReference<Map<String, String>>()
+                    {
+                    }
+            );
+        } catch (IOException e)
+        {
+            throw new InitializationError(
+                    String.format(
+                            "%s. Bad formatted configuration json for " +
+                                    "PARSER_TYPES_BY_PATTERN as " +
+                                    "%s",
+                            e.getMessage(),
+                            rawParsersByPattern
+                    )
+            );
+        }
+    }
+
+    private TextContentProvider createDependenciesByPatternProvider(String rawParsersByPattern)
+    {
+        Map<String, String> parsersByPatternConfig =
+                deserializeParsersByPatternConfig(rawParsersByPattern);
+
         ByPatternTextContentParser byPatternParser =
-                parserFactory.createByPatternParser(
-                        rawParsersByPattern,
+                parserFactory.buildByPatternParser(
+                        parsersByPatternConfig,
                         parser
                 );
 
+        ByPatternContentGetterDecorator byPatternGetter =
+                contentGetterFactory.buildByPatternContentGetter(
+                        parsersByPatternConfig,
+                        contentGetter,
+                        defaultModifier
+                );
+
         return new ParserByPatternTextContentProvider(
-                contentGetter,
+                byPatternGetter,
                 byPatternParser
         );
     }

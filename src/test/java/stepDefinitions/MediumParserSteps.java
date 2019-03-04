@@ -4,7 +4,7 @@ import com.westial.alexa.jumpandread.domain.content.ContentAddress;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContent;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
-import com.westial.alexa.jumpandread.infrastructure.MockContentAddress;
+import com.westial.alexa.jumpandread.infrastructure.structure.SimpleContentAddress;
 import com.westial.alexa.jumpandread.infrastructure.service.LocalContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.MediumTextContentParser;
 import cucumber.api.java.en.And;
@@ -49,7 +49,7 @@ public class MediumParserSteps
     @When("^I parse the medium file content$")
     public void iParseTheMediumFileContentWithTheRegexPatternAs() throws Throwable
     {
-        ContentAddress address = new MockContentAddress(contentFilePath);
+        ContentAddress address = new SimpleContentAddress(contentFilePath);
         try
         {
             results = parser.parse(contentGetter.getContent(address));
