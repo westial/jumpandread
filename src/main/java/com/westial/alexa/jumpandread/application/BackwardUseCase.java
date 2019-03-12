@@ -2,6 +2,7 @@ package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.command.move.BackwardCommandFactory;
 import com.westial.alexa.jumpandread.application.command.move.MoveCommand;
+import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 

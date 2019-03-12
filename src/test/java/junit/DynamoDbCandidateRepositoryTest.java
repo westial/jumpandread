@@ -4,6 +4,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.google.api.client.util.Lists;
+import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.MockQueueContentGetter;
@@ -104,6 +105,18 @@ public class DynamoDbCandidateRepositoryTest
         );
     }
 
+    private Candidate createNewRandomCandidate(int index, String searchId, String url)
+    {
+        return candidateFactory.create(
+                index,
+                new User(UUID.randomUUID().toString(), UUID.randomUUID().toString()),
+                searchId,
+                "title:" + UUID.randomUUID().toString(),
+                url,
+                "description:" + UUID.randomUUID().toString()
+        );
+    }
+
     private void assertEqualCandidate(Candidate candidateA, Candidate candidateB)
     {
         Assert.assertEquals(candidateA.getId(), candidateB.getId());
@@ -130,13 +143,13 @@ public class DynamoDbCandidateRepositoryTest
     }
 
     @Test
-    public void updateAndGetTest() throws NoParagraphsException
+    public void updateAndGetTest() throws NoParagraphsException, ReadableEndWithXtraContent
     {
         Candidate createdCandidate = createNewCandidate();
         createdCandidate.dump(3, Presenter.STRONG_TOKEN);
         Candidate gotCandidate = candidateRepository.get(searchId, candidateIndex);
         List<Map.Entry<Integer, Paragraph>> paragraphsList = Lists.newArrayList(gotCandidate.getParagraphs().entrySet().iterator());
-        for (Integer index = 0; index < paragraphsList.size(); index ++)
+        for (Integer index = 0; index < paragraphsList.size(); index++)
         {
             Map.Entry<Integer, Paragraph> entry = paragraphsList.get(index);
             Assert.assertEquals(entry.getKey(), index);
@@ -144,7 +157,118 @@ public class DynamoDbCandidateRepositoryTest
         assertEqualCandidate(createdCandidate, gotCandidate);
         Assert.assertEquals(
                 SAMPLE_SRC,
-                ((Paragraph)((Map.Entry)((LinkedHashMap)gotCandidate.getParagraphs()).entrySet().toArray()[7]).getValue()).getContent().get("src")
+                ((Paragraph) ((Map.Entry) ((LinkedHashMap) gotCandidate.getParagraphs()).entrySet().toArray()[7]).getValue()).getContent().get("src")
         );
+    }
+
+    public Integer randomChoice(LinkedList<Integer> givenList)    {
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(givenList.size());
+        Integer randomElement = givenList.get(randomIndex);
+        givenList.remove(randomIndex);
+        return randomElement;
+    }
+
+    @Test
+    public void lastIndexTest()
+    {
+        String searchId = UUID.randomUUID().toString();
+        final int EXPECTED_LAST_INDEX = 65655;
+        LinkedList<Integer> indexes = new LinkedList<>(
+                Arrays.asList(3, 6, 78, 124, 334, 1234, 3244, 4567, 12876)
+        );
+
+        Candidate createdCandidate = createNewRandomCandidate(
+                randomChoice(indexes),
+                searchId,
+                String.format(
+                        "https://%s.url.dot",
+                        UUID.randomUUID().toString()
+                )
+        );
+        createdCandidate.persist();
+
+        createdCandidate = createNewRandomCandidate(
+                EXPECTED_LAST_INDEX,
+                searchId,
+                String.format(
+                        "https://%s.url.dot",
+                        UUID.randomUUID().toString()
+                )
+        );
+        createdCandidate.persist();
+
+        while (!indexes.isEmpty())
+        {
+            createdCandidate = createNewRandomCandidate(
+                    randomChoice(indexes),
+                    searchId,
+                    String.format(
+                            "https://%s.url.dot",
+                            UUID.randomUUID().toString()
+                    )
+            );
+            createdCandidate.persist();
+        }
+
+        int lastIndex = candidateRepository.lastIndexBySearch(searchId);
+
+        Assert.assertEquals(EXPECTED_LAST_INDEX, lastIndex);
+    }
+
+    @Test
+    public void getAllUrlsTest()
+    {
+        int index = 1;
+        String searchId = UUID.randomUUID().toString();
+
+        // create 4 url random candidates
+        for (int i = 0; i < 4; i++)
+        {
+            Candidate createdCandidate = createNewRandomCandidate(
+                    index,
+                    searchId,
+                    String.format(
+                            "https://%s.url.dot",
+                            UUID.randomUUID().toString()
+                    )
+            );
+            createdCandidate.persist();
+            index++;
+        }
+
+        // create 2 candidates with the same url
+        for (int i = 0; i < 2; i++)
+        {
+            Candidate createdCandidate = createNewRandomCandidate(
+                    index,
+                    searchId,
+                    "https://first.url.dot"
+            );
+            createdCandidate.persist();
+            index++;
+        }
+
+        // create 3 candidates with the same url
+        for (int i = 0; i < 3; i++)
+        {
+            Candidate createdCandidate = createNewRandomCandidate(
+                    index,
+                    searchId,
+                    "https://second.url.dot"
+            );
+            createdCandidate.persist();
+            index++;
+        }
+
+        // asserts
+        Set<String> urls = candidateRepository.getUniqueUrls(searchId);
+        Assert.assertEquals(
+                6,
+                urls.size()
+        );
+
+        Assert.assertTrue(urls.contains("https://first.url.dot"));
+        Assert.assertTrue(urls.contains("https://second.url.dot"));
     }
 }

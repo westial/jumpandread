@@ -139,12 +139,15 @@ public class FullFlowsTest
             runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
         }
         String witness;
-        runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentRead("^<speak>.+(?=The Tech - Medium).{100,}</speak>$");
+        runAndCheckIntentRepeat("^<speak>.+(?=The Tech - Medium).+</speak>$");
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         witness = outputStreamResult.toString();
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
         Assert.assertNotNull(witness);
-        Assert.assertEquals(witness, outputStreamResult.toString());
+        Assert.assertEquals("Next/Previous result is not as expected", witness, outputStreamResult.toString());
     }
 
     @Test

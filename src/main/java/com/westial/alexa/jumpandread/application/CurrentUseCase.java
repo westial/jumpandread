@@ -3,6 +3,7 @@ package com.westial.alexa.jumpandread.application;
 import com.westial.alexa.jumpandread.application.command.CountCandidatesBySearchCommand;
 import com.westial.alexa.jumpandread.application.command.GetCandidateTitleCommand;
 import com.westial.alexa.jumpandread.application.command.ReadCommand;
+import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.NoCandidateException;
 import com.westial.alexa.jumpandread.domain.Presenter;

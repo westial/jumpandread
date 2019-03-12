@@ -5,10 +5,11 @@ import com.westial.alexa.jumpandread.domain.*;
 public class ReadCommand extends ReadingCommandTemplate
 {
     public ReadCommand(
-            CandidateFactory candidateFactory
+            CandidateFactory candidateFactory,
+            ChildrenToSearchCommand childrenCommand
     )
     {
-        super(candidateFactory);
+        super(candidateFactory, childrenCommand);
     }
 
 

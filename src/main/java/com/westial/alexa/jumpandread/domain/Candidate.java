@@ -1,7 +1,9 @@
 package com.westial.alexa.jumpandread.domain;
 
 import com.westial.alexa.jumpandread.application.exception.IteratingNoParagraphsException;
+import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.content.*;
+import com.westial.alexa.jumpandread.infrastructure.service.content.LinkHtmlTag;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -259,10 +261,11 @@ public abstract class Candidate
 
     protected abstract Paragraph buildParagraph(String label, TextTag text);
 
-    public String dump(int number, String pauseToken) throws NoParagraphsException
+    public String dump(int number, String pauseToken) throws NoParagraphsException, ReadableEndWithXtraContent
     {
         Paragraph paragraph;
         StringBuilder text = new StringBuilder();
+        boolean hasXtraTag = false;
 
         if (null == totalContentParagraphsCount)
         {
@@ -287,6 +290,7 @@ public abstract class Candidate
 
             if (handleXtraTagParagraph(paragraph))
             {
+                hasXtraTag = true;
                 continue;
             }
 
@@ -298,7 +302,12 @@ public abstract class Candidate
                     )
             );
         }
-        return text.toString();
+        String result = text.toString();
+        if (result.isEmpty() && hasXtraTag)
+        {
+            throw new ReadableEndWithXtraContent();
+        }
+        return result;
     }
 
     /**
@@ -317,7 +326,7 @@ public abstract class Candidate
             {
                 case X_CANDIDATE:
                     LinkToCandidateDescriptor linkToCandidate =
-                            (LinkToCandidateDescriptor) paragraph.getContent();
+                            new LinkHtmlTag(paragraph.getContent());
 
                     addChild(
                             linkToCandidate.getSrc(),
@@ -421,11 +430,10 @@ public abstract class Candidate
         {
             children = new HashMap<>();
         }
-        int nextIndex = repository.countBySearch(searchId);
 
         Candidate child = create(
-                Candidate.buildId(searchId, nextIndex),
-                nextIndex,
+                null,
+                null,
                 userId,
                 sessionId,
                 searchId,

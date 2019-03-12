@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import com.westial.alexa.jumpandread.application.*;
+import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
@@ -12,13 +13,14 @@ import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.service.content.parser.WebSearchTextContentParser;
-import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
 import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import utils.CandidateHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -52,6 +54,7 @@ public class RetrieveParagraphsSteps
             50,
             20
     );
+    private ChildrenToSearchCommand childrenCommand;
 
     @Given("^A candidate factory for parsing$")
     public void aCandidateFactory() throws Throwable
@@ -70,28 +73,6 @@ public class RetrieveParagraphsSteps
         candidateRepository = new MockCandidateRepository(candidates);
     }
 
-    private Candidate buildCandidate(int index, List<List<String>> candidateData)
-    {
-        return new DynamoDbCandidate(
-                DynamoDbCandidate.buildId(
-                        candidateData.get(index).get(3),
-                        Integer.parseInt(candidateData.get(index).get(0))
-                ),
-                Integer.parseInt(candidateData.get(index).get(0)),
-                candidateData.get(index).get(1),
-                candidateData.get(index).get(2),
-                candidateData.get(index).get(3),
-                candidateData.get(index).get(4),
-                candidateData.get(index).get(5),
-                candidateData.get(index).get(6),
-                contentProvider,
-                candidateRepository,
-                Integer.parseInt(candidateData.get(index).get(7)),
-                100,
-                partCalculator
-        );
-    }
-
     @Given("^A searching result candidate list as follows$")
     public void aSearchingResultCandidateListAsFollows(DataTable candidateTable) throws Throwable
     {
@@ -100,7 +81,14 @@ public class RetrieveParagraphsSteps
         for (int i = 1; i < candidateData.size(); i++)
         {
             candidates.add(
-                    buildCandidate(i, candidateData)
+                    CandidateHelper.buildCandidate(
+                            i,
+                            candidateData,
+                            contentProvider,
+                            candidateRepository,
+                            partCalculator,
+                            true
+                    )
             );
         }
     }
@@ -173,7 +161,8 @@ public class RetrieveParagraphsSteps
                 state,
                 presenter,
                 defaultCandidatesFactor,
-                defaultParagraphsGroup
+                defaultParagraphsGroup,
+                childrenCommand
         );
     }
 
@@ -319,5 +308,11 @@ public class RetrieveParagraphsSteps
     public void aMockContentProvider()
     {
         contentProvider = new RemoteTextContentProvider(contentGetter, contentParser);
+    }
+
+    @And("^An adding children to search candidates command for reading only$")
+    public void anAddingChildrenToSearchCandidatesCommandForReadingOnly()
+    {
+        childrenCommand = new ChildrenToSearchCommand(candidateFactory, candidateRepository);
     }
 }

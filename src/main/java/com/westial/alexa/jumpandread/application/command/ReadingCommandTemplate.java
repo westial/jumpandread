@@ -1,6 +1,8 @@
 package com.westial.alexa.jumpandread.application.command;
 
+import com.westial.alexa.jumpandread.application.exception.AlreadyStepped;
 import com.westial.alexa.jumpandread.application.exception.CannotContinueMandatoryReadException;
+import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.*;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -10,12 +12,15 @@ import java.util.List;
 public abstract class ReadingCommandTemplate
 {
     private final CandidateFactory candidateFactory;
+    private final ChildrenToSearchCommand childrenCommand;
 
     public ReadingCommandTemplate(
-            CandidateFactory candidateFactory
+            CandidateFactory candidateFactory,
+            ChildrenToSearchCommand childrenCommand
     )
     {
         this.candidateFactory = candidateFactory;
+        this.childrenCommand = childrenCommand;
     }
 
     public List<Object[]> execute(
@@ -87,9 +92,31 @@ public abstract class ReadingCommandTemplate
                 );
                 appendResult(results, Presenter.STRONG_TOKEN);
             }
-            String content = dump(paragraphsGroup, candidate);
+            String content = candidate.dump(paragraphsGroup, Presenter.STRONG_TOKEN);
+
             appendResult(results, content);
             state.updateCandidateIndex(candidateIndex);
+            return results;
+
+        } catch (ReadableEndWithXtraContent xtraContent)
+        {
+            try
+            {
+                String childrenList = childrenCommand.execute(candidate);
+                appendResult(
+                        results,
+                        "warning.no.more.paragraphs.but.children"
+                );
+                appendResult(results, Presenter.STRONG_TOKEN);
+                appendResult(results, childrenList);
+            } catch (AlreadyStepped alreadyStepped)
+            {
+                appendResult(
+                        results,
+                        "warning.no.more.paragraphs.but.children.already.in.list"
+                );
+            }
+
             return results;
 
         } catch (NoParagraphsException noParagraphsException)
@@ -138,15 +165,4 @@ public abstract class ReadingCommandTemplate
             int unsignedParagraphsMoveFactor,
             int paragraphsGroup
     );
-
-    String dump(
-            int paragraphsGroup,
-            Candidate candidate
-    ) throws NoParagraphsException
-    {
-        return candidate.dump(
-                paragraphsGroup,
-                Presenter.STRONG_TOKEN
-        );
-    }
 }

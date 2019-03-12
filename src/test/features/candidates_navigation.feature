@@ -19,6 +19,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "1", paragraphs group as "10"
@@ -44,6 +45,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
     And A configuration value for default jumping factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for pause candidate reading
     When I invoke pause candidate use case for intent name as "Pause", paragraphs group as "2"
@@ -69,6 +71,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "1", paragraphs group as "10"
@@ -93,6 +96,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for reading next
     When I invoke next candidate use case for intent name as "Continue", paragraphs group as "3"
@@ -117,6 +121,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for repeat reading
     When I invoke repeat reading use case for intent name as "Repeat", paragraphs group as "2"
@@ -141,6 +146,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "3", paragraphs group as "10"
@@ -165,6 +171,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "3", paragraphs group as "10"
@@ -190,6 +197,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A candidate factory for parsing
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A newly created use case for reading next
     When I invoke next candidate use case for intent name as "Continue", paragraphs group as "10"
@@ -215,6 +223,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
     And A configuration value for default jumping factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A forward created use case for reading as times as default jumping factor after next
     When I invoke forward candidate use case for intent name as "Forward", paragraphs group as "2"
@@ -240,6 +249,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A Mock Presenter service
     And A configuration value for default candidates factor as "1"
     And A configuration value for default jumping factor as "1"
+    And An adding children to search candidates command for reading only
     And A Use Case Factory for reading only
     And A backward created use case for reading as times as default jumping factor after last
     When I invoke backward candidate use case for intent name as "Backward", paragraphs group as "2"

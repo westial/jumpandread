@@ -9,6 +9,7 @@ import com.amazon.ask.util.JacksonSerializer;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.westial.alexa.jumpandread.application.*;
+import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
@@ -109,6 +110,11 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 )
         );
 
+        ChildrenToSearchCommand childrenCommand = new ChildrenToSearchCommand(
+                candidateFactory,
+                candidateRepository
+        );
+
         // Create Use Cases
 
         UseCaseFactory useCaseFactory = new UseCaseFactory(
@@ -118,7 +124,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                 state,
                 presenter,
                 DEFAULT_CANDIDATES_FACTOR,
-                DEFAULT_PARAGRAPHS_GROUP_FACTOR
+                DEFAULT_PARAGRAPHS_GROUP_FACTOR,
+                childrenCommand
         );
 
         BackwardUseCase backwardUseCase = useCaseFactory.createBackward();

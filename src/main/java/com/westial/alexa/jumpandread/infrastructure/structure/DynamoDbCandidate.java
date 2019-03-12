@@ -172,7 +172,7 @@ public class DynamoDbCandidate extends Candidate
     }
 
     @Override
-    @DynamoDBAttribute(attributeName = "index")
+    @DynamoDBIndexRangeKey(attributeName = "index", globalSecondaryIndexName = "search_id-index-index")
     public Integer getIndex()
     {
         return super.getIndex();
@@ -208,7 +208,8 @@ public class DynamoDbCandidate extends Candidate
     }
 
     @Override
-    @DynamoDBIndexHashKey(attributeName = "search_id", globalSecondaryIndexName = "search_id-index")
+    @DynamoDBIndexHashKey(attributeName = "search_id", globalSecondaryIndexName = "search_id-index-index")
+    @DynamoDBIndexRangeKey(attributeName = "search_id", globalSecondaryIndexName = "search_id-index-index")
     public String getSearchId()
     {
         return super.getSearchId();

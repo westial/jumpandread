@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.application.command.move;
 
+import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
 import com.westial.alexa.jumpandread.application.command.ReadingCommandTemplate;
 import com.westial.alexa.jumpandread.domain.*;
 
@@ -11,10 +12,11 @@ public class MoveCommand extends ReadingCommandTemplate
 
     public MoveCommand(
             CandidateFactory candidateFactory,
-            int sign
+            int sign,
+            ChildrenToSearchCommand childrenCommand
     )
     {
-        super(candidateFactory);
+        super(candidateFactory, childrenCommand);
         this.sign = sign;
     }
 

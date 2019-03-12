@@ -100,6 +100,33 @@ public class MockCandidateRepository implements CandidateRepository
         return candidatesBySearchId.get(searchId).size();
     }
 
+    @Override
+    public Set<String> getUniqueUrls(String searchId)
+    {
+        Set<String> urls = new HashSet<>();
+        for (Map.Entry<Pair<Integer, String>, Candidate> candidateEntry: candidates.entrySet())
+        {
+            Candidate candidate = candidateEntry.getValue();
+            urls.add(candidate.getUrl());
+        }
+        return urls;
+    }
+
+    @Override
+    public Integer lastIndexBySearch(String searchId)
+    {
+        Integer last = null;
+        for (Map.Entry<Pair<Integer, String>, Candidate> entry: candidates.entrySet())
+        {
+            Integer index = entry.getKey().getLeft();
+            if (null == last || 0 > last.compareTo(index))
+            {
+                last = index;
+            }
+        }
+        return last;
+    }
+
     public String testOnlyGetLastSearchId()
     {
         Candidate last = null;

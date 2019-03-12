@@ -1,10 +1,7 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
 import com.westial.alexa.jumpandread.application.*;
-import com.westial.alexa.jumpandread.application.command.CountCandidatesBySearchCommand;
-import com.westial.alexa.jumpandread.application.command.GetCandidateTitleCommand;
-import com.westial.alexa.jumpandread.application.command.ReadCommand;
-import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
+import com.westial.alexa.jumpandread.application.command.*;
 import com.westial.alexa.jumpandread.application.command.move.BackwardCommandFactory;
 import com.westial.alexa.jumpandread.application.command.move.ForwardCommandFactory;
 import com.westial.alexa.jumpandread.domain.*;
@@ -18,6 +15,7 @@ public class UseCaseFactory
     private final Presenter presenter;
     private final int defaultUnsignedCandidatesFactor;
     private final int defaultUnsignedParagraphsFactor;
+    private final ChildrenToSearchCommand childrenCommand;
 
     public UseCaseFactory(
             CandidateRepository candidateRepository,
@@ -26,7 +24,8 @@ public class UseCaseFactory
             State state,
             Presenter presenter,
             int defaultUnsignedCandidatesFactor,
-            int defaultUnsignedParagraphsFactor
+            int defaultUnsignedParagraphsFactor,
+            ChildrenToSearchCommand childrenCommand
     )
     {
         this.candidateRepository = candidateRepository;
@@ -36,12 +35,13 @@ public class UseCaseFactory
         this.presenter = presenter;
         this.defaultUnsignedCandidatesFactor = defaultUnsignedCandidatesFactor;
         this.defaultUnsignedParagraphsFactor = defaultUnsignedParagraphsFactor;
+        this.childrenCommand = childrenCommand;
     }
 
     public BackwardUseCase createBackward()
     {
         BackwardCommandFactory backwardCommandFactory =
-                new BackwardCommandFactory(candidateFactory);
+                new BackwardCommandFactory(candidateFactory, childrenCommand);
 
         return new BackwardUseCase(
                 state,
@@ -56,11 +56,12 @@ public class UseCaseFactory
     public ForwardUseCase createForward()
     {
         ForwardCommandFactory forwardCommandFactory =
-                new ForwardCommandFactory(candidateFactory);
+                new ForwardCommandFactory(candidateFactory, childrenCommand);
 
         return new ForwardUseCase(
                 state,
                 forwardCommandFactory,
+                new CountCandidatesBySearchCommand(candidateRepository),
                 presenter,
                 defaultUnsignedCandidatesFactor,
                 defaultUnsignedParagraphsFactor
@@ -73,7 +74,7 @@ public class UseCaseFactory
                 state,
                 new GetCandidateTitleCommand(candidateFactory),
                 new CountCandidatesBySearchCommand(candidateRepository),
-                new ReadCommand(candidateFactory),
+                new ReadCommand(candidateFactory, childrenCommand),
                 presenter,
                 defaultUnsignedCandidatesFactor,
                 defaultUnsignedParagraphsFactor
