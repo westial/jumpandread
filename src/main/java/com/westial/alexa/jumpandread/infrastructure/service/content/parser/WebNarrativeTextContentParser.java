@@ -22,7 +22,6 @@ public class WebNarrativeTextContentParser extends TextContentParser
     {
         LinkedList<TextContent> contents = new LinkedList<>();
         Document document = Jsoup.parse(content);
-        // TODO check if there is any child else throw an exception
         buildContents(document.body().children(), contents);
         return contents;
     }

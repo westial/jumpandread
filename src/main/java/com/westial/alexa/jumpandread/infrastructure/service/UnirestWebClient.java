@@ -28,7 +28,6 @@ public class UnirestWebClient implements WebClient
             Map<String, String> payload
     ) throws WebClientSearchException
     {
-        // TODO implement other methods on demand
         switch (method)
         {
             case POST:
