@@ -1,262 +1,270 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "salta y lee",
-      "intents": [
-        {
-          "name": "ReadCandidate",
-          "slots": [
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "salta y lee",
+            "intents": [
+                {
+                    "name": "ReadCandidate",
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{candidateIndex}",
+                        "ves al {candidateIndex}",
+                        "léeme {candidateIndex}",
+                        "leer {candidateIndex}",
+                        "por favor léeme el {candidateIndex}",
+                        "lee {candidateIndex}"
+                    ]
+                },
+                {
+                    "name": "SearchCandidates",
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{searchTerms}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "busca",
+                        "buscar",
+                        "encuéntrame {searchTerms}",
+                        "búscame {searchTerms}",
+                        "encuentra {searchTerms}",
+                        "busca {searchTerms}",
+                        "para buscar {searchTerms}",
+                        "buscar {searchTerms}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "cómo funciona",
+                        "cómo funciona esto",
+                        "no sé cómo funciona",
+                        "ayuda",
+                        "ayúdame"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "cancela",
+                        "quita bicho",
+                        "fuera",
+                        "salir",
+                        "quieto",
+                        "quieta",
+                        "stop",
+                        "párate",
+                        "para",
+                        "cancelar"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PauseIntent",
+                    "samples": [
+                        "pausa",
+                        "espera",
+                        "quieta",
+                        "quieto"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": [
+                        "menú",
+                        "vuelve al principio",
+                        "vuelve al inicio",
+                        "inicio"
+                    ]
+                },
+                {
+                    "name": "AMAZON.ResumeIntent",
+                    "samples": [
+                        "venga",
+                        "continúa"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Continue",
+                    "slots": [],
+                    "samples": [
+                        "corre",
+                        "siguiente",
+                        "dime",
+                        "arrí",
+                        "arri",
+                        "palante",
+                        "dale",
+                        "continúa",
+                        "lee",
+                        "arranca",
+                        "venga",
+                        "adelante",
+                        "sigue",
+                        "continuar"
+                    ]
+                },
+                {
+                    "name": "Forward",
+                    "slots": [],
+                    "samples": [
+                        "salta",
+                        "pasa",
+                        "pega un salto",
+                        "salto"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PreviousIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Previous",
+                    "slots": [],
+                    "samples": [
+                        "anterior",
+                        "el anterior",
+                        "previo",
+                        "el previo",
+                        "el de antes"
+                    ]
+                },
+                {
+                    "name": "Backward",
+                    "slots": [],
+                    "samples": [
+                        "rebobina",
+                        "hacia atrás",
+                        "tira atrás",
+                        "atrás"
+                    ]
+                },
+                {
+                    "name": "AMAZON.RepeatIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Repeat",
+                    "slots": [],
+                    "samples": [
+                        "no lo he entendido",
+                        "no lo comprendo",
+                        "no lo entiendo",
+                        "no lo he entendido bien",
+                        "la última",
+                        "otra vez",
+                        "repite",
+                        "repetir"
+                    ]
+                },
+                {
+                    "name": "List",
+                    "slots": [],
+                    "samples": [
+                        "qué habías encontrado",
+                        "vuelve a la lista",
+                        "lístame los resultados",
+                        "qué tenía en la lista",
+                        "cuáles eran los últimos resultados",
+                        "qué he encontrado en la última búsqueda",
+                        "lista de resultados",
+                        "la última lista de resultados",
+                        "dame la lista",
+                        "lista"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SearchCandidates",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.931081730687.212093844238",
+                                "elicitation": "Elicit.Slot.798008352785.877697191399"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ReadCandidate",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "SKILL_RESPONSE"
+        },
+        "prompts": [
             {
-              "name": "candidateIndex",
-              "type": "AMAZON.NUMBER"
-            }
-          ],
-          "samples": [
-            "{candidateIndex}",
-            "ves al {candidateIndex}",
-            "léeme {candidateIndex}",
-            "leer {candidateIndex}",
-            "por favor léeme el {candidateIndex}",
-            "lee {candidateIndex}"
-          ]
-        },
-        {
-          "name": "SearchCandidates",
-          "slots": [
+                "id": "Elicit.Slot.798008352785.877697191399",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Qué es lo que buscas?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿Qué quieres buscar?"
+                    }
+                ]
+            },
             {
-              "name": "searchTerms",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "{searchTerms}"
-              ]
-            }
-          ],
-          "samples": [
-            "busca",
-            "buscar",
-            "encuéntrame {searchTerms}",
-            "búscame {searchTerms}",
-            "encuentra {searchTerms}",
-            "busca {searchTerms}",
-            "para buscar {searchTerms}",
-            "buscar {searchTerms}"
-          ]
-        },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": [
-            "cómo funciona",
-            "cómo funciona esto",
-            "no sé cómo funciona",
-            "ayuda",
-            "ayúdame"
-          ]
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": [
-            "cancela",
-            "quita bicho",
-            "fuera",
-            "salir",
-            "quieto",
-            "quieta",
-            "stop",
-            "párate",
-            "para",
-            "cancelar"
-          ]
-        },
-        {
-          "name": "AMAZON.PauseIntent",
-          "samples": [
-            "pausa",
-            "espera",
-            "quieta",
-            "quieto"
-          ]
-        },
-        {
-          "name": "AMAZON.NavigateHomeIntent",
-          "samples": [
-            "menú",
-            "vuelve al principio",
-            "vuelve al inicio",
-            "inicio"
-          ]
-        },
-
-
-        {
-          "name": "AMAZON.ResumeIntent",
-          "samples": [
-            "venga",
-            "continúa"
-          ]
-        },
-        {
-          "name": "AMAZON.NextIntent",
-          "samples": []
-        },
-        {
-          "name": "Continue",
-          "slots": [],
-          "samples": [
-            "corre",
-            "siguiente",
-            "dime",
-            "arrí",
-            "arri",
-            "palante",
-            "dale",
-            "continúa",
-            "lee",
-            "arranca",
-            "venga",
-            "adelante",
-            "sigue",
-            "continuar"
-          ]
-        },
-
-        {
-          "name": "Forward",
-          "slots": [],
-          "samples": [
-            "salta",
-            "pasa",
-            "pega un salto",
-            "salto"
-          ]
-        },
-
-
-        {
-          "name": "AMAZON.PreviousIntent",
-          "samples": []
-        },
-        {
-          "name": "Previous",
-          "slots": [],
-          "samples": [
-            "anterior",
-            "el anterior",
-            "previo",
-            "el previo",
-            "el de antes"
-          ]
-        },
-
-        {
-          "name": "Backward",
-          "slots": [],
-          "samples": [
-            "rebobina",
-            "hacia atrás",
-            "tira atrás",
-            "atrás"
-          ]
-        },
-
-
-        {
-          "name": "AMAZON.RepeatIntent",
-          "samples": []
-        },
-        {
-          "name": "Repeat",
-          "slots": [],
-          "samples": [
-            "no lo he entendido",
-            "no lo comprendo",
-            "no lo entiendo",
-            "no lo he entendido bien",
-            "la última",
-            "otra vez",
-            "repite",
-            "repetir"
-          ]
-        }
-      ],
-      "types": []
-    },
-    "dialog": {
-      "intents": [
-        {
-          "name": "SearchCandidates",
-          "confirmationRequired": false,
-          "prompts": {},
-          "slots": [
+                "id": "Confirm.Intent.931081730687",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres buscar {searchTerms} ?"
+                    }
+                ]
+            },
             {
-              "name": "searchTerms",
-              "type": "AMAZON.SearchQuery",
-              "confirmationRequired": true,
-              "elicitationRequired": true,
-              "prompts": {
-                "confirmation": "Confirm.Slot.931081730687.212093844238",
-                "elicitation": "Elicit.Slot.798008352785.877697191399"
-              }
-            }
-          ]
-        },
-        {
-          "name": "ReadCandidate",
-          "confirmationRequired": false,
-          "prompts": {},
-          "slots": [
+                "id": "Confirm.Slot.931081730687.212093844238",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres buscar {searchTerms} ?"
+                    }
+                ]
+            },
             {
-              "name": "candidateIndex",
-              "type": "AMAZON.NUMBER",
-              "confirmationRequired": false,
-              "elicitationRequired": false,
-              "prompts": {}
+                "id": "Elicit.Slot.1057603318951.1466430063659",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres continuar, o quieres buscar otra cosa?"
+                    }
+                ]
             }
-          ]
-        }
-      ],
-      "delegationStrategy": "SKILL_RESPONSE"
-    },
-    "prompts": [
-      {
-        "id": "Elicit.Slot.798008352785.877697191399",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "¿Qué es lo que buscas?"
-          },
-          {
-            "type": "PlainText",
-            "value": "¿Qué quieres buscar?"
-          }
         ]
-      },
-      {
-        "id": "Confirm.Intent.931081730687",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "¿Quieres buscar {searchTerms} ?"
-          }
-        ]
-      },
-      {
-        "id": "Confirm.Slot.931081730687.212093844238",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "¿Quieres buscar {searchTerms} ?"
-          }
-        ]
-      },
-      {
-        "id": "Elicit.Slot.1057603318951.1466430063659",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "¿Quieres continuar, o quieres buscar otra cosa?"
-          }
-        ]
-      }
-    ]
-  }
+    }
 }

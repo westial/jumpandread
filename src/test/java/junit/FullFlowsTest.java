@@ -39,6 +39,7 @@ public class FullFlowsTest
     private final static String AWS_PROFILE = "westial";
 
     private final static String LAZY_EXPECTED_PATTERN = "^<speak>.+</speak>$";
+    private final static String LAZY_FULL_LIST_EXPECTED_PATTERN = "^<speak>1.+</speak>$";
 
     private final static String SAMPLE_INTENTS_PATH = "intents/websearch";
     private final static String SAMPLE_INTENTS_EXPECTED_FILENAME = "ssml_expected.json";
@@ -62,7 +63,8 @@ public class FullFlowsTest
         searchmath,
         searchmediumnarrative,
         searchcustommedium,
-        stop
+        stop,
+        list
     }
 
     @Before
@@ -179,6 +181,7 @@ public class FullFlowsTest
             runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
             runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
             runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making Mathematical Connections).{200,}</speak>$");
+            runAndCheckIntentList("^<speak>1.+(?=SkyMath and the NCTM Standards.).{200,}</speak>$");
             runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentRepeat("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
@@ -194,10 +197,13 @@ public class FullFlowsTest
 
     private void recycledFlow()
     {
-        String witness;
+        String readingWitness;
+        String listWitness;
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentList(LAZY_FULL_LIST_EXPECTED_PATTERN);
+        listWitness = outputStreamResult.toString();
         runAndCheckIntentRepeat(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
@@ -205,19 +211,21 @@ public class FullFlowsTest
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
-        witness = outputStreamResult.toString();
+        readingWitness = outputStreamResult.toString();
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        Assert.assertNotEquals(witness, outputStreamResult.toString());
+        Assert.assertNotEquals(readingWitness, outputStreamResult.toString());
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-        Assert.assertEquals(witness, outputStreamResult.toString());
+        Assert.assertEquals(readingWitness, outputStreamResult.toString());
+        runAndCheckIntentList(LAZY_FULL_LIST_EXPECTED_PATTERN);
+        Assert.assertEquals(listWitness, outputStreamResult.toString());
     }
 
     private void runAndCheckIntentLaunch(String expectedPattern)
@@ -235,6 +243,12 @@ public class FullFlowsTest
     private void runAndCheckIntentRead(String expectedPattern)
     {
         runIntent(INTENT.readthis);
+        assertSsmlRegex(expectedPattern);
+    }
+
+    private void runAndCheckIntentList(String expectedPattern)
+    {
+        runIntent(INTENT.list);
         assertSsmlRegex(expectedPattern);
     }
 

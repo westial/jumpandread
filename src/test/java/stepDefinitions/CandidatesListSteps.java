@@ -10,8 +10,10 @@ import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
 import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
+import com.westial.alexa.jumpandread.infrastructure.service.AlexaPresenter;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbCandidateFactory;
 import com.westial.alexa.jumpandread.infrastructure.service.MarginPagerEdgesCalculator;
+import com.westial.alexa.jumpandread.infrastructure.service.MockTranslator;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
@@ -45,6 +47,7 @@ public class CandidatesListSteps
     private State state;
     private String listResult;
     private Exception exception;
+    private Presenter presenter;
 
     @Given("^A recorded in repository sample candidate of user as \"([^\"]*)\", session as \"([^\"]*)\", from search id as \"([^\"]*)\", url as \"([^\"]*)\" with children as follows$")
     public void aSampleCandidateFromSearchIdAsWithChildren(String userId, String sessionId, String searchId, String candidateUrl, DataTable candidateTable) throws Throwable
@@ -213,7 +216,11 @@ public class CandidatesListSteps
     @And("^A getting search if list use case$")
     public void aGettingSearchIfListUseCase()
     {
-        gettingListUseCase = new GettingListUseCase(state, gettingListCommand);
+        gettingListUseCase = new GettingListUseCase(
+                state,
+                gettingListCommand,
+                presenter
+        );
     }
 
     @When("^I invoke getting list use case$")
@@ -221,7 +228,7 @@ public class CandidatesListSteps
     {
         try
         {
-            listResult = gettingListUseCase.invoke();
+            listResult = gettingListUseCase.invoke().getSpeech();
         } catch (Exception e)
         {
             exception = e;
@@ -260,5 +267,11 @@ public class CandidatesListSteps
                 Assert.assertTrue(exception instanceof NoSearchResultsException);
                 break;
         }
+    }
+
+    @And("^An Alexa Presenter service for listing$")
+    public void anAlexaPresenterServiceForListing()
+    {
+        presenter = new AlexaPresenter(new MockTranslator());
     }
 }

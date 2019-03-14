@@ -12,7 +12,6 @@ import com.westial.alexa.jumpandread.application.*;
 import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
-import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.intent.*;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
@@ -48,7 +47,6 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
     {
         ResponseEnvelope response;
         Skill skill;
-        TextContentParser contentParser;
 
         RequestEnvelope request = serializer.deserialize(input, RequestEnvelope.class);
 
@@ -140,6 +138,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         LaunchUseCase launchUseCase = useCaseFactory.createLaunch();
 
+        GettingListUseCase listUseCase = useCaseFactory.createList();
+
         StopUseCase stopUseCase = useCaseFactory.createStop();
 
         SessionEndedUseCase sessionEndedUseCase = useCaseFactory.createEnded();
@@ -165,6 +165,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                                 forwardUseCase,
                                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
                         ),
+                        new List(listUseCase),
                         new Launch(launchUseCase),
                         new Pause(
                                 pauseUseCase,

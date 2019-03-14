@@ -81,6 +81,15 @@ public class UseCaseFactory
         );
     }
 
+    public GettingListUseCase createList()
+    {
+        return new GettingListUseCase(
+                state,
+                new GettingListCommand(candidateRepository),
+                presenter
+        );
+    }
+
     public SearchUseCase createSearch()
     {
         return new SearchUseCase(
