@@ -105,4 +105,21 @@ public class DynamoDbCandidateRepository
 
         return items.get(0).getIndex();
     }
+
+    @Override
+    public List<Candidate> all(String searchId)
+    {
+        DynamoDBQueryExpression<DynamoDbCandidate> expression =
+                createSearchIdRetrievalExpression(searchId);
+
+        List<DynamoDbCandidate> items = dbMapper.query(
+                DynamoDbCandidate.class,
+                expression
+        );
+
+        return items
+                .stream()
+                .map(c -> (Candidate) c)
+                .collect(Collectors.toList());
+    }
 }

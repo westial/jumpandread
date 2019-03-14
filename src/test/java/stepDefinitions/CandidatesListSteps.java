@@ -1,18 +1,20 @@
 package stepDefinitions;
 
+import com.westial.alexa.jumpandread.application.GettingListUseCase;
 import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
-import com.westial.alexa.jumpandread.domain.Candidate;
-import com.westial.alexa.jumpandread.domain.CandidateFactory;
-import com.westial.alexa.jumpandread.domain.CandidateRepository;
-import com.westial.alexa.jumpandread.domain.PagerEdgesCalculator;
+import com.westial.alexa.jumpandread.application.command.GettingListCommand;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
 import com.westial.alexa.jumpandread.infrastructure.MockContentGetter;
 import com.westial.alexa.jumpandread.infrastructure.MockContentParser;
+import com.westial.alexa.jumpandread.infrastructure.MockStateRepository;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbCandidateFactory;
 import com.westial.alexa.jumpandread.infrastructure.service.MarginPagerEdgesCalculator;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbCandidate;
+import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -36,6 +38,13 @@ public class CandidatesListSteps
     private ChildrenToSearchCommand addingChildrenCommand;
     private CandidateFactory candidateFactory;
     private String newOnesListing;
+    private GettingListCommand gettingListCommand;
+    private GettingListUseCase gettingListUseCase;
+    private StateRepository stateRepository;
+    private static final String INTENT_NAME = "List";
+    private State state;
+    private String listResult;
+    private Exception exception;
 
     @Given("^A recorded in repository sample candidate of user as \"([^\"]*)\", session as \"([^\"]*)\", from search id as \"([^\"]*)\", url as \"([^\"]*)\" with children as follows$")
     public void aSampleCandidateFromSearchIdAsWithChildren(String userId, String sessionId, String searchId, String candidateUrl, DataTable candidateTable) throws Throwable
@@ -83,10 +92,9 @@ public class CandidatesListSteps
         candidateRepository.update(sampleCandidate);
     }
 
-    @Given("^A mock candidate repository with current candidates count of user as \"([^\"]*)\", session as \"([^\"]*)\" for search id as \"([^\"]*)\" at \"([^\"]*)\"$")
+    @Given("^The mock candidate repository contains candidates for user as \"([^\"]*)\", session as \"([^\"]*)\" for search id as \"([^\"]*)\" at \"([^\"]*)\"$")
     public void aMockCandidateRepositoryWithCurrentCandidatesCountForSearchIdAsAt(String userId, String sessionId, String searchId, String candidatesCount) throws Throwable
     {
-        candidateRepository = new MockCandidateRepository();
         List<Candidate> candidates =
                 CandidateHelper.buildRandomCandidatesBySearchId(
                         Integer.parseInt(candidatesCount),
@@ -151,12 +159,12 @@ public class CandidatesListSteps
         );
     }
 
-    @And("^The listing command result is as in file \"([^\"]*)\"$")
+    @And("^Getting list result as in file \"([^\"]*)\"$")
     public void theListingCommandResultIsAsInFile(String expectedFileContent) throws Throwable
     {
         Assert.assertEquals(
                 FileSystemHelper.readResourceFile(expectedFileContent),
-                newOnesListing
+                listResult
         );
     }
 
@@ -188,5 +196,69 @@ public class CandidatesListSteps
                 true
         );
         candidateRepository.update(sampleCandidate);
+    }
+
+    @And("^A mock candidate repository for listing$")
+    public void aMockCandidateRepositoryForListing()
+    {
+        candidateRepository = new MockCandidateRepository();
+    }
+
+    @And("^A command for getting list by search ID$")
+    public void aCommandForGettingListBySearchID()
+    {
+        gettingListCommand = new GettingListCommand(candidateRepository);
+    }
+
+    @And("^A getting search if list use case$")
+    public void aGettingSearchIfListUseCase()
+    {
+        gettingListUseCase = new GettingListUseCase(state, gettingListCommand);
+    }
+
+    @When("^I invoke getting list use case$")
+    public void iInvokeGettingListUseCaseForSearchIdAs() throws Throwable
+    {
+        try
+        {
+            listResult = gettingListUseCase.invoke();
+        } catch (Exception e)
+        {
+            exception = e;
+        }
+    }
+
+    @And("^A user state repository for listing$")
+    public void aUserStateRepositoryForListing()
+    {
+        stateRepository = new MockStateRepository();
+    }
+
+    @And("^A current state for listing with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
+    public void aCurrentStateForListingWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex) throws Throwable
+    {
+        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
+        state.updateCandidateIndex(Integer.parseInt(rawCandidateIndex));
+    }
+
+    @And("^A current state for listing with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", no search Id$")
+    public void aCurrentStateForListingWithUserIdAsSessionIdAsNoSearchId(String userId, String sessionId) throws Throwable
+    {
+        state = new DynamoDbState(stateRepository, userId, sessionId);
+    }
+
+    @Then("^Use case threw an exception of type \"([^\"]*)\"$")
+    public void useCaseThrewAnExceptionOfType(String expectedName) throws Throwable
+    {
+        switch (expectedName)
+        {
+            case "MandatorySearchException":
+                Assert.assertTrue(exception instanceof MandatorySearchException);
+                break;
+
+            case "NoSearchResultsException":
+                Assert.assertTrue(exception instanceof NoSearchResultsException);
+                break;
+        }
     }
 }

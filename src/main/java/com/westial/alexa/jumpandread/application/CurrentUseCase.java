@@ -68,12 +68,12 @@ public class CurrentUseCase extends SafeUseCaseTemplate
             );
             if (0 == candidatesCount)
             {
-                presenter.addText("notice.no.search.in.this.session.yet");
+                presenter.addText("warning.no.search.in.this.session.yet");
             }
             else
             {
                 presenter.addText(
-                        "notice.no.candidate.for.this.index.(index(%s),start(%s),end(%s))",
+                        "warning.no.candidate.for.this.index.(index(%s),start(%s),end(%s))",
                         String.valueOf(candidateIndex),
                         String.valueOf(Candidate.INDEX_START),
                         String.valueOf(candidatesCount -1 + Candidate.INDEX_START)

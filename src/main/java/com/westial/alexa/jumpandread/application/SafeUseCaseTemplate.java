@@ -1,7 +1,6 @@
 package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.exception.CannotContinueMandatoryReadException;
-import com.westial.alexa.jumpandread.domain.MandatorySearchException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.infrastructure.structure.PresenterView;
 
@@ -56,11 +55,6 @@ public abstract class SafeUseCaseTemplate
             excReading.printStackTrace();
             presenter.addText("notice.no.more.paragraphs");
 
-        } catch (MandatorySearchException mandatoryExc)
-        {
-            mandatoryExc.printStackTrace();
-
-            presenter.addText("warning.something.unexpected");
         }
 
         return new PresenterView(presenter);

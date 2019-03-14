@@ -132,7 +132,7 @@ public abstract class ReadingCommandTemplate
 
             appendResult(
                     results,
-                    "notice.candidate.has.no.elements.(index(%s))",
+                    "warning.candidate.has.no.elements.(index(%s))",
                     candidateIndex
             );
 

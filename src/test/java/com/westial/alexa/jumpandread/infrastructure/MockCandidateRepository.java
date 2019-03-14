@@ -127,6 +127,12 @@ public class MockCandidateRepository implements CandidateRepository
         return last;
     }
 
+    @Override
+    public List<Candidate> all(String searchId)
+    {
+        return candidatesBySearchId.get(searchId);
+    }
+
     public String testOnlyGetLastSearchId()
     {
         Candidate last = null;

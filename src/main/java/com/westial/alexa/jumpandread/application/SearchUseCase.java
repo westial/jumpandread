@@ -38,15 +38,15 @@ public class SearchUseCase
             {
                 presenter.addText(searchCommand.execute(state, searchTerms));
 
-            } catch (SearchException e)
+            } catch (SearchException se)
             {
                 presenter.addText("warning.search.exception");
-                System.out.printf("ERROR: %s\n", e.getMessage());
-                e.printStackTrace();
+                System.out.printf("ERROR: %s\n", se.getMessage());
+                se.printStackTrace();
 
-            } catch (NoSearchResultsException e)
+            } catch (NoSearchResultsException me)
             {
-                presenter.addText("notice.no.search.results");
+                presenter.addText("warning.no.search.results");
                 presenter.addText("dialog.search.want.other");
                 presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.what");

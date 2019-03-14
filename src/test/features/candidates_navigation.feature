@@ -52,7 +52,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     Then The result after invocation is not null
     And The current state candidate index is as "1"
     And The current state candidate paragraph position is as "4"
-    And The speech contained in result is as "notice.after.pause"
+    And The speech contained in result is as "warning.after.pause"
 
 
   Scenario: Read command, try reading the first paragraphs for an empty candidate goes to read first paragraphs of the next one
@@ -151,7 +151,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "3", paragraphs group as "10"
     Then The result after invocation is not null
-    And The speech contained in result is as "notice.no.candidate.for.this.index.(index(3),start(1),end(2))"
+    And The speech contained in result is as "warning.no.candidate.for.this.index.(index(3),start(1),end(2))"
     And The current state candidate index is as "1"
 
 
@@ -176,7 +176,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "3", paragraphs group as "10"
     Then The result after invocation is not null
-    And The speech contained in result is as "notice.no.search.in.this.session.yet"
+    And The speech contained in result is as "warning.no.search.in.this.session.yet"
 
 
   Scenario: Trying to read next paragraphs when candidate has no more paragraphs notices user and goes to next candidate and reads first paragraphs group

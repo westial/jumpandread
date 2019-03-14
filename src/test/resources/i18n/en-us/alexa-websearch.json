@@ -13,8 +13,8 @@
     "command.reading.back": "IN ENGLISH  Para ir hacia atrás entre los grupos de párrafos del contenido que te he leído, dime,{{ . }} Alexa, atrás.",
     "presentation.finish": "IN ENGLISH  Y bien, esta era mi introducción, ya puedes empezar a buscar. Te toca a tí, dime,{{ . }} Alexa, buscar",
 
-    "notice.after.pause": "IN ENGLISH  {{ whisper }}Pausa.{{ end whisper }}. Para continuar dime,{{ . }} Alexa, continuar",
-    "notice.no.search.results": "IN ENGLISH  Lo siento mucho, pero no he encontrado ningun resultado con por las palabras que me has pedido.",
+    "warning.after.pause": "IN ENGLISH  {{ whisper }}Pausa.{{ end whisper }}. Para continuar dime,{{ . }} Alexa, continuar",
+    "warning.no.search.results": "IN ENGLISH  Lo siento mucho, pero no he encontrado ningun resultado con por las palabras que me has pedido.",
 
     "warning.no.more.paragraphs": "IN ENGLISH  Disculpa, no puedo continuar leyendo porque sigo sin encontrar texto para leer en el resultado seleccionado. Puedes pedirme de saltar otra vez con la orden,{{ . }} Alexa salta. O también puedes volver leer cualquier otro resultado con la orden,{{ . }} Alexa lee, y el número de resultado que quieras leer. O, también puedes volver a buscar otra cosa con la orden,{{ . }} Alexa buscar, y las palabras que quieras buscar.",
     "warning.something.unexpected": "IN ENGLISH  Disculpa, algo raro ha pasado... o no encuentro tu última búsqueda, o no veo que queden más resultados en ella,  o has pedido leer un número de resultado que no está dentro del rango de búsqueda. Si quieres buscar otra cosa, dame la orden: Alexa buscar, y las palabras que quieras buscar.",
@@ -24,15 +24,15 @@
     "dialog.search.what": "IN ENGLISH  ¿Qué quieres buscar?",
     "dialog.search.want.other": "IN ENGLISH  ¿Quieres probar a buscar otra cosa?",
 
-    "notice.session.exit.due.error": "IN ENGLISH  Ha ocurrido un error y la sesión se va a cerrar.",
+    "warning.session.exit.due.error": "IN ENGLISH  Ha ocurrido un error y la sesión se va a cerrar.",
 
     "salutation.bye.1": "IN ENGLISH  Hasta pronto.",
     "salutation.bye.2": "IN ENGLISH  Adiós.",
 
-    "notice.candidate.has.no.elements.(index(%s))": "IN ENGLISH  El resultado de búsqueda número %s o no dispone de contenido legible o ya se ha leído todo. Salto a leer el siguiente resultado.",
+    "warning.candidate.has.no.elements.(index(%s))": "IN ENGLISH  El resultado de búsqueda número %s o no dispone de contenido legible o ya se ha leído todo. Salto a leer el siguiente resultado.",
 
     "response.search.result.listing.(index(%s),title(%s))": "IN ENGLISH  Resultado de búsqueda número %s, titulado, %s",
 
-    "notice.no.candidate.for.this.index.(index(%s),start(%s),end(%s))": "IN ENGLISH  No recuerdo haberte dado el número %s en la lista de resultados. La lista de resultados empieza en el número %s y tiene un total de %s resultados.",
-    "notice.no.search.in.this.session.yet": "IN ENGLISH  En esta sesión todavía no has buscado nada y por lo tanto no puedo ofrecerte ningún resultado."
+    "warning.no.candidate.for.this.index.(index(%s),start(%s),end(%s))": "IN ENGLISH  No recuerdo haberte dado el número %s en la lista de resultados. La lista de resultados empieza en el número %s y tiene un total de %s resultados.",
+    "warning.no.search.in.this.session.yet": "IN ENGLISH  En esta sesión todavía no has buscado nada y por lo tanto no puedo ofrecerte ningún resultado."
 }

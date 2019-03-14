@@ -1,9 +1,41 @@
 Feature: Proving candidates listing
 
+  Scenario: Successfully getting the last candidates list
+    Given A mock candidate repository for listing
+    And The mock candidate repository contains candidates for user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
+    And The mock candidate repository contains candidates for user as "userOther", session as "sessionOther" for search id as "othersearchid" at "10"
+    And A user state repository for listing
+    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1"
+    And A command for getting list by search ID
+    And A getting search if list use case
+    When I invoke getting list use case
+    Then Getting list result as in file "expected_getting_list.txt"
+
+  Scenario: Trying to get the last candidates list for a state with no search Id throws an exception
+    Given A mock candidate repository for listing
+    And The mock candidate repository contains candidates for user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
+    And The mock candidate repository contains candidates for user as "userOther", session as "sessionOther" for search id as "othersearchid" at "10"
+    And A user state repository for listing
+    And A current state for listing with user Id as "user123456789", session Id as "session123456789", no search Id
+    And A command for getting list by search ID
+    And A getting search if list use case
+    When I invoke getting list use case
+    Then Use case threw an exception of type "MandatorySearchException"
+
+  Scenario: Trying to get the last candidates list for a state with search Id but no candidates throws an exception
+    Given A mock candidate repository for listing
+    And A user state repository for listing
+    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1"
+    And A command for getting list by search ID
+    And A getting search if list use case
+    When I invoke getting list use case
+    Then Use case threw an exception of type "NoSearchResultsException"
+
   Scenario: Adding candidate children items to a search id candidates collection when they are not in yet
     Given A mock text content provider for candidate listing
     And A margin edges calculator service for candidate listing
-    And A mock candidate repository with current candidates count of user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
+    And A mock candidate repository for listing
+    And The mock candidate repository contains candidates for user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
     And A candidate factory for candidate listing
     And A recorded in repository sample candidate of user as "user123456789", session as "session123456789", from search id as "mysearchid", url as "https://myurl.com" with children as follows
       | title                  | url                         | description         |
@@ -17,7 +49,8 @@ Feature: Proving candidates listing
   Scenario: Adding candidate children items to a search id candidates collection when some of them are already in
     Given A mock text content provider for candidate listing
     And A margin edges calculator service for candidate listing
-    And A mock candidate repository with current candidates count of user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
+    And A mock candidate repository for listing
+    And The mock candidate repository contains candidates for user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
     And A candidate factory for candidate listing
     And A recorded in repository sample candidate of user as "user123456789", session as "session123456789", from search id as "mysearchid", url as "http://first.candidate.com" with no children
     And A recorded in repository sample candidate of user as "user123456789", session as "session123456789", from search id as "mysearchid", url as "https://myurl.com" with children as follows

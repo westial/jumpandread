@@ -30,7 +30,7 @@ public class SessionEndedUseCase
 
         if (reason.equals(Reason.ERROR))
         {
-            presenter.addText("notice.session.exit.due.error");
+            presenter.addText("warning.session.exit.due.error");
         }
         else
         {

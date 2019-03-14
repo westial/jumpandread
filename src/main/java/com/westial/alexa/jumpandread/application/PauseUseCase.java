@@ -42,7 +42,7 @@ public class PauseUseCase
 
         candidate.persist();
 
-        presenter.addText("notice.after.pause");
+        presenter.addText("warning.after.pause");
 
         return new PresenterView(presenter);
     }

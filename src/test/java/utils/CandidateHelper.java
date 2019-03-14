@@ -80,7 +80,13 @@ public class CandidateHelper
         );
     }
 
-    public static List<String> createCandidateDataBySearchIdAndUrl(int index, String userId, String sessionId, String searchId, String url)
+    public static List<String> createCandidateDataBySearchIdAndUrl(
+            int index,
+            String userId,
+            String sessionId,
+            String searchId,
+            String url
+    )
     {
         List<String> candidateDataItem = new ArrayList<>();
         candidateDataItem.add(String.format("%d", index));
@@ -93,10 +99,11 @@ public class CandidateHelper
         else
             candidateDataItem.add(sessionId);
         candidateDataItem.add(searchId);
-        candidateDataItem.add("title:" + UUID.randomUUID().toString());
+        candidateDataItem.add(String.format("title: %s %d", searchId, index));
         candidateDataItem.add(url);
         candidateDataItem.add("description:" + UUID.randomUUID().toString());
         candidateDataItem.add("0");
+
         return candidateDataItem;
     }
 
@@ -116,7 +123,7 @@ public class CandidateHelper
         for (int i = 0; i < count; i ++)
         {
             String url = "http://" + UUID.randomUUID().toString() + ".com";
-            candidateData.add(createCandidateDataBySearchIdAndUrl(i + 1, userId, sessionId,searchId, url));
+            candidateData.add(createCandidateDataBySearchIdAndUrl(i + 1, userId, sessionId, searchId, url));
         }
 
         List<Candidate> candidates = new ArrayList<>();

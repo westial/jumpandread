@@ -1,5 +1,6 @@
 package com.westial.alexa.jumpandread.domain;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CandidateRepository
@@ -13,4 +14,6 @@ public interface CandidateRepository
     Set<String> getUniqueUrls(String searchId);
 
     Integer lastIndexBySearch(String searchId);
+
+    List<Candidate> all(String searchId);
 }

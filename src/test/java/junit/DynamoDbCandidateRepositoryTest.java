@@ -271,4 +271,50 @@ public class DynamoDbCandidateRepositoryTest
         Assert.assertTrue(urls.contains("https://first.url.dot"));
         Assert.assertTrue(urls.contains("https://second.url.dot"));
     }
+
+    @Test
+    public void getAllTest()
+    {
+        int index = 1;
+        String searchId = UUID.randomUUID().toString();
+
+        // create 4 url random candidates
+        for (int i = 0; i < 4; i++)
+        {
+            Candidate createdCandidate = createNewRandomCandidate(
+                    index,
+                    searchId,
+                    String.format(
+                            "https://%d.url.dot",
+                            i
+                    )
+            );
+            createdCandidate.persist();
+            index++;
+        }
+
+        // asserts
+        LinkedList<Candidate> candidates = new LinkedList<>(
+                candidateRepository.all(searchId)
+        );
+        Assert.assertEquals(
+                4,
+                candidates.size()
+        );
+
+        for (int i = 0; i < 4; i++)
+        {
+            Candidate checkingCandidate = candidates.remove();
+            Assert.assertEquals(
+                    String.format(
+                            "https://%d.url.dot",
+                            i
+                    ),
+                    checkingCandidate.getUrl()
+            );
+            System.out.println(checkingCandidate.getIndex());
+            System.out.println(checkingCandidate.getUrl());
+            index++;
+        }
+    }
 }
