@@ -86,9 +86,12 @@ public abstract class ReadingCommandTemplate
             {
                 appendResult(
                         results,
-                        "response.search.result.listing.(index(%s),title(%s))",
+                        "response.search.result.listing.(index(%s),title(%s),domain(%s))",
                         String.valueOf(candidateIndex),
-                        candidate.getTitle()
+                        candidate.getTitle(),
+                        Presenter.DOMAIN_START_TOKEN
+                                + candidate.getPublishedBy()
+                                + Presenter.DOMAIN_END_TOKEN
                 );
                 appendResult(results, Presenter.STRONG_TOKEN);
             }

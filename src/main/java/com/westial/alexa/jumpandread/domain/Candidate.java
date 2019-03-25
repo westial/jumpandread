@@ -6,6 +6,8 @@ import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.service.content.LinkHtmlTag;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 public abstract class Candidate
@@ -372,6 +374,21 @@ public abstract class Candidate
     public String getUrl()
     {
         return url;
+    }
+
+    public String getPublishedBy()
+    {
+        String publishedBy;
+        try
+        {
+            URL parsedUrl = new URL(url);
+            publishedBy = parsedUrl.getHost();
+
+        } catch (MalformedURLException e)
+        {
+            publishedBy = url;
+        }
+        return publishedBy;
     }
 
     public String getDescription()

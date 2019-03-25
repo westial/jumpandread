@@ -15,6 +15,8 @@ public abstract class Presenter
     public final static String WHISPER_END_TOKEN = "{{ end whisper }}";
     public final static String EMPHASIS_START_TOKEN = "{{ emphasis }}";
     public final static String EMPHASIS_END_TOKEN = "{{ end emphasis }}";
+    public final static String DOMAIN_START_TOKEN = "{{ domain }}";
+    public final static String DOMAIN_END_TOKEN = "{{ end domain }}";
 
     Set<String> TOKENS = new HashSet<>(
             Arrays.asList(
@@ -40,6 +42,8 @@ public abstract class Presenter
     public abstract String strongBreak();
 
     public abstract String whisper(boolean startToggle);
+
+    public abstract String domain(boolean startToggle);
 
     public abstract String emphasis(boolean startToggle);
 
@@ -110,6 +114,8 @@ public abstract class Presenter
         content = content.replace(Presenter.WEAK_TOKEN, weakBreak());
 
         // Replace effects
+        content = content.replace(Presenter.DOMAIN_START_TOKEN, domain(true));
+        content = content.replace(Presenter.DOMAIN_END_TOKEN, domain(false));
         content = content.replace(Presenter.WHISPER_START_TOKEN, whisper(true));
         content = content.replace(Presenter.WHISPER_END_TOKEN, whisper(false));
         content = content.replace(Presenter.EMPHASIS_START_TOKEN, emphasis(true));

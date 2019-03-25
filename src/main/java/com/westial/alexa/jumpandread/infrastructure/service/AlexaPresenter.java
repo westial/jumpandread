@@ -35,6 +35,19 @@ public class AlexaPresenter extends Presenter
     }
 
     @Override
+    public String domain(boolean startToggle)
+    {
+        if (startToggle)
+        {
+            return "<say-as interpret-as=\"spell-out\">";
+        }
+        else
+        {
+            return "</say-as>";
+        }
+    }
+
+    @Override
     public String emphasis(boolean startToggle)
     {
         if (startToggle)

@@ -34,6 +34,19 @@ public class MockPresenter extends Presenter
     }
 
     @Override
+    public String domain(boolean startToggle)
+    {
+        if (startToggle)
+        {
+            return "{DOMAIN_START_TOKEN}";
+        }
+        else
+        {
+            return "{DOMAIN_END_TOKEN}";
+        }
+    }
+
+    @Override
     public String emphasis(boolean startToggle)
     {
         if (startToggle)
