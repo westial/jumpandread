@@ -4,8 +4,10 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.westial.alexa.jumpandread.application.exception.GettingContentException;
-import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.ContentAddress;
+import com.westial.alexa.jumpandread.domain.content.ContentGetter;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -48,10 +50,12 @@ public class UnirestContentGetter implements ContentGetter
                     .loadTrustMaterial(null, new TrustSelfSignedStrategy())
                     .build();
             SSLConnectionSocketFactory sslConnectionFactory = new SSLConnectionSocketFactory(sslcontext, NoopHostnameVerifier.INSTANCE);
-            CloseableHttpClient httpclient = HttpClients.custom()
+            CloseableHttpClient httpClient = HttpClients.custom()
                     .setSSLSocketFactory(sslConnectionFactory)
-                    .build();
-            Unirest.setHttpClient(httpclient);
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setCookieSpec(CookieSpecs.STANDARD).build()
+                    ).build();
+            Unirest.setHttpClient(httpClient);
             HttpResponse<String> response = Unirest.get(url)
                     .header("User-Agent", userAgent)
                     .asString();

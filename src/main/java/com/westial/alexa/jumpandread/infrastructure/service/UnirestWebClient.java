@@ -6,7 +6,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 import com.westial.alexa.jumpandread.infrastructure.structure.HttpMethod;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.ByteArrayInputStream;
@@ -19,6 +23,18 @@ import java.util.zip.GZIPInputStream;
 
 public class UnirestWebClient implements WebClient
 {
+
+    UnirestWebClient()
+    {
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setDefaultRequestConfig(
+                        RequestConfig.custom()
+                                .setCookieSpec(CookieSpecs.STANDARD)
+                                .build()
+                ).build();
+        Unirest.setHttpClient(httpClient);
+    }
+
     @Override
     public String request(
             HttpMethod method,
@@ -97,7 +113,7 @@ public class UnirestWebClient implements WebClient
     // FIXME does not work. Disabled header for gzip compression
     private String uncompressBody(byte[] contentBytes) throws IOException
     {
-        GZIPInputStream gzip = new GZIPInputStream (
+        GZIPInputStream gzip = new GZIPInputStream(
                 new ByteArrayInputStream(contentBytes)
         );
         StringBuilder buffer = new StringBuilder();
@@ -106,12 +122,12 @@ public class UnirestWebClient implements WebClient
 
         while (true)
         {
-            int  iLength = gzip.read (contentByte, 0, 1024);
+            int iLength = gzip.read(contentByte, 0, 1024);
 
             if (iLength < 0)
                 break;
 
-            buffer.append (new String(contentByte, 0, iLength));
+            buffer.append(new String(contentByte, 0, iLength));
         }
         return buffer.toString();
     }
