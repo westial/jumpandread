@@ -186,6 +186,12 @@ public class FullFlowsTest
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentRepeat("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentForward("^<speak>.+Those standards which are given explicit conceptual development are shown in the chart below.{200,}</speak>$");
+            runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
+            runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentBackward("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentPause("^<speak>.+Alexa.+</speak>$");
             runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
@@ -213,15 +219,7 @@ public class FullFlowsTest
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
         readingWitness = outputStreamResult.toString();
         runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
         Assert.assertNotEquals(readingWitness, outputStreamResult.toString());
-        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-        runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
         Assert.assertEquals(readingWitness, outputStreamResult.toString());
         runAndCheckIntentList(LAZY_FULL_LIST_EXPECTED_PATTERN);
