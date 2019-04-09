@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.application.command;
 
-import com.westial.alexa.jumpandread.application.exception.FromRepositoryNoSearchResultsException;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.FromRepositoryNoSearchResultException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateRepository;
 import com.westial.alexa.jumpandread.domain.Presenter;
@@ -17,14 +17,14 @@ public class GettingListCommand
         this.candidateRepository = candidateRepository;
     }
 
-    public String execute(String searchId) throws NoSearchResultsException
+    public String execute(String searchId) throws NoSearchResultException
     {
         StringBuilder candidatesList = new StringBuilder();
         List<Candidate> candidates = candidateRepository.all(searchId);
 
         if (null == candidates || candidates.isEmpty())
         {
-            throw new FromRepositoryNoSearchResultsException(
+            throw new FromRepositoryNoSearchResultException(
                     String.format(
                             "No candidates for search Id as %s",
                             searchId

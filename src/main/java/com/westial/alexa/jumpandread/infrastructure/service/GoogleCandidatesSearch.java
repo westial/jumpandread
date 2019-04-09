@@ -6,12 +6,12 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.customsearch.Customsearch;
 import com.google.api.services.customsearch.model.Result;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateFactory;
 import com.westial.alexa.jumpandread.domain.CandidatesSearch;
 import com.westial.alexa.jumpandread.domain.User;
-import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultsException;
+import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultException;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 
@@ -69,7 +69,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
     }
 
     @Override
-    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultsException
+    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultException
     {
         List<Candidate> candidates = new ArrayList<>();
         Result result;
@@ -84,7 +84,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
             );
             if (results.isEmpty())
             {
-                throw new EngineNoSearchResultsException("No result in Google searching results page");
+                throw new EngineNoSearchResultException("No result in Google searching results page");
             }
             for (int resultsIndex = startingIndex; !results.isEmpty() ; resultsIndex ++)
             {

@@ -3,7 +3,7 @@ package stepDefinitions;
 import com.westial.alexa.jumpandread.application.GettingListUseCase;
 import com.westial.alexa.jumpandread.application.command.ChildrenToSearchCommand;
 import com.westial.alexa.jumpandread.application.command.GettingListCommand;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.MockCandidateRepository;
@@ -263,8 +263,8 @@ public class CandidatesListSteps
                 Assert.assertTrue(exception instanceof MandatorySearchException);
                 break;
 
-            case "NoSearchResultsException":
-                Assert.assertTrue(exception instanceof NoSearchResultsException);
+            case "NoSearchResultException":
+                Assert.assertTrue(exception instanceof NoSearchResultException);
                 break;
         }
     }

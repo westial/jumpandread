@@ -2,7 +2,7 @@ package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.command.GettingListCommand;
 import com.westial.alexa.jumpandread.application.exception.IncompleteStateMandatorySearchException;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.MandatorySearchException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
@@ -36,7 +36,7 @@ public class GettingListUseCase
             }
             presenter.addText(listCommand.execute(searchId));
 
-        } catch (NoSearchResultsException | MandatorySearchException exc)
+        } catch (NoSearchResultException | MandatorySearchException exc)
         {
             presenter.addText("warning.no.search.results.empty.list");
         }

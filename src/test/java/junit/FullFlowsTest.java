@@ -3,6 +3,7 @@ package junit;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter;
+import com.westial.alexa.jumpandread.FreeFirstFailSafeJumpAndReadRouter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,14 +22,14 @@ import java.util.*;
 
 /**
  * There are two ways to execute this test class.
- *
- *  1. As default you can play one or multiple annotated test functions and
- *     userId and sessionId will be generated new every time.
- *
- *  2. Pass userSession system property to java command if you want to recycle
- *     a userId and sessionId and do not overload the search engine service.
- *     User and session values are separated by a colon character ":"
- *     Command option example: `-DuserSession=myuserid:mysessionId`
+ * <p>
+ * 1. As default you can play one or multiple annotated test functions and
+ * userId and sessionId will be generated new every time.
+ * <p>
+ * 2. Pass userSession system property to java command if you want to recycle
+ * a userId and sessionId and do not overload the search engine service.
+ * User and session values are separated by a colon character ":"
+ * Command option example: `-DuserSession=myuserid:mysessionId`
  */
 public class FullFlowsTest
 {
@@ -91,7 +92,8 @@ public class FullFlowsTest
             userId = userSessionItems.get(0);
             sessionId = userSessionItems.get(1);
         }
-        else {
+        else
+        {
             userId = String.format(
                     "amzn1.ask.account.%s.%s", "test",
                     token
@@ -125,10 +127,11 @@ public class FullFlowsTest
     /**
      * Both with and without user and session. You, please, use without to get
      * credentials and refresh session from time to time.
-     *
+     * <p>
      * Fast check with a given session and user with testing commandline
      * parameters as:
-     * `-ea -DuserSession=amzn1.ask.account.test.7e262d31-1a62-4346-8d44-8000af92c8b1:amzn1.echo-api.session.test.7e262d31-1a62-4346-8d44-8000af92c8b1`
+     * `-ea -DuserSession=amzn1.ask.account.test.cfd24248-c697-431f-8bbd-3ce3ff30a256:amzn1.echo-api.session.test.cfd24248-c697-431f-8bbd-3ce3ff30a256`
+     *
      * @throws Throwable
      */
     @Test
@@ -136,7 +139,7 @@ public class FullFlowsTest
     {
         setEnvironment("environment_bypattern_force_custommedium_authorlist_en.json");
         handler = new DuckDuckGoJumpAndReadRouter();
-        if (null != System.getProperty("userSession"))
+        if (null == System.getProperty("userSession"))
         {
             runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
         }
@@ -177,7 +180,8 @@ public class FullFlowsTest
             // It has to be lazy checked and avoid first intents when recycling session.
             recycledFlow();
         }
-        else {
+        else
+        {
             runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
             runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
             runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making Mathematical Connections).{200,}</speak>$");
@@ -199,6 +203,15 @@ public class FullFlowsTest
             runAndCheckIntentPrevious("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
             runAndCheckIntentPrevious("^<speak>.+(?=received funding from the National Science Foundation to prepare a middle school mathematics module incorporating real-time weather data).{200,}</speak>$");
         }
+    }
+
+    @Test
+    public void checkFreeFirstFailSafeSearch() throws Throwable
+    {
+        setEnvironment(SAMPLE_ENVIRONMENT_VARS);
+        handler = new FreeFirstFailSafeJumpAndReadRouter();
+        runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
+        runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
     }
 
     private void recycledFlow()

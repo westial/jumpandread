@@ -1,6 +1,6 @@
 package junit;
 
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
@@ -79,7 +79,7 @@ public class GoogleCandidatesSearchTest
     }
 
     @Test
-    public void findTest() throws SearchException, NoSearchResultsException
+    public void findTest() throws SearchException, NoSearchResultException
     {
         List<Candidate> candidates = engine.find(
                 new User("user id", "session id"),
@@ -90,7 +90,7 @@ public class GoogleCandidatesSearchTest
     }
 
     @Test
-    public void doNotFindTest() throws SearchException, NoSearchResultsException
+    public void doNotFindTest() throws SearchException, NoSearchResultException
     {
         try
         {
@@ -101,7 +101,7 @@ public class GoogleCandidatesSearchTest
             );
             assert false;
         }
-        catch (NoSearchResultsException exc)
+        catch (NoSearchResultException exc)
         {
             assert true;
         }

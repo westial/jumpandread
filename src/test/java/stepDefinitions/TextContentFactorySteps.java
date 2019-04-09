@@ -33,7 +33,7 @@ public class TextContentFactorySteps
     private TextContentParser defaultParser;
     private ContentGetter contentGetter;
     private ByConfigurationTextContentProviderFactory providerFactory;
-    private TextContentProvider provider;
+    private TextContentProvider textProvider;
     private String exceptionName;
     private ByPatternTextContentParser byPatternParser;
     private ParserFactory parserFactory;
@@ -102,7 +102,7 @@ public class TextContentFactorySteps
     {
         try
         {
-            provider = providerFactory.create(configuration);
+            textProvider = providerFactory.create(configuration);
         }
         catch (Exception e)
         {
@@ -113,7 +113,7 @@ public class TextContentFactorySteps
     @Then("^The providers factory parser class name is as \"([^\"]*)\"$")
     public void theProvidersFactoryParserClassNameIsAs(String expectedClassName) throws Throwable
     {
-        Assert.assertEquals(expectedClassName, provider.getClass().getName());
+        Assert.assertEquals(expectedClassName, textProvider.getClass().getName());
     }
 
     @Then("^The factory threw an exception with name as \"([^\"]*)\"$")

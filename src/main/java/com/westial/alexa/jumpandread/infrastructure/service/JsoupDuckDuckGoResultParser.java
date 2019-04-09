@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.infrastructure.service;
 
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
-import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
+import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultException;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 import com.westial.alexa.jumpandread.infrastructure.structure.DuckDuckGoResult;
@@ -20,7 +20,7 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
      * if no result is found.
      */
     @Override
-    public List<DuckDuckGoResult> parse(String content) throws SearchException, NoSearchResultsException
+    public List<DuckDuckGoResult> parse(String content) throws SearchException, NoSearchResultException
     {
         Document document = Jsoup.parse(content);
         List<DuckDuckGoResult> results = new ArrayList<>();
@@ -43,7 +43,7 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
             }
             catch (NullPointerException missingNode)
             {
-                throw new EngineNoSearchResultsException("No result in DuckDuckGo searching results page");
+                throw new EngineNoSearchResultException("No result in DuckDuckGo searching results page");
             }
         }
         return results;

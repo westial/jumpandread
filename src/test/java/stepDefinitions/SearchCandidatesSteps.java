@@ -1,22 +1,29 @@
 package stepDefinitions;
 
 import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
 import com.westial.alexa.jumpandread.domain.content.TextContentProvider;
 import com.westial.alexa.jumpandread.infrastructure.*;
+import com.westial.alexa.jumpandread.infrastructure.exception.EngineNoSearchResultException;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
+import com.westial.alexa.jumpandread.infrastructure.exception.WebClientSearchException;
 import com.westial.alexa.jumpandread.infrastructure.service.*;
 import com.westial.alexa.jumpandread.infrastructure.service.content.RemoteTextContentProvider;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import utils.FileSystemHelper;
+import utils.JsonService;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
@@ -37,12 +44,15 @@ public class SearchCandidatesSteps
     private State state;
     private DuckDuckGoResultParser pageParser;
     private WebClient pageClient;
-    private CandidatesSearch searchEngine;
     private List<Candidate> candidates;
     private HeadersProvider headersProvider;
     private DuckDuckGoLocaleProvider duckLocaleProvider;
     private TextContentProvider contentProvider;
     private Exception exception;
+    private CandidatesSearchFactory searchFactory;
+    private CandidatesSearchFactory failSafeSearchFactory;
+    private Configuration configuration;
+    private CandidatesSearchFactory secondSearchFactory;
 
     @Given("^A local web client service with a forced content as in file as \"([^\"]*)\"$")
     public void anHtmlSearchResultPageAsInFileAs(String fileName) throws Throwable
@@ -64,7 +74,7 @@ public class SearchCandidatesSteps
     @Given("^A DuckDuckGo candidates search service for url as \"([^\"]*)\", iso 4-letters locale as \"([^\"]*)\"$")
     public void aDuckDuckGoCandidatesSearchService(String duckUrl, String iso4Locale)
     {
-        searchEngine = new DuckDuckGoCandidatesSearch(
+        candidatesSearch = new DuckDuckGoCandidatesSearch(
                 STARTING_CANDIDATE_INDEX,
                 pageClient,
                 pageParser,
@@ -102,12 +112,12 @@ public class SearchCandidatesSteps
     {
         try
         {
-            candidates = searchEngine.find(
+            candidates = candidatesSearch.find(
                     new User(userId, sessionId),
                     searchId,
                     terms
             );
-        } catch (SearchException | NoSearchResultsException e)
+        } catch (SearchException | NoSearchResultException e)
         {
             exception = e;
         }
@@ -179,7 +189,7 @@ public class SearchCandidatesSteps
         try
         {
             foundCandidates = searchCandidates.execute(state, searchTerms);
-        } catch (SearchException | NoSearchResultsException e)
+        } catch (SearchException | NoSearchResultException e)
         {
             exception = e;
         }
@@ -292,6 +302,88 @@ public class SearchCandidatesSteps
     @Then("^Command threw a no results exception$")
     public void commandThrewAExceptionTypeAs() throws Throwable
     {
-        Assert.assertTrue(exception instanceof NoSearchResultsException);
+        Assert.assertTrue(exception instanceof NoSearchResultException);
+    }
+
+    @And("^A mock candidates search factory for the candidates search service above$")
+    public void aMockCandidatesSearchFactoryForTheCandidatesSearchServiceAbove()
+    {
+        searchFactory = new MockCandidatesSearchFactory(candidatesSearch);
+    }
+
+    @And("^A fail-safe candidates search factory with \"([^\"]*)\" instances of first search factory$")
+    public void aFailSafeCandidatesSearchFactoryWithInstancesOfOtherSearchFactories(String rawFactoriesCount) throws Throwable
+    {
+        int dependentOnCount = Integer.parseInt(rawFactoriesCount);
+        CandidatesSearchFactory[] dependentOnFactories =
+                new CandidatesSearchFactory[dependentOnCount];
+        for (int index = 0; index < dependentOnFactories.length; index ++)
+        {
+            dependentOnFactories[index] = searchFactory;
+        }
+        failSafeSearchFactory = new FailSafeCandidatesSearchFactory(dependentOnFactories);
+    }
+
+    @And("^A fail-safe candidates search factory with \"([^\"]*)\" instances of first search factory and with \"([^\"]*)\" instances of second one$")
+    public void aFailSafeCandidatesSearchFactoryWithInstancesOfBothSearchFactories(String rawFirstFactoryCount, String rawSecondFactoryCount) throws Throwable
+    {
+        int dependentOnFirstCount = Integer.parseInt(rawFirstFactoryCount);
+        int dependentOnSecondCount = Integer.parseInt(rawSecondFactoryCount);
+        CandidatesSearchFactory[] dependentOnFactories =
+                new CandidatesSearchFactory[dependentOnFirstCount + dependentOnSecondCount];
+        for (int index = 0; index < dependentOnFirstCount; index ++)
+        {
+            dependentOnFactories[index] = searchFactory;
+        }
+        for (int index = dependentOnFirstCount; index < dependentOnFactories.length; index ++)
+        {
+            dependentOnFactories[index] = secondSearchFactory;
+        }
+        failSafeSearchFactory = new FailSafeCandidatesSearchFactory(dependentOnFactories);
+    }
+
+    @When("^I create the fail-safe Candidates search service$")
+    public void iCreateTheFailSafeCandidatesSearchService()
+    {
+        candidatesSearch = failSafeSearchFactory.create(configuration, candidateFactory);
+    }
+
+    @Given("^A configuration service created from an environment as in file \"([^\"]*)\"$")
+    public void aConfigurationServiceCreatedFromAnEnvironmentAsInFile(String configFilePath) throws Throwable
+    {
+        configuration = new EnvironmentConfiguration();
+
+        String rawConfig = FileSystemHelper.readResourceFile(configFilePath);
+
+        Map<String, String> environmentVars = (HashMap<String, String>) JsonService.loads(rawConfig).get("Variables");
+
+        for (Map.Entry<String, String> envEntry: environmentVars.entrySet())
+        {
+            configuration.register(envEntry.getKey(), envEntry.getValue());
+        }
+    }
+
+    @And("^A candidates search service throwing an exception as \"([^\"]*)\"$")
+    public void aCandidatesSearchServiceThrowingAnExceptionAs(String exceptionName) throws Throwable
+    {
+        switch (exceptionName)
+        {
+            case "SearchException":
+                candidatesSearch = new MockCandidatesSearch(
+                        new WebClientSearchException("Forced search exception")
+                );
+                break;
+            case "NoSearchResultException":
+                candidatesSearch = new MockCandidatesSearch(
+                        new EngineNoSearchResultException("Forced no result exception")
+                );
+                break;
+        }
+    }
+
+    @And("^A second mock candidates search factory for the candidates search service$")
+    public void aSecondMockCandidatesSearchFactoryForTheCandidatesSearchService()
+    {
+        secondSearchFactory = new MockCandidatesSearchFactory(candidatesSearch);
     }
 }

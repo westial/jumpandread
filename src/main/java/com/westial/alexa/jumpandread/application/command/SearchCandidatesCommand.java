@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.application.command;
 
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
-import com.westial.alexa.jumpandread.application.exception.ParsingNoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
+import com.westial.alexa.jumpandread.application.exception.ParsingNoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
 
@@ -17,7 +17,7 @@ public class SearchCandidatesCommand
         this.candidatesSearch = candidatesSearch;
     }
 
-    public String execute(State state, String terms) throws SearchException, NoSearchResultsException
+    public String execute(State state, String terms) throws SearchException, NoSearchResultException
     {
         StringBuilder candidatesList = new StringBuilder();
         state.updateSearchId();
@@ -31,7 +31,7 @@ public class SearchCandidatesCommand
         );
         if (null == candidates)
         {
-            throw new ParsingNoSearchResultsException(
+            throw new ParsingNoSearchResultException(
                     "Apparently there is any result but no Candidate has been built"
             );
         }

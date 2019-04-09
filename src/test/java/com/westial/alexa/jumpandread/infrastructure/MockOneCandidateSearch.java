@@ -1,6 +1,6 @@
 package com.westial.alexa.jumpandread.infrastructure;
 
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.CandidateFactory;
 import com.westial.alexa.jumpandread.domain.CandidatesSearch;
@@ -24,7 +24,7 @@ public class MockOneCandidateSearch implements CandidatesSearch
         this.factory = factory;
     }
 
-    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultsException
+    public List<Candidate> find(User user, String searchId, String terms) throws SearchException, NoSearchResultException
     {
         List<Candidate> candidates = new ArrayList<>();
         Candidate candidate = factory.create(

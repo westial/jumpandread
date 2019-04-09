@@ -1,7 +1,7 @@
 package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.command.SearchCandidatesCommand;
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
@@ -44,7 +44,7 @@ public class SearchUseCase
                 System.out.printf("ERROR: %s\n", se.getMessage());
                 se.printStackTrace();
 
-            } catch (NoSearchResultsException me)
+            } catch (NoSearchResultException me)
             {
                 presenter.addText("warning.no.search.results");
                 presenter.addText("dialog.search.want.other");

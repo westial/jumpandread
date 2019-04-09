@@ -1,6 +1,6 @@
 package junit;
 
-import com.westial.alexa.jumpandread.application.exception.NoSearchResultsException;
+import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.ContentGetter;
 import com.westial.alexa.jumpandread.domain.content.TextContentParser;
@@ -73,7 +73,7 @@ public class DuckDuckGoCandidatesSearchTest
     }
 
     @Test
-    public void find() throws SearchException, NoSearchResultsException
+    public void find() throws SearchException, NoSearchResultException
     {
         List<Candidate> candidates = engine.find(
                 new User("user id", "session id"),
@@ -84,7 +84,7 @@ public class DuckDuckGoCandidatesSearchTest
     }
 
     @Test
-    public void doNotFindTest() throws SearchException, NoSearchResultsException
+    public void doNotFindTest() throws SearchException, NoSearchResultException
     {
         try
         {
@@ -95,7 +95,7 @@ public class DuckDuckGoCandidatesSearchTest
             );
             assert false;
         }
-        catch (NoSearchResultsException exc)
+        catch (NoSearchResultException exc)
         {
             assert true;
         }
