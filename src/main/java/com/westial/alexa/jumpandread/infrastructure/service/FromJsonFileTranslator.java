@@ -7,40 +7,60 @@ import com.westial.alexa.jumpandread.infrastructure.exception.InitializationErro
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FromJsonFileTranslator implements Translator
 {
     private final Map<String, String> locales;
     private final String currentLocale;
 
-    public FromJsonFileTranslator(String iso4Locale, String filename)
+    private static Map<String, String> loadFile(String filePath) throws IOException, URISyntaxException
     {
+        String i18nContent = FileSystemService.readResourceFile(filePath);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(
+                i18nContent,
+                new TypeReference<Map<String, String>>()
+                {
+                }
+        );
+    }
+
+    public FromJsonFileTranslator(String iso4Locale, String... resourceFilenames)
+    {
+        locales = new HashMap<>();
         iso4Locale = iso4Locale.toLowerCase();
         iso4Locale = iso4Locale.replace("_", "-");
         currentLocale = iso4Locale;
-        String resourceFilePath = String.format(
-                "i18n/%s/%s",
-                iso4Locale,
-                filename
+        String filename = null;
+        LinkedList<String> filenamesList = new LinkedList<>(
+                Arrays.asList(resourceFilenames)
         );
+
         try
         {
-            String i18nContent = FileSystemService.readResourceFile(resourceFilePath);
-            ObjectMapper mapper = new ObjectMapper();
-            locales = mapper.readValue(
-                    i18nContent,
-                    new TypeReference<Map<String, String>>()
-                    {
-                    }
-            );
+            filename = filenamesList.poll();
+
+            while (null != filename)
+            {
+                String resourceFilePath = String.format(
+                        "i18n/%s/%s",
+                        iso4Locale,
+                        filename
+                );
+                locales.putAll(
+                        loadFile(resourceFilePath)
+                );
+                
+                filename = filenamesList.poll();
+            }
+
         } catch (URISyntaxException | IOException exc)
         {
             throw new InitializationError(
                     String.format(
                             "Error trying to read and format locales from file as %s. %s",
-                            resourceFilePath,
+                            filename,
                             exc.getMessage()
                     )
             );

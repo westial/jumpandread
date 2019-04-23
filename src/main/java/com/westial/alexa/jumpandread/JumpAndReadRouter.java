@@ -104,7 +104,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
         Presenter presenter = new AlexaPresenter(
                 new FromJsonFileTranslator(
                         config.retrieve("ISO4_LANGUAGE"),
-                        config.retrieve("LOCALES_FILENAME")
+                        config.retrieve("LOCALES_FILENAME").split(",")
                 )
         );
 

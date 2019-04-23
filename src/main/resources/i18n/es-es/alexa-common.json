@@ -1,6 +1,5 @@
 {
     "presentation.title": "Salta y lee",
-    "presentation.abstract": "Este es un servicio de búsqueda en internet que lista los resultados y entra a leerlos para tí.",
     "command.search.no.terms": "Para ir directamente al servicio de búsqueda, dime,{{ . }} Alexa, buscar.",
     "presentation.getting.started.introduction": "Voy a explicarte el funcionamiento básico brevemente.{{ . }}{{ . }} Memoriza bien los verbos más importantes de este servicio: buscar,{{ . }} leer,{{ . }} saltar.",
     "presentation.getting.started.obvious": "Buscar, busca{{ . }} leer, lee{{ . }} saltar, salta{{ . }}{{ . }}... {{ whisper }}ji, ji, ji{{ end whisper }}. Trataba de hacerte una broma que te servirá para memorizar buscar, leer y saltar.",

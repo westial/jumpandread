@@ -17,6 +17,7 @@ public class PresenterTest
     {
         Translator translator = new FromJsonFileTranslator(
                 "es-ES",
+                "common.json",
                 "test.json"
         );
 
