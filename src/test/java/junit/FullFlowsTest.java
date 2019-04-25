@@ -44,8 +44,10 @@ public class FullFlowsTest
 
     private final static String SAMPLE_INTENTS_PATH = "intents/websearch";
     private final static String SAMPLE_INTENTS_EXPECTED_FILENAME = "ssml_expected.json";
+    private final static String SAMPLE_NO_RESULTS_DIALOG_EXPECTED_FILENAME = "ssml_noresults_dialog.json";
     private final static String SAMPLE_INTENTS_EXTENSION = ".json";
     private final static String SAMPLE_ENVIRONMENT_VARS = "environment_bypattern_es.json";
+    private final static String SAMPLE_FORCE_NO_RESULTS_ENVIRONMENT_VARS = "environment_bypattern_forcenoresults.json";
     private OutputStream outputStreamResult;
     private static String userId;
     private static String sessionId;
@@ -62,6 +64,7 @@ public class FullFlowsTest
         readthis,
         repeat,
         searchmath,
+        searchwithnoresults,
         searchmediumnarrative,
         searchcustommedium,
         stop,
@@ -214,6 +217,14 @@ public class FullFlowsTest
         runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
     }
 
+    @Test
+    public void checkDialogAfterNoSearchingResults() throws Throwable
+    {
+        setEnvironment(SAMPLE_FORCE_NO_RESULTS_ENVIRONMENT_VARS);
+        handler = new DuckDuckGoJumpAndReadRouter();
+        runAndCheckIntentSearchDialogDirectives(LAZY_EXPECTED_PATTERN, INTENT.searchwithnoresults);
+    }
+
     private void recycledFlow()
     {
         String readingWitness;
@@ -249,6 +260,12 @@ public class FullFlowsTest
     {
         runIntent(testIntent);
         assertSsmlRegex(expectedPattern);
+    }
+
+    private void runAndCheckIntentSearchDialogDirectives(String expectedPattern, INTENT testIntent)
+    {
+        runIntent(testIntent);
+        assertSsmlRegexWithDirectives(expectedPattern);
     }
 
     private void runAndCheckIntentRead(String expectedPattern)
@@ -341,6 +358,43 @@ public class FullFlowsTest
                         new Customization(
                                 "response.reprompt.outputSpeech.ssml",
                                 new RegularExpressionValueMatcher<>(expectedSsmlPattern)
+                        )
+                )
+        );
+    }
+
+    private void assertSsmlRegexWithDirectives(String expectedSsmlPattern)
+    {
+        String expected;
+        try
+        {
+            expected = FileSystemHelper.readResourceFile(
+                    String.format(
+                            "%s/%s",
+                            SAMPLE_INTENTS_PATH,
+                            SAMPLE_NO_RESULTS_DIALOG_EXPECTED_FILENAME
+                    )
+            );
+        } catch (IOException e)
+        {
+            throw new RuntimeException();
+        }
+        JSONAssert.assertEquals(
+                expected,
+                outputStreamResult.toString(),
+                new CustomComparator(
+                        JSONCompareMode.STRICT,
+                        new Customization(
+                                "response.outputSpeech.ssml",
+                                new RegularExpressionValueMatcher<>(expectedSsmlPattern)
+                        ),
+                        new Customization(
+                                "response.reprompt.outputSpeech.ssml",
+                                new RegularExpressionValueMatcher<>(expectedSsmlPattern)
+                        ),
+                        new Customization(
+                                "response.directives.updatedIntent.slots.searchTerms.value",
+                                new RegularExpressionValueMatcher<>(".+")
                         )
                 )
         );

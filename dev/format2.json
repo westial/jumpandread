@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+    "userAgent": "ask-java/2.5.5 Java/1.8.0_172",
+    "response": {
+        "outputSpeech": {
+            "type": "SSML",
+            "ssml": "<speak>IN ENGLISH  Resultado de búsqueda número 1<break strength=\"x-strong\"/>titulado<break strength=\"x-strong\"/>The Tech - Medium<break time=\"1500ms\"/>warning.no.more.paragraphs.but.children.already.in.list</speak>"
+        },
+        "reprompt": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak>IN ENGLISH  Resultado de búsqueda número 1<break strength=\"x-strong\"/>titulado<break strength=\"x-strong\"/>The Tech - Medium<break time=\"1500ms\"/>warning.no.more.paragraphs.but.children.already.in.list</speak>"
+            }
+        },
+        "shouldEndSession": false
+    }
+}

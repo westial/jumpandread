@@ -1,0 +1,25 @@
+Hello,
+I sent this message as certification feedback too and I do not know if message sent will be taken as issue to solve. I need a solution, I spend lots of hours in this Skill and after this failed result with no information and apparently no cause, I do not know what I have to do.
+
+########################################
+
+Feedback Clarity: you wrote in the feedback email "We've included a description of the issue(s) and steps to reproduce below" I only can see a dash, email message is literally as follows, please help me reproduce the error that I cannot find:
+
+Issues with skill in Spanish (Spain) 
+__________________________________________________________
+1. -
+
+__________________________________________________________
+
+########################################
+
+Result Validity: Ok, it can fail, I have a wide test coverage and I manually tested that I could expect, errors happen. So, I checked the CloudWatch because your feedback clarity is null and I can see what I'm going to enumerate below:
+
+a) You invoked the Lambda 5 times.
+b) Lambda has not broken by any error.
+c) Looking for error messages in CloudWatch logs I can see that you tested to give Skill a value out of range, if search results are 30 you asked for 1001. The Skill did not break out, it returned a message like "Ups, something strange happened, please, try to find again".
+
+########################################
+
+Sincerely,
+Jaume Mila

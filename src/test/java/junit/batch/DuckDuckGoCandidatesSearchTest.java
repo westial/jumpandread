@@ -1,4 +1,4 @@
-package junit;
+package junit.batch;
 
 import com.westial.alexa.jumpandread.application.exception.NoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;

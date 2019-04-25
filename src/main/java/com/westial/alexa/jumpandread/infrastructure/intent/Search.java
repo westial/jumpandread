@@ -42,11 +42,12 @@ public class Search implements RequestHandler
                 INTENT_NAME
         );
         Slot termsSlot = current.getSlots().get(TERMS_SLOT_NAME);
-        String searchTerms = termsSlot.getValue();
+        StringBuilder searchTerms = new StringBuilder();
+        searchTerms.append(termsSlot.getValue());
 
         View view = searchUseCase.invoke(INTENT_NAME, searchTerms);
 
-        if (null == searchTerms || searchTerms.isEmpty() || view.isEmpty())
+        if (0 == searchTerms.length() || view.isEmpty())
         {
             System.out.println("DEBUG: No search terms, delegating directive");
 

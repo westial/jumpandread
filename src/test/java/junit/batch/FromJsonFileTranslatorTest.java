@@ -1,4 +1,4 @@
-package junit;
+package junit.batch;
 
 import com.westial.alexa.jumpandread.infrastructure.service.FromJsonFileTranslator;
 import com.westial.alexa.jumpandread.domain.Translator;

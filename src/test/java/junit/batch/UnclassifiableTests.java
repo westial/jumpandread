@@ -1,4 +1,4 @@
-package junit;
+package junit.batch;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;

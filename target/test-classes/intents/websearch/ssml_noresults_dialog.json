@@ -1,0 +1,34 @@
+{
+    "version": "1.0",
+    "userAgent": "ask-java/2.5.5 Java/1.8.0_172",
+    "response": {
+        "outputSpeech": {
+            "type": "SSML",
+            "ssml": "<speak>Lo siento mucho<break strength=\"x-strong\"/>pero no he encontrado ningun resultado con las palabras que me has pedido.¿Quieres probar a buscar otra cosa?<break time=\"1500ms\"/>¿Qué quieres buscar?</speak>"
+        },
+        "reprompt": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak>Lo siento mucho<break strength=\"x-strong\"/>pero no he encontrado ningun resultado con las palabras que me has pedido.¿Quieres probar a buscar otra cosa?<break time=\"1500ms\"/>¿Qué quieres buscar?</speak>"
+            }
+        },
+        "directives": [
+            {
+                "type": "Dialog.ElicitSlot",
+                "updatedIntent": {
+                    "name": "SearchCandidates",
+                    "slots": {
+                        "searchTerms": {
+                            "name": "searchTerms",
+                            "value": "ttttggyhhhhhhhhhee",
+                            "confirmationStatus": "NONE"
+                        }
+                    },
+                    "confirmationStatus": "NONE"
+                },
+                "slotToElicit": "searchTerms"
+            }
+        ],
+        "shouldEndSession": false
+    }
+}

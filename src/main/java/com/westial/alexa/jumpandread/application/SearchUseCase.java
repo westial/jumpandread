@@ -24,11 +24,11 @@ public class SearchUseCase
         this.presenter = presenter;
     }
 
-    public View invoke(String intentName, String searchTerms)
+    public View invoke(String intentName, StringBuilder searchTerms)
     {
         state.updateIntent(intentName);
 
-        if (null == searchTerms || searchTerms.isEmpty())
+        if (0 == searchTerms.length())
         {
             presenter.addText("dialog.search.what");
         }
@@ -36,7 +36,12 @@ public class SearchUseCase
         {
             try
             {
-                presenter.addText(searchCommand.execute(state, searchTerms));
+                presenter.addText(
+                        searchCommand.execute(
+                                state,
+                                searchTerms.toString()
+                        )
+                );
 
             } catch (SearchException se)
             {
@@ -50,6 +55,10 @@ public class SearchUseCase
                 presenter.addText("dialog.search.want.other");
                 presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.what");
+
+                // Emptying the search terms
+                // makes upper level treat it as empty search
+                searchTerms.setLength(0);
             }
         }
 

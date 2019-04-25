@@ -1,0 +1,28 @@
+{
+    "Variables": {
+        "LOCALES_FILENAME": "alexa-common.json",
+        "AGENTS_RESOURCE_PATH": "useragent.pc.list",
+        "ISO4_LANGUAGE": "es-ES",
+        "HTTP_USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+        "DUCK_URL": "https://duckduckgo.com/html/",
+        "DUCK_DORK": "filetype:html OR filetype:htm",
+        "GOOGLE_DORK": "ext:html OR ext:htm",
+        "DUCK_LOCALE_RESOURCE_PATH": "duckduckgo.kl.lang.es.list",
+        "GOOGLE_KEY": "AIzaSyA5eLYGobLzHVI-qSvyBZpK758Z78ftvGs",
+        "GOOGLE_CX":  "005508282593815979665:xfy8ykyx4y0",
+        "GOOGLE_APP_NAME": "Jump and Read",
+        "GOOGLE_RESULTS_BY_SEARCH": "10",
+        "STATE_TABLE_NAME": "jnr_state",
+        "CANDIDATE_TABLE_NAME": "jnr_candidate",
+        "REFERRERS_RESOURCE_PATH": "referrers.list",
+        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
+        "LANGUAGES_RESOURCE_PATH": "languages.list",
+        "STARTING_CANDIDATE_INDEX": "1",
+        "MAX_PARAGRAPHS_PROVIDED": "50",
+        "CONTENT_PROVIDER_MARGIN": "20",
+        "PARSER_TYPES_BY_PATTERN": "{ \"^https?://(?:www\\\\.)?gutenberg\\\\..+\": \"WebNarrative\", \"^https?://(?:www\\\\.)?medium\\\\.com/.+\": \"WebSearch\" }",
+        "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})",
+        "MEDIUM_URI_ROOT": "http://www.medium.com/p"
+    }
+}
+
