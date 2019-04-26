@@ -60,7 +60,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
                 null
         ).setApplicationName(googleAppName).build();
 
-        this.dork = (null == dork) ? "" : String.format(" AND (%s)", dork);
+        this.dork = (null == dork || dork.isEmpty()) ? "" : String.format(" AND (%s)", dork);
     }
 
     private static String formatLanguage(String iso4Language)

@@ -109,6 +109,11 @@ public class UseCaseFactory
         return new LaunchUseCase(state, presenter);
     }
 
+    public HelpUseCase createHelp()
+    {
+        return new HelpUseCase(state, presenter);
+    }
+
     public StopUseCase createStop()
     {
         return new StopUseCase(state, presenter);

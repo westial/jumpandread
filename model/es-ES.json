@@ -120,6 +120,7 @@
                     "name": "Forward",
                     "slots": [],
                     "samples": [
+                        "saltar",
                         "salta",
                         "pasa",
                         "pega un salto",
@@ -182,6 +183,7 @@
                         "lista de resultados",
                         "la última lista de resultados",
                         "dame la lista",
+                        "listar",
                         "lista"
                     ]
                 }

@@ -58,6 +58,7 @@ public class FullFlowsTest
         backward,
         forward,
         launch,
+        help,
         next,
         previous,
         pause,
@@ -225,6 +226,14 @@ public class FullFlowsTest
         runAndCheckIntentSearchDialogDirectives(LAZY_EXPECTED_PATTERN, INTENT.searchwithnoresults);
     }
 
+    @Test
+    public void checkHelpIntent() throws Throwable
+    {
+        setEnvironment(SAMPLE_ENVIRONMENT_VARS);
+        handler = new FreeFirstFailSafeJumpAndReadRouter();
+        runAndCheckIntentHelp("^<speak>(?=Para ir directamente al servicio).+(?=Para volver a la lista de resultados).+</speak>$");
+    }
+
     private void recycledFlow()
     {
         String readingWitness;
@@ -253,6 +262,12 @@ public class FullFlowsTest
     private void runAndCheckIntentLaunch(String expectedPattern)
     {
         runIntent(INTENT.launch);
+        assertSsmlRegex(expectedPattern);
+    }
+
+    private void runAndCheckIntentHelp(String expectedPattern)
+    {
+        runIntent(INTENT.help);
         assertSsmlRegex(expectedPattern);
     }
 

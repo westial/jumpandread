@@ -10,7 +10,7 @@
         "GOOGLE_KEY": "AIzaSyA5eLYGobLzHVI-qSvyBZpK758Z78ftvGs",
         "GOOGLE_CX":  "005508282593815979665:xfy8ykyx4y0",
         "GOOGLE_APP_NAME": "Jump and Read",
-        "GOOGLE_DORK": "site:medium.com AND (ext:html OR ext:htm)",
+        "GOOGLE_DORK": "",
         "GOOGLE_RESULTS_BY_SEARCH": "10",
         "STATE_TABLE_NAME": "jnr_state",
         "CANDIDATE_TABLE_NAME": "jnr_candidate",

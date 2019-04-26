@@ -4,31 +4,14 @@
     "response": {
         "outputSpeech": {
             "type": "SSML",
-            "ssml": "<speak>Lo siento mucho<break strength=\"x-strong\"/>pero no he encontrado ningun resultado con las palabras que me has pedido.¿Quieres probar a buscar otra cosa?<break time=\"1500ms\"/>¿Qué quieres buscar?</speak>"
+            "ssml": "<speak>Para ir directamente al servicio de búsqueda<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>buscar.<break time=\"1500ms\"/><break time=\"1500ms\"/>Si quieres buscar algo concreto<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>busca<break strength=\"x-strong\"/>y las palabras de lo que quieras buscar<break time=\"1500ms\"/><break time=\"1500ms\"/>Cuando he buscado por las palabras que me has indicado<break strength=\"x-strong\"/>te devuelvo una lista numerada con los títulos de los resultados que he obtenido<break time=\"1500ms\"/>Dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>lee<break strength=\"x-strong\"/>y el número de resultado que quieras entrar a leer.<break time=\"1500ms\"/><break time=\"1500ms\"/>Después de pedirme de entrar en uno de los resultados numerados<break strength=\"x-strong\"/>entro a leer su contenido<break time=\"1500ms\"/>Selecciono los primeros párrafos del contenido y empiezo a leer<break time=\"1500ms\"/>Cuando termino los párrafos que he seleccionado me paro<break time=\"1500ms\"/>Puedes decirme,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>siguiente,<break time=\"1500ms\"/> para que continúe en el siguiente contenido.<break time=\"1500ms\"/><break time=\"1500ms\"/>Si los párrafos del contenido que he seleccionado no te gustan y quieres ir hacia adelante rápidamente<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>salta.<break time=\"1500ms\"/><break time=\"1500ms\"/>Puedes pedirme que te repita los últimos párrafos del contenido que te he leído<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>repetir.<break time=\"1500ms\"/><break time=\"1500ms\"/>Para ir hacia atrás entre los grupos de párrafos del contenido que te he leído<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>atrás.<break time=\"1500ms\"/><break time=\"1500ms\"/>Para volver a la lista de resultados de tu última búsqueda<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>lista.</speak>"
         },
         "reprompt": {
             "outputSpeech": {
                 "type": "SSML",
-                "ssml": "<speak>Lo siento mucho<break strength=\"x-strong\"/>pero no he encontrado ningun resultado con las palabras que me has pedido.¿Quieres probar a buscar otra cosa?<break time=\"1500ms\"/>¿Qué quieres buscar?</speak>"
+                "ssml": "<speak>Para ir directamente al servicio de búsqueda<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>buscar.<break time=\"1500ms\"/><break time=\"1500ms\"/>Si quieres buscar algo concreto<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>busca<break strength=\"x-strong\"/>y las palabras de lo que quieras buscar<break time=\"1500ms\"/><break time=\"1500ms\"/>Cuando he buscado por las palabras que me has indicado<break strength=\"x-strong\"/>te devuelvo una lista numerada con los títulos de los resultados que he obtenido<break time=\"1500ms\"/>Dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>lee<break strength=\"x-strong\"/>y el número de resultado que quieras entrar a leer.<break time=\"1500ms\"/><break time=\"1500ms\"/>Después de pedirme de entrar en uno de los resultados numerados<break strength=\"x-strong\"/>entro a leer su contenido<break time=\"1500ms\"/>Selecciono los primeros párrafos del contenido y empiezo a leer<break time=\"1500ms\"/>Cuando termino los párrafos que he seleccionado me paro<break time=\"1500ms\"/>Puedes decirme,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>siguiente,<break time=\"1500ms\"/> para que continúe en el siguiente contenido.<break time=\"1500ms\"/><break time=\"1500ms\"/>Si los párrafos del contenido que he seleccionado no te gustan y quieres ir hacia adelante rápidamente<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>salta.<break time=\"1500ms\"/><break time=\"1500ms\"/>Puedes pedirme que te repita los últimos párrafos del contenido que te he leído<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>repetir.<break time=\"1500ms\"/><break time=\"1500ms\"/>Para ir hacia atrás entre los grupos de párrafos del contenido que te he leído<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>atrás.<break time=\"1500ms\"/><break time=\"1500ms\"/>Para volver a la lista de resultados de tu última búsqueda<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>lista.</speak>"
             }
         },
-        "directives": [
-            {
-                "type": "Dialog.ElicitSlot",
-                "updatedIntent": {
-                    "name": "SearchCandidates",
-                    "slots": {
-                        "searchTerms": {
-                            "name": "searchTerms",
-                            "value": "ttttggyhhhhhhhhhee",
-                            "confirmationStatus": "NONE"
-                        }
-                    },
-                    "confirmationStatus": "NONE"
-                },
-                "slotToElicit": "searchTerms"
-            }
-        ],
         "shouldEndSession": false
     }
 }

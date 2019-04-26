@@ -41,25 +41,32 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
                 DuckDuckGoResult result = createResult(node);
                 results.add(result);
             }
-            catch (NullPointerException missingNode)
+            catch (NullPointerException ignored)
             {
-                throw new EngineNoSearchResultException("No result in DuckDuckGo searching results page");
             }
+        }
+        if (results.isEmpty())
+        {
+            throw new EngineNoSearchResultException("No result in DuckDuckGo searching results page");
         }
         return results;
     }
 
     private DuckDuckGoResult createResult(Element resultNode) throws NullPointerException
     {
+        String description = "";
         Element titleLink = resultNode
                 .select("a.result__a")
                 .first();
         String title = titleLink.text();
         String url = titleLink.attr("href");
-        String description = resultNode
-                .select("a.result__snippet")
-                .first()
-                .text();
+        Elements descriptionNodes = resultNode.select("a.result__snippet");
+        if (!descriptionNodes.isEmpty())
+        {
+            description = descriptionNodes
+                    .first()
+                    .text();
+        }
         return new DuckDuckGoResult(title, url, description);
     }
 }

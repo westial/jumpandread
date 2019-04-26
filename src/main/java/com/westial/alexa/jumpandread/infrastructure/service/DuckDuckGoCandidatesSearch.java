@@ -40,7 +40,7 @@ public class DuckDuckGoCandidatesSearch implements CandidatesSearch
         this.duckGoLocaleProvider = duckGoLocaleProvider;
         this.iso4Language = iso4Language;
         this.candidateFactory = candidateFactory;
-        this.dork = (null == dork) ? "" : String.format(" AND (%s)", dork);
+        this.dork = (null == dork || dork.isEmpty()) ? "" : String.format(" AND (%s)", dork);
     }
 
     @Override

@@ -138,6 +138,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         LaunchUseCase launchUseCase = useCaseFactory.createLaunch();
 
+        HelpUseCase helpUseCase = useCaseFactory.createHelp();
+
         GettingListUseCase listUseCase = useCaseFactory.createList();
 
         StopUseCase stopUseCase = useCaseFactory.createStop();
@@ -167,6 +169,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                         ),
                         new List(listUseCase),
                         new Launch(launchUseCase),
+                        new Help(helpUseCase),
                         new Pause(
                                 pauseUseCase,
                                 Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))

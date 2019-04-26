@@ -1,14 +1,15 @@
 package com.westial.alexa.jumpandread.application;
 
-import com.westial.alexa.jumpandread.domain.*;
+import com.westial.alexa.jumpandread.domain.Presenter;
+import com.westial.alexa.jumpandread.domain.State;
 import com.westial.alexa.jumpandread.infrastructure.structure.PresenterView;
 
-public class LaunchUseCase
+public class HelpUseCase
 {
     private final State state;
     private final Presenter presenter;
 
-    public LaunchUseCase(
+    public HelpUseCase(
             State state,
             Presenter presenter
     )
@@ -21,17 +22,7 @@ public class LaunchUseCase
     {
         state.updateIntent(intentName);
 
-        presenter.addText("presentation.title");
-        presenter.addText(Presenter.LONGEST_TOKEN);
-        presenter.addText("presentation.abstract");
-        presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("command.search.no.terms");
-        presenter.addText(Presenter.LONGEST_TOKEN);
-        presenter.addText("presentation.getting.started.introduction");
-        presenter.addText(Presenter.LONGEST_TOKEN);
-        presenter.addText("presentation.getting.started.obvious");
-        presenter.addText(Presenter.STRONG_TOKEN);
-        presenter.addText("presentation.getting.started.jocking");
         presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("command.search.with.terms");
         presenter.addText(Presenter.LONGEST_TOKEN);
@@ -46,8 +37,6 @@ public class LaunchUseCase
         presenter.addText("command.reading.back");
         presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("command.reading.list");
-        presenter.addText(Presenter.LONGEST_TOKEN);
-        presenter.addText("presentation.finish");
 
         return new PresenterView(presenter);
     }

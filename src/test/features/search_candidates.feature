@@ -64,6 +64,21 @@ Feature: Search some terms and try fail safe searching service
     And Candidate with position "23" in list has property "title" as "Cómo distinguir un melón maduro - YouTube"
     And Candidate with position "28" in list has property "url" as "https://elcomidista.elpais.com/elcomidista/2013/08/20/receta/1376974800_137697.html"
 
+  Scenario: Properly parse results, issue 54-bug-nullpointer-exception-reading-duckduckgo-results
+    Given A local web client service with a forced content as in file as "nullpointerduckresults.html"
+    And A random headers provider service for agents file as "useragent.pc.list", languages file as "languages.list", referrers file as "referrers.list"
+    And A random duckduckgo locale provider service for available locales file as "duckduckgo.kl.lang.en.list"
+    And A DuckDuckGo page parser service
+    And A mock text content parser
+    And An address document getter
+    And A mock text content provider
+    And An Alexa output formatter for searching
+    And A candidate repository
+    And A candidate factory
+    And A DuckDuckGo candidates search service for url as "http://duck.dot", iso 4-letters locale as "en-US"
+    When I ask to find candidates to search service for user with ID as "userid1234-1234-1234", session ID as "sessionid1234-1234-1234", search ID as "searchid1234-1234-1234", terms as "word1 word2 word3"
+    Then The service returned a list with "28" candidates
+
   Scenario: No candidates for a given DuckDuckGo empty results page
     Given A local web client service with a forced content as in file as "duckduckgo/recetas no results at DuckDuckGo.html"
     And A random headers provider service for agents file as "useragent.pc.list", languages file as "languages.list", referrers file as "referrers.list"
