@@ -29,10 +29,6 @@ public class LaunchUseCase
         presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("presentation.getting.started.introduction");
         presenter.addText(Presenter.LONGEST_TOKEN);
-        presenter.addText("presentation.getting.started.obvious");
-        presenter.addText(Presenter.STRONG_TOKEN);
-        presenter.addText("presentation.getting.started.jocking");
-        presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("command.search.with.terms");
         presenter.addText(Presenter.LONGEST_TOKEN);
         presenter.addText("command.read.with.number");
