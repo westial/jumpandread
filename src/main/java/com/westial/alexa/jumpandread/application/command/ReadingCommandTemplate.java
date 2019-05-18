@@ -140,6 +140,11 @@ public abstract class ReadingCommandTemplate
                     candidateIndex
             );
 
+            appendResult(
+                    results,
+                    "{{ . }}"
+            );
+
             candidateIndex += signedCandidateMovingFactor;
 
             return execute(

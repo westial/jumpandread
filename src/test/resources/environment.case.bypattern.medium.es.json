@@ -15,11 +15,11 @@
         "STATE_TABLE_NAME": "jnr_state",
         "CANDIDATE_TABLE_NAME": "jnr_candidate",
         "REFERRERS_RESOURCE_PATH": "referrers.list",
-        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "5",
+        "PARAGRAPHS_GROUP_MEMBERS_COUNT": "12",
         "LANGUAGES_RESOURCE_PATH": "languages.list",
         "STARTING_CANDIDATE_INDEX": "1",
         "MAX_PARAGRAPHS_PROVIDED": "300",
-        "CONTENT_PROVIDER_MARGIN": "50",
+        "CONTENT_PROVIDER_MARGIN": "100",
         "PARSER_TYPES_BY_PATTERN": "{ \"^https?://(?:www\\\\.)?gutenberg\\\\..+\": \"WebNarrative\", \"^https?://(?:www\\\\.)?medium\\\\.com/.+\": \"CustomMedium\" }",
         "MEDIUM_PREFIX_FILTER_REGEX": "\\]\\)\\}while\\(1\\);</x>(\\{.+\\})",
         "MEDIUM_URI_ROOT": "http://www.medium.com/p"
