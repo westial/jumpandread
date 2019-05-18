@@ -60,6 +60,7 @@ public class ForwardUseCase extends SafeUseCaseTemplate
         {
             if (countCandidatesCommand.execute(state.getSearchId()) < state.getCandidateIndex())
             {
+                state.updateCandidateIndex(state.getCandidateIndex() - 1);
                 presenter.addText(
                         "warning.forward.into.candidate.out.of.bounds(index(%s))",
                         String.valueOf(state.getCandidateIndex())
