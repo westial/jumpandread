@@ -251,7 +251,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A forward created use case for reading as times as default jumping factor after next
     When I invoke forward candidate use case for intent name as "Forward", paragraphs group as "2"
     Then The result after invocation is not null
-    And The speech contained in result is as "warning.forward.into.candidate.out.of.bounds(index(3))command.reading.list"
+    And The speech contained in result is as "warning.forward.into.candidate.out.of.bounds(index(2))command.reading.list"
     And The current state candidate index is as "2"
 
 
