@@ -15,5 +15,5 @@ public interface CandidateFactory
             Integer index,
             User user,
             String searchId
-    );
+    ) throws NoCandidateException;
 }

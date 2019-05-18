@@ -1,7 +1,6 @@
 package com.westial.alexa.jumpandread.application.command;
 
 import com.westial.alexa.jumpandread.application.exception.AlreadyStepped;
-import com.westial.alexa.jumpandread.application.exception.CannotContinueMandatoryReadException;
 import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -29,7 +28,7 @@ public abstract class ReadingCommandTemplate
             int signedCandidateMovingFactor,
             int paragraphsGroup,
             int paragraphsGroupFactor
-    )
+    ) throws NoCandidateException
     {
         List<Object[]> results = new ArrayList<>();
         return execute(
@@ -64,8 +63,9 @@ public abstract class ReadingCommandTemplate
             int paragraphsGroup,
             int paragraphsGroupFactor,
             List<Object[]> results
-    )
+    ) throws NoCandidateException
     {
+        Candidate candidate;
         System.out.printf(
                 "DEBUG: Executing Paragraphs Retrieval. Context: candidateIndex %d, user ID as %s, session ID as %s, search ID as %s\n",
                 candidateIndex,
@@ -73,7 +73,9 @@ public abstract class ReadingCommandTemplate
                 state.getSessionId(),
                 state.getSearchId()
         );
-        Candidate candidate = candidateFactory.create(
+        state.updateCandidateIndex(candidateIndex);
+
+        candidate = candidateFactory.create(
                 candidateIndex,
                 new User(state.getUserId(), state.getSessionId()),
                 state.getSearchId()
@@ -98,7 +100,6 @@ public abstract class ReadingCommandTemplate
             String content = candidate.dump(paragraphsGroup, Presenter.STRONG_TOKEN);
 
             appendResult(results, content);
-            state.updateCandidateIndex(candidateIndex);
             return results;
 
         } catch (ReadableEndWithXtraContent xtraContent)
@@ -150,16 +151,6 @@ public abstract class ReadingCommandTemplate
                     results
             );
 
-        } catch (NoCandidateException noCandidateException)
-        {
-            throw new CannotContinueMandatoryReadException(
-                    String.format(
-                            "Cannot continue reading due to a no Candidate " +
-                                    "exception for index %d. %s",
-                            candidateIndex,
-                            noCandidateException.getMessage()
-                    )
-            );
         }
     }
 

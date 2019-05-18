@@ -2,7 +2,7 @@ package com.westial.alexa.jumpandread.application;
 
 import com.westial.alexa.jumpandread.application.command.move.BackwardCommandFactory;
 import com.westial.alexa.jumpandread.application.command.move.MoveCommand;
-import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
+import com.westial.alexa.jumpandread.domain.NoCandidateException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
@@ -43,15 +43,29 @@ public class BackwardUseCase extends SafeUseCaseTemplate
 
         candidateIndex = state.getCandidateIndex();
 
-        presenter.addTexts(
-                backwardCommand.execute(
-                        state,
-                        candidateIndex,
-                        candidatesFactor,
-                        paragraphsGroup,
-                        paragraphsFactor
-                )
-        );
+        try
+        {
+            presenter.addTexts(
+                    backwardCommand.execute(
+                            state,
+                            candidateIndex,
+                            candidatesFactor,
+                            paragraphsGroup,
+                            paragraphsFactor
+                    )
+            );
+        } catch (NoCandidateException exc)
+        {
+            presenter.addText("warning.something.unexpected.on.backwards");
+            presenter.addText("command.reading.list");
+
+            System.out.printf(
+                    "WARNING: %s. Candidate index: %d, Search Id: %s",
+                    exc.getMessage(),
+                    candidateIndex,
+                    state.getSearchId()
+            );
+        }
 
         return presenter;
     }

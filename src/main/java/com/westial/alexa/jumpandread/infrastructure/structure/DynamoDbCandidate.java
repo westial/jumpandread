@@ -2,10 +2,7 @@ package com.westial.alexa.jumpandread.infrastructure.structure;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.westial.alexa.jumpandread.domain.Candidate;
-import com.westial.alexa.jumpandread.domain.CandidateRepository;
-import com.westial.alexa.jumpandread.domain.PagerEdgesCalculator;
-import com.westial.alexa.jumpandread.domain.Paragraph;
+import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.domain.content.*;
 import com.westial.alexa.jumpandread.infrastructure.service.DynamoDbParagraphListConverter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -104,7 +101,7 @@ public class DynamoDbCandidate extends Candidate
             TextContentProvider contentProvider,
             CandidateRepository repository,
             int maxParagraphsNumber,
-            PagerEdgesCalculator partCalculator)
+            PagerEdgesCalculator partCalculator) throws NoCandidateException
     {
         super(id, index, userId, sessionId, searchId, contentProvider, repository, maxParagraphsNumber);
         this.partCalculator = partCalculator;

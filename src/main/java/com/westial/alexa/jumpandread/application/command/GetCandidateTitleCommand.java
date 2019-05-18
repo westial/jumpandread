@@ -16,7 +16,7 @@ public class GetCandidateTitleCommand
     public String execute(
             State state,
             int candidateIndex
-    )
+    ) throws NoCandidateException
     {
         System.out.printf(
                 "DEBUG: Executing Candidate Title Retrieval. Context: candidateIndex %d, user ID as %s, session ID as %s, search ID as %s\n",

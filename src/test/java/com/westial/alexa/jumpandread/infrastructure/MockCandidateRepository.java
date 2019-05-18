@@ -11,7 +11,7 @@ public class MockCandidateRepository implements CandidateRepository
 {
 
     private final LinkedHashMap<Pair<Integer, String>, Candidate> candidates;
-    private final HashMap<String, List<Candidate>> candidatesBySearchId = new HashMap<>();
+    private final HashMap<String, Map<Integer, Candidate>> candidatesBySearchId = new HashMap<>();
 
     public MockCandidateRepository()
     {
@@ -22,9 +22,9 @@ public class MockCandidateRepository implements CandidateRepository
     {
         if (!candidatesBySearchId.containsKey(searchId))
         {
-            candidatesBySearchId.put(searchId, new ArrayList<>());
+            candidatesBySearchId.put(searchId, new HashMap<>());
         }
-        candidatesBySearchId.get(searchId).add(candidate);
+        candidatesBySearchId.get(searchId).put(candidate.getIndex(), candidate);
     }
 
     public MockCandidateRepository(Candidate forcedCandidate)
@@ -130,7 +130,11 @@ public class MockCandidateRepository implements CandidateRepository
     @Override
     public List<Candidate> all(String searchId)
     {
-        return candidatesBySearchId.get(searchId);
+        if (null == candidatesBySearchId.get(searchId))
+        {
+            return null;
+        }
+        return new ArrayList<>(candidatesBySearchId.get(searchId).values());
     }
 
     public String testOnlyGetLastSearchId()

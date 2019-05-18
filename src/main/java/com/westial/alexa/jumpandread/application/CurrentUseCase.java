@@ -3,7 +3,6 @@ package com.westial.alexa.jumpandread.application;
 import com.westial.alexa.jumpandread.application.command.CountCandidatesBySearchCommand;
 import com.westial.alexa.jumpandread.application.command.GetCandidateTitleCommand;
 import com.westial.alexa.jumpandread.application.command.ReadCommand;
-import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
 import com.westial.alexa.jumpandread.domain.Candidate;
 import com.westial.alexa.jumpandread.domain.NoCandidateException;
 import com.westial.alexa.jumpandread.domain.Presenter;
@@ -69,6 +68,11 @@ public class CurrentUseCase extends SafeUseCaseTemplate
             if (0 == candidatesCount)
             {
                 presenter.addText("warning.no.search.in.this.session.yet");
+                System.out.printf(
+                        "WARNING: %s. Search Id: %s",
+                        noCandidate.getMessage(),
+                        state.getSearchId()
+                );
             }
             else
             {
@@ -77,6 +81,13 @@ public class CurrentUseCase extends SafeUseCaseTemplate
                         String.valueOf(candidateIndex),
                         String.valueOf(Candidate.INDEX_START),
                         String.valueOf(candidatesCount -1 + Candidate.INDEX_START)
+                );
+                System.out.printf(
+                        "WARNING: %s. Candidate index: %d, start %d, end %d",
+                        noCandidate.getMessage(),
+                        candidateIndex,
+                        Candidate.INDEX_START,
+                        candidatesCount -1 + Candidate.INDEX_START
                 );
             }
         }

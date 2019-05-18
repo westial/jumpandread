@@ -94,7 +94,7 @@ public abstract class Candidate
             TextContentProvider contentProvider,
             CandidateRepository repository,
             Integer maxParagraphsNumber
-    )
+    ) throws NoCandidateException
     {
         this(
                 id,

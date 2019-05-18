@@ -29,20 +29,28 @@ public class PauseUseCase
     )
     {
         state.updateIntent(intentName);
+        Candidate candidate;
+        try
+        {
+            candidate = candidateFactory.create(
+                    state.getCandidateIndex(),
+                    new User(state.getUserId(), state.getSessionId()),
+                    state.getSearchId()
+            );
 
-        Candidate candidate = candidateFactory.create(
-                state.getCandidateIndex(),
-                new User(state.getUserId(), state.getSessionId()),
-                state.getSearchId()
-        );
+            candidate.rewind(
+                    paragraphsGroup * abs(unsignedParagraphsMoveFactor)
+            );
 
-        candidate.rewind(
-                paragraphsGroup * abs(unsignedParagraphsMoveFactor)
-        );
+            candidate.persist();
 
-        candidate.persist();
-
-        presenter.addText("warning.after.pause");
+            presenter.addText("warning.after.pause");
+        }
+        catch (NoCandidateException noCandidateException)
+        {
+            presenter.addText("warning.something.unexpected.after.pause");
+            presenter.addText("command.reading.list");
+        }
 
         return new PresenterView(presenter);
     }

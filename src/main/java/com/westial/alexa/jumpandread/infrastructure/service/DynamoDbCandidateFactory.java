@@ -52,7 +52,7 @@ public class DynamoDbCandidateFactory implements CandidateFactory
     }
 
     @Override
-    public Candidate create(Integer index, User user, String searchId)
+    public Candidate create(Integer index, User user, String searchId) throws NoCandidateException
     {
         return new DynamoDbCandidate(
                 Candidate.buildId(searchId, index),

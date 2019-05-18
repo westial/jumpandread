@@ -3,7 +3,7 @@ package com.westial.alexa.jumpandread.application;
 import com.westial.alexa.jumpandread.application.command.CountCandidatesBySearchCommand;
 import com.westial.alexa.jumpandread.application.command.move.ForwardCommandFactory;
 import com.westial.alexa.jumpandread.application.command.move.MoveCommand;
-import com.westial.alexa.jumpandread.application.exception.ReadableEndWithXtraContent;
+import com.westial.alexa.jumpandread.domain.NoCandidateException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.domain.State;
 
@@ -45,17 +45,40 @@ public class ForwardUseCase extends SafeUseCaseTemplate
 
         state.updateIntent(intentName);
 
-        candidateIndex = state.getCandidateIndex();
+        try
+        {
+            presenter.addTexts(
+                    forwardCommand.execute(
+                            state,
+                            state.getCandidateIndex(),
+                            candidatesFactor,
+                            paragraphsGroup,
+                            paragraphsFactor
+                    )
+            );
+        } catch (NoCandidateException exc)
+        {
+            if (countCandidatesCommand.execute(state.getSearchId()) < state.getCandidateIndex())
+            {
+                presenter.addText(
+                        "warning.forward.into.candidate.out.of.bounds(index(%s))",
+                        String.valueOf(state.getCandidateIndex())
+                );
+            }
+            else
+            {
+                presenter.addText("warning.something.unexpected.on.forward");
+            }
 
-        presenter.addTexts(
-                forwardCommand.execute(
-                        state,
-                        candidateIndex,
-                        candidatesFactor,
-                        paragraphsGroup,
-                        paragraphsFactor
-                )
-        );
+            presenter.addText("command.reading.list");
+
+            System.out.printf(
+                    "WARNING: %s. Candidate index: %d, Search Id: %s",
+                    exc.getMessage(),
+                    state.getCandidateIndex(),
+                    state.getSearchId()
+            );
+        }
 
         return presenter;
     }
