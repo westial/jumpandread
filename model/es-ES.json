@@ -122,6 +122,8 @@
                     "samples": [
                         "saltar",
                         "salta",
+                        "salta hacia adelante",
+                        "salta adelante",
                         "pasa",
                         "pega un salto",
                         "salto"
@@ -139,7 +141,8 @@
                         "el anterior",
                         "previo",
                         "el previo",
-                        "el de antes"
+                        "el de antes",
+                        "atrás"
                     ]
                 },
                 {
@@ -149,7 +152,8 @@
                         "rebobina",
                         "hacia atrás",
                         "tira atrás",
-                        "atrás"
+                        "salta atrás",
+                        "salta hacia atrás"
                     ]
                 },
                 {
