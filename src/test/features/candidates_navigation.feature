@@ -252,7 +252,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     When I invoke forward candidate use case for intent name as "Forward", paragraphs group as "2"
     Then The result after invocation is not null
     And The speech contained in result is as "warning.forward.into.candidate.out.of.bounds(index(3))command.reading.list"
-    And The current state candidate index is as "3"
+    And The current state candidate index is as "2"
 
 
   Scenario: Backward command, jump backwards as value of jumping factor and read paragraphs when current candidate has them
