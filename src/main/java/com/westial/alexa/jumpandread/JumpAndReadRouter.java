@@ -157,7 +157,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                         ),
                         new Backward(
                                 backwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
                         ),
                         new Next(
                                 forwardUseCase,
@@ -165,7 +166,8 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                         ),
                         new Forward(
                                 forwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
+                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
                         ),
                         new List(listUseCase),
                         new Launch(launchUseCase),

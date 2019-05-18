@@ -17,14 +17,17 @@ public class Backward implements RequestHandler
     public static final String INTENT_NAME = "Backward";
     private final BackwardUseCase rewindUseCase;
     private final int defaultParagraphsGroup;
+    private final int defaultParagraphsFactor;
 
     public Backward(
             BackwardUseCase rewindUseCase,
-            int defaultParagraphsGroup
+            int defaultParagraphsGroup,
+            int defaultParagraphsFactor
     )
     {
         this.rewindUseCase = rewindUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
+        this.defaultParagraphsFactor = defaultParagraphsFactor;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -47,7 +50,7 @@ public class Backward implements RequestHandler
                 INTENT_NAME,
                 null,
                 1,
-                4,
+                defaultParagraphsFactor,
                 defaultParagraphsGroup
         );
 

@@ -17,15 +17,18 @@ public class Forward implements RequestHandler
     public static final String INTENT_NAME = "Forward";
     private final ForwardUseCase forwardUseCase;
     private final int defaultParagraphsGroup;
+    private final int defaultParagraphsFactor;
 
     public Forward(
             ForwardUseCase forwardUseCase,
-            int defaultParagraphsGroup
+            int defaultParagraphsGroup,
+            int defaultParagraphsFactor
     )
     {
 
         this.forwardUseCase = forwardUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
+        this.defaultParagraphsFactor = defaultParagraphsFactor;
     }
 
     public boolean canHandle(HandlerInput input)
@@ -48,7 +51,7 @@ public class Forward implements RequestHandler
                 INTENT_NAME,
                 null,
                 1,
-                4,
+                defaultParagraphsFactor,
                 defaultParagraphsGroup
         );
 

@@ -16,6 +16,7 @@
         "CANDIDATE_TABLE_NAME": "jnr_candidate",
         "REFERRERS_RESOURCE_PATH": "referrers.list",
         "PARAGRAPHS_GROUP_MEMBERS_COUNT": "12",
+        "PARAGRAPHS_GROUP_JUMP_FACTOR": "4",
         "LANGUAGES_RESOURCE_PATH": "languages.list",
         "STARTING_CANDIDATE_INDEX": "1",
         "MAX_PARAGRAPHS_PROVIDED": "300",
