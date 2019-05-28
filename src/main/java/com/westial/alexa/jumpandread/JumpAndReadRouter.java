@@ -50,6 +50,12 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         RequestEnvelope request = serializer.deserialize(input, RequestEnvelope.class);
 
+        if (null == request.getSession())
+        {
+            // Warm Up
+            return;
+        }
+
         State state = stateManager.provide(
                 request.getSession().getUser().getUserId(),
                 request.getSession().getSessionId()
