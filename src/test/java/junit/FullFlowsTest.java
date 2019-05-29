@@ -38,16 +38,22 @@ public class FullFlowsTest
     private Context context;
 
     private final static String AWS_PROFILE = "westial";
+    private final static String AWS_PROFILE_USA = "westial_usa";
 
     private final static String LAZY_EXPECTED_PATTERN = "^<speak>.+</speak>$";
-    private final static String LAZY_FULL_LIST_EXPECTED_PATTERN = "^<speak>1.+</speak>$";
+    private final static String LAZY_FULL_LIST_EXPECTED_PATTERN = "^<speak>1" +
+            ".+</speak>$";
 
     private final static String SAMPLE_INTENTS_PATH = "intents/websearch";
-    private final static String SAMPLE_INTENTS_EXPECTED_FILENAME = "ssml_expected.json";
-    private final static String SAMPLE_NO_RESULTS_DIALOG_EXPECTED_FILENAME = "ssml_noresults_dialog.json";
+    private final static String SAMPLE_INTENTS_EXPECTED_FILENAME =
+            "ssml_expected.json";
+    private final static String SAMPLE_NO_RESULTS_DIALOG_EXPECTED_FILENAME =
+            "ssml_noresults_dialog.json";
     private final static String SAMPLE_INTENTS_EXTENSION = ".json";
-    private final static String SAMPLE_ENVIRONMENT_VARS = "environment_bypattern_es.json";
-    private final static String SAMPLE_FORCE_NO_RESULTS_ENVIRONMENT_VARS = "environment_bypattern_forcenoresults.json";
+    private final static String SAMPLE_ENVIRONMENT_VARS =
+            "environment_bypattern_es.json";
+    private final static String SAMPLE_FORCE_NO_RESULTS_ENVIRONMENT_VARS =
+            "environment_bypattern_forcenoresults.json";
     private OutputStream outputStreamResult;
     private static String userId;
     private static String sessionId;
@@ -83,7 +89,9 @@ public class FullFlowsTest
     {
         String rawConfig = FileSystemHelper.readResourceFile(rawConfigFile);
 
-        Map<String, String> configuration = (HashMap<String, String>) JsonService.loads(rawConfig).get("Variables");
+        Map<String, String> configuration =
+                (HashMap<String, String>) JsonService.loads(rawConfig).get(
+                        "Variables");
         configuration.put("AWS_PROFILE", AWS_PROFILE);
         JvmEnvironment.setEnv(configuration);
 
@@ -111,6 +119,29 @@ public class FullFlowsTest
         }
     }
 
+    private void setEnvironmentUsa(String rawConfigFile) throws Exception
+    {
+        String rawConfig = FileSystemHelper.readResourceFile(rawConfigFile);
+
+        Map<String, String> configuration =
+                (HashMap<String, String>) JsonService.loads(rawConfig).get(
+                        "Variables");
+        configuration.put("AWS_PROFILE", AWS_PROFILE_USA);
+        JvmEnvironment.setEnv(configuration);
+
+        String token = UUID.randomUUID().toString();
+
+        userId = String.format(
+                "amzn1.ask.account.%s.%s", "test",
+                token
+        );
+        sessionId = String.format(
+                "amzn1.echo-api.session.%s.%s",
+                "test",
+                token
+        );
+    }
+
     private static String buildInputEvent(INTENT intent) throws IOException
     {
 
@@ -135,21 +166,26 @@ public class FullFlowsTest
      * <p>
      * Fast check with a given session and user with testing commandline
      * parameters as:
-     * `-ea -DuserSession=amzn1.ask.account.test.cfd24248-c697-431f-8bbd-3ce3ff30a256:amzn1.echo-api.session.test.cfd24248-c697-431f-8bbd-3ce3ff30a256`
+     * `-ea -DuserSession=amzn1.ask.account.test
+     * .cfd24248-c697-431f-8bbd-3ce3ff30a256:amzn1.echo-api.session.test
+     * .cfd24248-c697-431f-8bbd-3ce3ff30a256`
      *
      * @throws Throwable
      */
     @Test
     public void fastCheckIntentsFlowCustomMedium() throws Throwable
     {
-        setEnvironment("environment_bypattern_force_custommedium_authorlist_en.json");
+        setEnvironment(
+                "environment_bypattern_force_custommedium_authorlist_en.json");
         handler = new DuckDuckGoJumpAndReadRouter();
         if (null == System.getProperty("userSession"))
         {
-            runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchcustommedium);
+            runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN,
+                    INTENT.searchcustommedium);
         }
         String witness;
-        runAndCheckIntentRead("^<speak>.+(?=The Tech - Medium).{100,}</speak>$");
+        runAndCheckIntentRead("^<speak>.+(?=The Tech - Medium).{100," +
+                "}</speak>$");
         runAndCheckIntentRepeat("^<speak>.+(?=The Tech - Medium).+</speak>$");
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
@@ -157,12 +193,40 @@ public class FullFlowsTest
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
         runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
         Assert.assertNotNull(witness);
-        Assert.assertEquals("Next/Previous result is not as expected", witness, outputStreamResult.toString());
+        Assert.assertEquals("Next/Previous result is not as expected",
+                witness, outputStreamResult.toString());
+    }
+
+    @Test
+    public void fastCheckIntentsFlowCustomMediumUsa() throws Throwable
+    {
+        setEnvironmentUsa(
+                "environment_bypattern_en_usa.json");
+        handler = new DuckDuckGoJumpAndReadRouter();
+        if (null == System.getProperty("userSession"))
+        {
+            runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN,
+                    INTENT.searchcustommedium);
+        }
+        String witness;
+        runAndCheckIntentRead("^<speak>.+(?=The Tech - Medium).{100," +
+                "}</speak>$");
+        runAndCheckIntentRepeat("^<speak>.+(?=The Tech - Medium).+</speak>$");
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        witness = outputStreamResult.toString();
+        runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
+        runAndCheckIntentPrevious(LAZY_EXPECTED_PATTERN);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals("Next/Previous result is not as expected",
+                witness, outputStreamResult.toString());
     }
 
     /**
-     * -ea -DuserSession=amzn1.ask.account.AFFBCDFK35GH77EAFBRYON6TTXC6O7R6HRZOQTKQGX4VSK2NGMWJWH4R7TVWVN4SQASBNBGVFUOWRUXEOBSBQTBDFSPUQNTTEUNT3BCJ7MOIVIQGE6I3QFJJNWXZ2KP6I2W4VAOQNGC6GSGC5BY6SDL6VQSSMQU5VCZ5PJKI37SC67HZVYDMX326USL52YILCN63RTG6WU4W5IA:amzn1.echo-api.session.3db89e17-482b-4865-ac35-2b50d18a23b4
-     * You have to change the candidateIndex number in the INTENT.readnumber file.
+     * -ea -DuserSession=amzn1.ask.account
+     * .AFFBCDFK35GH77EAFBRYON6TTXC6O7R6HRZOQTKQGX4VSK2NGMWJWH4R7TVWVN4SQASBNBGVFUOWRUXEOBSBQTBDFSPUQNTTEUNT3BCJ7MOIVIQGE6I3QFJJNWXZ2KP6I2W4VAOQNGC6GSGC5BY6SDL6VQSSMQU5VCZ5PJKI37SC67HZVYDMX326USL52YILCN63RTG6WU4W5IA:amzn1.echo-api.session.3db89e17-482b-4865-ac35-2b50d18a23b4
+     * You have to change the candidateIndex number in the INTENT.readnumber
+     * file.
      */
     @Test
     public void fastCheckMediumCase() throws Throwable
@@ -180,10 +244,12 @@ public class FullFlowsTest
     @Test
     public void fastCheckIntentsFlowWebNarrative() throws Throwable
     {
-        setEnvironment("environment_bypattern_force_mediumwebnarrative_es.json");
+        setEnvironment("environment_bypattern_force_mediumwebnarrative_es" +
+                ".json");
         handler = new DuckDuckGoJumpAndReadRouter();
         String witness;
-        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchmediumnarrative);
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN,
+                INTENT.searchmediumnarrative);
         runAndCheckIntentRead(LAZY_EXPECTED_PATTERN);
         witness = outputStreamResult.toString();
         runAndCheckIntentNext(LAZY_EXPECTED_PATTERN);
@@ -199,31 +265,56 @@ public class FullFlowsTest
         handler = new DuckDuckGoJumpAndReadRouter();
         if (null != System.getProperty("userSession"))
         {
-            // It has to be lazy checked and avoid first intents when recycling session.
+            // It has to be lazy checked and avoid first intents when
+            // recycling session.
             recycledFlow();
         }
         else
         {
-            runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
-            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
-            runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making Mathematical Connections).{200,}</speak>$");
-            runAndCheckIntentList("^<speak>1.+(?=SkyMath and the NCTM Standards.).{200,}</speak>$");
-            runAndCheckIntentNext("^<speak>The University Corporation for Atmospheric Research \\(UCAR\\) received funding from the National Science Foundation.{200,}</speak>$");
-            runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
-            runAndCheckIntentRepeat("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
-            runAndCheckIntentForward("^<speak>.+Those standards which are given explicit conceptual development are shown in the chart below.{200,}</speak>$");
+            runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el " +
+                    "funcionamiento básico brevemente).+(?=Puedes pedirme que" +
+                    " te repita los últimos párrafos del contenido).{100," +
+                    "}</speak>$");
+            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and" +
+                    " the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
+            runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making " +
+                    "Mathematical Connections).{200,}</speak>$");
+            runAndCheckIntentList("^<speak>1.+(?=SkyMath and the NCTM " +
+                    "Standards.).{200,}</speak>$");
+            runAndCheckIntentNext("^<speak>The University Corporation for " +
+                    "Atmospheric Research \\(UCAR\\) received funding from " +
+                    "the National Science Foundation.{200,}</speak>$");
+            runAndCheckIntentNext("^<speak>.+(?=calls for the development of " +
+                    "several mathematical concepts using a single).{200," +
+                    "}</speak>$");
+            runAndCheckIntentRepeat("^<speak>.+(?=calls for the development " +
+                    "of several mathematical concepts using a single).{200," +
+                    "}</speak>$");
+            runAndCheckIntentForward("^<speak>.+Those standards which are " +
+                    "given explicit conceptual development are shown in the " +
+                    "chart below.{200,}</speak>$");
             runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
             runAndCheckIntentBackward(LAZY_EXPECTED_PATTERN);
-            runAndCheckIntentBackward("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
+            runAndCheckIntentBackward("^<speak>.+(?=calls for the development" +
+                    " of several mathematical concepts using a single).{200," +
+                    "}</speak>$");
             runAndCheckIntentPause("^<speak>.+Alexa.+</speak>$");
-            runAndCheckIntentNext("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
-            runAndCheckIntentNext("^<speak>Brainstorming: Temperature and Temperature Changes.{200,}</speak>$");
-            runAndCheckIntentPrevious("^<speak>.+(?=calls for the development of several mathematical concepts using a single).{200,}</speak>$");
-            runAndCheckIntentPrevious("^<speak>.+(?=received funding from the National Science Foundation to prepare a middle school mathematics module incorporating real-time weather data).{200,}</speak>$");
+            runAndCheckIntentNext("^<speak>.+(?=calls for the development of " +
+                    "several mathematical concepts using a single).{200," +
+                    "}</speak>$");
+            runAndCheckIntentNext("^<speak>Brainstorming: Temperature and " +
+                    "Temperature Changes.{200,}</speak>$");
+            runAndCheckIntentPrevious("^<speak>.+(?=calls for the development" +
+                    " of several mathematical concepts using a single).{200," +
+                    "}</speak>$");
+            runAndCheckIntentPrevious("^<speak>.+(?=received funding from the" +
+                    " National Science Foundation to prepare a middle school " +
+                    "mathematics module incorporating real-time weather data)" +
+                    ".{200,}</speak>$");
         }
     }
 
@@ -232,8 +323,11 @@ public class FullFlowsTest
     {
         setEnvironment(SAMPLE_ENVIRONMENT_VARS);
         handler = new FreeFirstFailSafeJumpAndReadRouter();
-        runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el funcionamiento básico brevemente).+(?=Puedes pedirme que te repita los últimos párrafos del contenido).{100,}</speak>$");
-        runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
+        runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el " +
+                "funcionamiento básico brevemente).+(?=Puedes pedirme que te " +
+                "repita los últimos párrafos del contenido).{100,}</speak>$");
+        runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the" +
+                " NCTM Standards).{200,}</speak>$", INTENT.searchmath);
     }
 
     @Test
@@ -241,7 +335,8 @@ public class FullFlowsTest
     {
         setEnvironment(SAMPLE_FORCE_NO_RESULTS_ENVIRONMENT_VARS);
         handler = new DuckDuckGoJumpAndReadRouter();
-        runAndCheckIntentSearchDialogDirectives(LAZY_EXPECTED_PATTERN, INTENT.searchwithnoresults);
+        runAndCheckIntentSearchDialogDirectives(LAZY_EXPECTED_PATTERN,
+                INTENT.searchwithnoresults);
     }
 
     @Test
@@ -249,7 +344,8 @@ public class FullFlowsTest
     {
         setEnvironment(SAMPLE_ENVIRONMENT_VARS);
         handler = new FreeFirstFailSafeJumpAndReadRouter();
-        runAndCheckIntentHelp("^<speak>(?=Para ir directamente al servicio).+(?=Para volver a la lista de resultados).+</speak>$");
+        runAndCheckIntentHelp("^<speak>(?=Para ir directamente al servicio).+" +
+                "(?=Para volver a la lista de resultados).+</speak>$");
     }
 
     private void recycledFlow()
@@ -289,7 +385,8 @@ public class FullFlowsTest
         assertSsmlRegex(expectedPattern);
     }
 
-    private void runAndCheckIntentSearchThat(String expectedPattern, INTENT testIntent)
+    private void runAndCheckIntentSearchThat(String expectedPattern,
+                                             INTENT testIntent)
     {
         runIntent(testIntent);
         assertSsmlRegex(expectedPattern);
@@ -432,7 +529,8 @@ public class FullFlowsTest
                                 new RegularExpressionValueMatcher<>(expectedSsmlPattern)
                         ),
                         new Customization(
-                                "response.directives.updatedIntent.slots.searchTerms.value",
+                                "response.directives.updatedIntent.slots" +
+                                        ".searchTerms.value",
                                 new RegularExpressionValueMatcher<>(".+")
                         )
                 )
@@ -459,7 +557,8 @@ public class FullFlowsTest
 
     private OutputStream handle(String inputEvent) throws Exception
     {
-        InputStream inputStream = new ByteArrayInputStream(inputEvent.getBytes());
+        InputStream inputStream =
+                new ByteArrayInputStream(inputEvent.getBytes());
         OutputStream outputStream = new ByteArrayOutputStream();
         handler.handleRequest(inputStream, outputStream, context);
         return outputStream;
