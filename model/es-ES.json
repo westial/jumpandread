@@ -72,7 +72,25 @@
                         "encuentra {searchTerms}",
                         "busca {searchTerms}",
                         "para buscar {searchTerms}",
-                        "buscar {searchTerms}"
+                        "buscar {searchTerms}",
+                        "un texto sobre {searchTerms}",
+                        "un texto de {searchTerms}",
+                        "un texto que hable de {searchTerms}",
+                        "un texto con las palabras {searchTerms}",
+                        "un artículo sobre {searchTerms}",
+                        "un artículo de {searchTerms}",
+                        "un artículo que hable de {searchTerms}",
+                        "un artículo con las palabras {searchTerms}",
+                        "una publicación sobre {searchTerms}",
+                        "una publicación de {searchTerms}",
+                        "una publicación que hable de {searchTerms}",
+                        "una publicación con las palabras {searchTerms}",
+                        "sobre {searchTerms}",
+                        "acerca de {searchTerms}",
+                        "algo que tenga que ver con {searchTerms}",
+                        "una publicación",
+                        "un artículo",
+                        "algo"
                     ]
                 },
                 {
