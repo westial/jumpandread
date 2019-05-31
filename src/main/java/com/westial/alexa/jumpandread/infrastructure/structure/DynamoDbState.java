@@ -7,69 +7,69 @@ import com.westial.alexa.jumpandread.domain.StateRepository;
 
 import java.util.Calendar;
 
-public class DynamoDbState extends State
-{
-    public DynamoDbState()
-    {
-        super(null, null, null, null, null);
+public class DynamoDbState extends State {
+    public DynamoDbState() {
+        super(null, null, null, null, null, null);
     }
 
-    public DynamoDbState(StateRepository repository, String userId, String sessionId)
-    {
+    public DynamoDbState(
+            StateRepository repository,
+            String userId,
+            String sessionId
+    ) {
         super(repository, userId, sessionId);
     }
 
-    public DynamoDbState(StateRepository repository, String userId, String sessionId, String intent, String searchId)
-    {
-        super(repository, userId, sessionId, intent, searchId);
+    public DynamoDbState(
+            StateRepository repository,
+            String userId,
+            String sessionId,
+            String intent,
+            String searchId,
+            String searchTerms
+    ) {
+        super(repository, userId, sessionId, intent, searchId, searchTerms);
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "intent")
-    public String getIntent()
-    {
+    public String getIntent() {
         return super.getIntent();
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "user_id")
-    public String getUserId()
-    {
+    public String getUserId() {
         return super.getUserId();
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "session_id")
-    public String getSessionId()
-    {
+    public String getSessionId() {
         return super.getSessionId();
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "timestamp")
-    public Calendar getTimestamp()
-    {
+    public Calendar getTimestamp() {
         return super.getTimestamp();
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "search_id")
-    public String getSearchId()
-    {
+    public String getSearchId() {
         return super.getSearchId();
     }
 
     @Override
     @DynamoDBAttribute(attributeName = "candidate_index")
-    public Integer getCandidateIndex()
-    {
+    public Integer getCandidateIndex() {
         return super.getCandidateIndex();
     }
 
     @Override
     @DynamoDBHashKey(attributeName = "id")
-    public String getId()
-    {
+    public String getId() {
         return super.id;
     }
 
@@ -78,38 +78,35 @@ public class DynamoDbState extends State
     // Required by DynamoDB SDK
     //
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         super.id = id;
     }
 
-    public void setUserId(String userId)
-    {
+    public void setUserId(String userId) {
         super.userId = userId;
     }
 
-    public void setSessionId(String sessionId)
-    {
+    public void setSessionId(String sessionId) {
         super.sessionId = sessionId;
     }
 
-    public void setSearchId(String searchId)
-    {
+    public void setSearchId(String searchId) {
         super.searchId = searchId;
     }
 
-    public void setIntent(String intent)
-    {
+    public void setSearchTerms(String searchTerms) {
+        super.searchTerms = searchTerms;
+    }
+
+    public void setIntent(String intent) {
         super.intent = intent;
     }
 
-    public void setTimestamp(Calendar timestamp)
-    {
+    public void setTimestamp(Calendar timestamp) {
         super.timestamp = timestamp;
     }
 
-    public void setCandidateIndex(Integer candidateIndex)
-    {
+    public void setCandidateIndex(Integer candidateIndex) {
         super.candidateIndex = candidateIndex;
     }
 }

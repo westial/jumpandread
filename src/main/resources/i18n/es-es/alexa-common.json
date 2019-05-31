@@ -31,6 +31,8 @@
  "salutation.bye.1": "Hasta pronto.",
  "salutation.bye.2": "Adiós.",
  "warning.candidate.has.no.elements.(index(%s))": "El resultado de búsqueda número %s o no dispone de contenido legible o ya se ha leído todo. Salto a leer el siguiente resultado.",
+ "response.search.results.(terms(%s),count(%d))": "Después de buscar por %s, encontré %s resultados:",
+ "response.search.result.only.one.(terms(%s))": "Después de buscar por %s, encontré un solo resultado:",
  "response.search.result.listing.(index(%s),title(%s),domain(%s))": "Resultado de búsqueda número %s, titulado, %s, publicado en, %s",
  "warning.no.candidate.for.this.index.(index(%s),start(%s),end(%s))": "No recuerdo haberte dado el número %s en la lista de resultados. La lista de resultados empieza en el número %s y tiene un total de %s resultados.",
  "warning.no.search.in.this.session.yet": "En esta sesión todavía no has buscado nada y por lo tanto no puedo ofrecerte ningún resultado."

@@ -12,12 +12,26 @@
                         }
                     ],
                     "samples": [
+                        "el {candidateIndex}",
+                        "la {candidateIndex}",
                         "{candidateIndex}",
                         "ves al {candidateIndex}",
+                        "ir al {candidateIndex}",
+                        "ves al número {candidateIndex}",
+                        "ir al número {candidateIndex}",
+                        "ves al resultado {candidateIndex}",
+                        "ir al resultado {candidateIndex}",
+                        "ves al resultado número {candidateIndex}",
+                        "ir al resultado número {candidateIndex}",
                         "léeme {candidateIndex}",
                         "leer {candidateIndex}",
                         "por favor léeme el {candidateIndex}",
-                        "lee {candidateIndex}"
+                        "lee {candidateIndex}",
+                        "me lea el resultado número {candidateIndex}",
+                        "quiero oír el resultado número {candidateIndex}",
+                        "quiero escuchar el {candidateIndex}",
+                        "quiero escuchar el número {candidateIndex}",
+                        "quiero escuchar el resultado número {candidateIndex}"
                     ]
                 },
                 {
@@ -239,7 +253,12 @@
                         "la última lista de resultados",
                         "dame la lista",
                         "listar",
-                        "lista"
+                        "lista",
+                        "me liste los resultados de la última búsqueda",
+                        "quiero oír la lista de resultados",
+                        "quiero oír la última lista de resultados",
+                        "quiero oír los últimos resultados",
+                        "qué resultados hay en la lista"
                     ]
                 }
             ],

@@ -16,6 +16,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import utils.FileSystemHelper;
 import utils.JsonService;
@@ -188,7 +189,8 @@ public class SearchCandidatesSteps
     {
         try
         {
-            foundCandidates = searchCandidates.execute(state, searchTerms);
+            Pair<Integer, String> results = searchCandidates.execute(state, searchTerms);
+            foundCandidates = results.getRight();
         } catch (SearchException | NoSearchResultException e)
         {
             exception = e;
@@ -284,7 +286,7 @@ public class SearchCandidatesSteps
     @Given("^A state with the user as \"([^\"]*)\", session as \"([^\"]*)\" and intent as \"([^\"]*)\"$")
     public void aStateWithTheUserAsSessionAsAndIntentAs(String userId, String sessionId, String intent) throws Throwable
     {
-        state = stateFactory.create(userId, sessionId, intent, "no matters");
+        state = stateFactory.create(userId, sessionId, intent, "no matters", "no matters");
     }
 
     @Then("^The service returned no candidates$")

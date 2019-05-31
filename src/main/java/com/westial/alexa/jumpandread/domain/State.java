@@ -14,6 +14,7 @@ public abstract class State
     protected String sessionId;
     protected String intent;
     protected String searchId;
+    protected String searchTerms;
     protected Calendar timestamp;
     protected Integer candidateIndex;
 
@@ -22,13 +23,16 @@ public abstract class State
             String userId,
             String sessionId,
             String intent,
-            String searchId)
+            String searchId,
+            String searchTerms
+    )
     {
         this.repository = repository;
         this.userId = userId;
         this.sessionId = sessionId;
         this.intent = intent;
         this.searchId = searchId;
+        this.searchTerms = searchTerms;
 
         this.id = buildId(this.userId, this.sessionId);
     }
@@ -38,7 +42,7 @@ public abstract class State
             String userId,
             String sessionId)
     {
-        this(repository, userId, sessionId, null, null);
+        this(repository, userId, sessionId, null, null, null);
         System.out.printf(
                 "DEBUG: Trying to retrieve State from repository. Context: " +
                         "user ID as %s, session ID as %s\n",
@@ -52,16 +56,18 @@ public abstract class State
                     "DEBUG: State retrieved from repository. Context: " +
                             "user ID as %s, session ID as %s, search " +
                             "ID as %s, candidateIndex as %d, " +
-                            "Intent as %s\n",
+                            "Intent as %s, terms as %s\n",
                     state.getUserId(),
                     state.getSessionId(),
                     state.getSearchId(),
                     state.getCandidateIndex(),
-                    state.getIntent()
+                    state.getIntent(),
+                    state.getSearchTerms()
             );
             searchId = state.getSearchId();
             candidateIndex = state.getCandidateIndex();
             intent = state.getIntent();
+            searchTerms = state.getSearchTerms();
         }
     }
 
@@ -71,9 +77,10 @@ public abstract class State
         // return String.format("%s:%s", userId, sessionId);
     }
 
-    public void updateSearchId()
+    public void createSearchId(String terms)
     {
         searchId = randomUUID().toString();
+        searchTerms = terms;
         candidateIndex = null;
         persist();
     }
@@ -120,6 +127,11 @@ public abstract class State
     public String getSearchId()
     {
         return searchId;
+    }
+
+    public String getSearchTerms()
+    {
+        return searchTerms;
     }
 
     public String getId()

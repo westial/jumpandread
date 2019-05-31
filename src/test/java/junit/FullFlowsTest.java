@@ -256,7 +256,7 @@ public class FullFlowsTest
                     "funcionamiento básico brevemente).+(?=Puedes pedirme que" +
                     " te repita los últimos párrafos del contenido).{100," +
                     "}</speak>$");
-            runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and" +
+            runAndCheckIntentSearchThat("^<speak>.+:1<break[^/]+/>(?=SkyMath and" +
                     " the NCTM Standards).{200,}</speak>$", INTENT.searchmath);
             runAndCheckIntentRead("^<speak>.+(?=Project SkyMath: Making " +
                     "Mathematical Connections).{200,}</speak>$");
@@ -307,7 +307,7 @@ public class FullFlowsTest
         runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el " +
                 "funcionamiento básico brevemente).+(?=Puedes pedirme que te " +
                 "repita los últimos párrafos del contenido).{100,}</speak>$");
-        runAndCheckIntentSearchThat("^<speak>1<break[^/]+/>(?=SkyMath and the" +
+        runAndCheckIntentSearchThat("^<speak>.+:1<break[^/]+/>(?=SkyMath and the" +
                 " NCTM Standards).{200,}</speak>$", INTENT.searchmath);
     }
 

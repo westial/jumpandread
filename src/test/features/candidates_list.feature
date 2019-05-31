@@ -5,7 +5,7 @@ Feature: Proving candidates listing
     And The mock candidate repository contains candidates for user as "user123456789", session as "session123456789" for search id as "mysearchid" at "10"
     And The mock candidate repository contains candidates for user as "userOther", session as "sessionOther" for search id as "othersearchid" at "10"
     And A user state repository for listing
-    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1"
+    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1", search terms as "bla bli blu"
     And A command for getting list by search ID
     And An Alexa Presenter service for listing
     And A getting search if list use case
@@ -27,7 +27,7 @@ Feature: Proving candidates listing
   Scenario: Trying to get the last candidates list for a state with search Id but no candidates gets the empty list warning
     Given A mock candidate repository for listing
     And A user state repository for listing
-    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1"
+    And A current state for listing with user Id as "user123456789", session Id as "session123456789", search Id as "mysearchid", candidateIndex as "1", search terms as "bla bli blu"
     And A command for getting list by search ID
     And An Alexa Presenter service for listing
     And A getting search if list use case

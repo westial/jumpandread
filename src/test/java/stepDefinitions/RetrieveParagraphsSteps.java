@@ -108,10 +108,10 @@ public class RetrieveParagraphsSteps
         contentGetter = new MockQueueContentGetter(contents);
     }
 
-    @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
-    public void aCurrentStateWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex) throws Throwable
+    @Given("^A current state with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\", search terms as \"([^\"]*)\"$")
+    public void aCurrentStateWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex, String searchTerms) throws Throwable
     {
-        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
+        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId, searchTerms);
         state.updateCandidateIndex(Integer.parseInt(rawCandidateIndex));
     }
 

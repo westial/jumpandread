@@ -241,10 +241,10 @@ public class CandidatesListSteps
         stateRepository = new MockStateRepository();
     }
 
-    @And("^A current state for listing with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\"$")
-    public void aCurrentStateForListingWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex) throws Throwable
+    @And("^A current state for listing with user Id as \"([^\"]*)\", session Id as \"([^\"]*)\", search Id as \"([^\"]*)\", candidateIndex as \"([^\"]*)\", search terms as \"([^\"]*)\"$")
+    public void aCurrentStateForListingWithUserIdAsSessionIdAsSearchIdAsCandidateIndexAs(String userId, String sessionId, String searchId, String rawCandidateIndex, String searchTerms) throws Throwable
     {
-        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId);
+        state = new DynamoDbState(stateRepository, userId, sessionId, INTENT_NAME, searchId, searchTerms);
         state.updateCandidateIndex(Integer.parseInt(rawCandidateIndex));
     }
 

@@ -7,7 +7,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -32,7 +32,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -59,7 +59,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -84,7 +84,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -109,7 +109,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -134,7 +134,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 2              |
@@ -184,7 +184,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -210,7 +210,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 3              |
@@ -236,7 +236,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "2"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "2", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 6              |
@@ -262,7 +262,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
       | sample_7_paragraphs_following.html |
     And A mock text content provider for retrieval
     And A user state repository for parsing
-    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1"
+    And A current state with user Id as "ab551872-0a24-4ea6-bfca-347ca76ee8ce", session Id as "12345678-1234-4ea6-bfca-347ca7612345", search Id as "87654321-7654-4ea6-bfca-747ca111111", candidateIndex as "1", search terms as "bla bli blu"
     And A searching result candidate list as follows
       | index | userId                               | sessionId                            | searchId                            | title                  | url                         | description         | paragraphIndex |
       | 1     | ab551872-0a24-4ea6-bfca-347ca76ee8ce | 12345678-1234-4ea6-bfca-347ca7612345 | 87654321-7654-4ea6-bfca-747ca111111 | First candidate title  | http://first.candidate.com  | first bla bla desc  | 5              |

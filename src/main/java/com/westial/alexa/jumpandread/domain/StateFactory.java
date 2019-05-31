@@ -10,7 +10,8 @@ public interface StateFactory
             String userId,
             String sessionId,
             String intent,
-            String searchId);
+            String searchId,
+            String searchTerms);
 
     /**
      * State factory when you want to retrieve current searchId and create a

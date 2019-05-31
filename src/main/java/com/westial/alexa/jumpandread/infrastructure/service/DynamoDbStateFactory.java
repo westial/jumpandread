@@ -4,12 +4,10 @@ import com.westial.alexa.jumpandread.domain.StateFactory;
 import com.westial.alexa.jumpandread.domain.StateRepository;
 import com.westial.alexa.jumpandread.infrastructure.structure.DynamoDbState;
 
-public class DynamoDbStateFactory implements StateFactory
-{
+public class DynamoDbStateFactory implements StateFactory {
     private final StateRepository repository;
 
-    public DynamoDbStateFactory(StateRepository repository)
-    {
+    public DynamoDbStateFactory(StateRepository repository) {
         this.repository = repository;
     }
 
@@ -18,18 +16,24 @@ public class DynamoDbStateFactory implements StateFactory
             String userId,
             String sessionId,
             String intent,
-            String searchId
-    )
-    {
-        return new DynamoDbState(repository, userId, sessionId, intent, searchId);
+            String searchId,
+            String searchTerms
+    ) {
+        return new DynamoDbState(
+                repository,
+                userId,
+                sessionId,
+                intent,
+                searchId,
+                searchTerms
+        );
     }
 
     @Override
     public DynamoDbState create(
             String userId,
             String sessionId
-    )
-    {
+    ) {
         return new DynamoDbState(repository, userId, sessionId);
     }
 }

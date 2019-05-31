@@ -4,6 +4,8 @@ import com.westial.alexa.jumpandread.application.exception.NoSearchResultExcepti
 import com.westial.alexa.jumpandread.application.exception.ParsingNoSearchResultException;
 import com.westial.alexa.jumpandread.domain.*;
 import com.westial.alexa.jumpandread.infrastructure.exception.SearchException;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -17,10 +19,10 @@ public class SearchCandidatesCommand
         this.candidatesSearch = candidatesSearch;
     }
 
-    public String execute(State state, String terms) throws SearchException, NoSearchResultException
+    public Pair<Integer, String> execute(State state, String terms) throws SearchException, NoSearchResultException
     {
         StringBuilder candidatesList = new StringBuilder();
-        state.updateSearchId();
+        state.createSearchId(terms);
         List<Candidate> candidates = candidatesSearch.find(
                 new User(
                         state.getUserId(),
@@ -43,6 +45,6 @@ public class SearchCandidatesCommand
             candidate.persist();
             candidatesList.append(candidate.buildListing(Presenter.STRONG_TOKEN));
         }
-        return candidatesList.toString();
+        return new ImmutablePair<>(candidates.size(), candidatesList.toString());
     }
 }
