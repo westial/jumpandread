@@ -56,6 +56,7 @@ public class SearchUseCase {
                     );
                 }
 
+                presenter.addText(Presenter.LONGEST_TOKEN);
                 presenter.addText(listing);
 
             }
