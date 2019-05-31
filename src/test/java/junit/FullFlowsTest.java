@@ -222,25 +222,6 @@ public class FullFlowsTest
                 witness, outputStreamResult.toString());
     }
 
-    /**
-     * -ea -DuserSession=amzn1.ask.account
-     * .AFFBCDFK35GH77EAFBRYON6TTXC6O7R6HRZOQTKQGX4VSK2NGMWJWH4R7TVWVN4SQASBNBGVFUOWRUXEOBSBQTBDFSPUQNTTEUNT3BCJ7MOIVIQGE6I3QFJJNWXZ2KP6I2W4VAOQNGC6GSGC5BY6SDL6VQSSMQU5VCZ5PJKI37SC67HZVYDMX326USL52YILCN63RTG6WU4W5IA:amzn1.echo-api.session.3db89e17-482b-4865-ac35-2b50d18a23b4
-     * You have to change the candidateIndex number in the INTENT.readnumber
-     * file.
-     */
-    @Test
-    public void fastCheckMediumCase() throws Throwable
-    {
-        setEnvironment("environment.case.bypattern.medium.es.json");
-        handler = new DuckDuckGoJumpAndReadRouter();
-        String witness;
-        runAndCheckIntentReadNumber(LAZY_EXPECTED_PATTERN);
-        witness = outputStreamResult.toString();
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-        witness = outputStreamResult.toString();
-        runAndCheckIntentForward(LAZY_EXPECTED_PATTERN);
-    }
-
     @Test
     public void fastCheckIntentsFlowWebNarrative() throws Throwable
     {

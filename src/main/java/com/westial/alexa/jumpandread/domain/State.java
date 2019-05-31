@@ -67,7 +67,8 @@ public abstract class State
 
     public static String buildId(String userId, String sessionId)
     {
-        return String.format("%s:%s", userId, sessionId);
+        return userId;
+        // return String.format("%s:%s", userId, sessionId);
     }
 
     public void updateSearchId()
