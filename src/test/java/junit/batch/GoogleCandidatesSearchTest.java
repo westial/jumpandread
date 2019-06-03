@@ -62,7 +62,8 @@ public class GoogleCandidatesSearchTest
                 "es-ES",
                 candidateFactory,
                 10,
-                "filetype:html OR filetype:htm"
+                "filetype:html OR filetype:htm",
+                new RegexTextCleaner("\\b[^-]+")
         );
     }
 

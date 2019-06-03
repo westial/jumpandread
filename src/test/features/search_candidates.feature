@@ -58,10 +58,10 @@ Feature: Search some terms and try fail safe searching service
     And A DuckDuckGo candidates search service for url as "http://duck.dot", iso 4-letters locale as "es-ES"
     When I ask to find candidates to search service for user with ID as "userid1234-1234-1234", session ID as "sessionid1234-1234-1234", search ID as "searchid1234-1234-1234", terms as "word1 word2 word3"
     Then The service returned a list with "29" candidates
-    And Candidate with position "3" in list has property "title" as "Recetas de Melones - recetasmelones.blogspot.com"
+    And Candidate with position "3" in list has property "title" as "Recetas de Melones"
     And Candidate with position "17" in list has property "description" as "Para hacer la sopa de melón, lo primero que tienes que hacer es retirar toda la piel de los melones, que en esta variedad es una piel bastante fina. Una vez limpios, el siguiente paso es trocear la pulpa y pasarla por la batidora."
     And Candidate with position "19" in list has property "url" as "https://www.petitchef.es/recetas/recetas-con-melon"
-    And Candidate with position "23" in list has property "title" as "Cómo distinguir un melón maduro - YouTube"
+    And Candidate with position "23" in list has property "title" as "Cómo distinguir un melón maduro"
     And Candidate with position "28" in list has property "url" as "https://elcomidista.elpais.com/elcomidista/2013/08/20/receta/1376974800_137697.html"
 
   Scenario: Properly parse results, issue 54-bug-nullpointer-exception-reading-duckduckgo-results

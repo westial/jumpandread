@@ -9,6 +9,9 @@ public class GoogleCandidatesSearchFactory implements CandidatesSearchFactory
     @Override
     public CandidatesSearch create(Configuration config, CandidateFactory candidateFactory)
     {
+        TextCleaner titleCleaner = new RegexTextCleaner(
+                config.retrieve("TITLE_CLEANER_EXTRACT_PATTERN")
+        );
         return new GoogleCandidatesSearch(
                 Integer.parseInt(config.retrieve("STARTING_CANDIDATE_INDEX")),
                 config.retrieve("GOOGLE_KEY"),
@@ -17,7 +20,8 @@ public class GoogleCandidatesSearchFactory implements CandidatesSearchFactory
                 config.retrieve("ISO4_LANGUAGE"),
                 candidateFactory,
                 Integer.parseInt(config.retrieve("GOOGLE_RESULTS_BY_SEARCH")),
-                config.retrieve("GOOGLE_DORK", null)
+                config.retrieve("GOOGLE_DORK", null),
+                titleCleaner
         );
     }
 }

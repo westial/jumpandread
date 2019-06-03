@@ -15,6 +15,14 @@ import java.util.List;
 
 public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
 {
+
+    private final TextCleaner titleCleaner;
+
+    public JsoupDuckDuckGoResultParser(TextCleaner titleCleaner)
+    {
+        this.titleCleaner = titleCleaner;
+    }
+
     /**
      * Parse string content and return duckduckgo result structure items or null
      * if no result is found.
@@ -58,7 +66,7 @@ public class JsoupDuckDuckGoResultParser implements DuckDuckGoResultParser
         Element titleLink = resultNode
                 .select("a.result__a")
                 .first();
-        String title = titleLink.text();
+        String title = titleCleaner.extract(titleLink.text());
         String url = titleLink.attr("href");
         Elements descriptionNodes = resultNode.select("a.result__snippet");
         if (!descriptionNodes.isEmpty())

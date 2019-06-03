@@ -55,6 +55,8 @@
                         "quiero oír un artículo sobre {searchTerms}",
                         "quiero oír un texto sobre {searchTerms}",
                         "busque {searchTerms}",
+                        "por {searchTerms}",
+                        "para {searchTerms}",
                         "me busque {searchTerms}",
                         "me lea {searchTerms}",
                         "me busque algo de {searchTerms}",
@@ -176,6 +178,7 @@
                         "venga",
                         "adelante",
                         "sigue",
+                        "seguir",
                         "continuar"
                     ]
                 },

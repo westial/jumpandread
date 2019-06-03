@@ -1,4 +1,4 @@
-package junit;
+package junit.batch;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;

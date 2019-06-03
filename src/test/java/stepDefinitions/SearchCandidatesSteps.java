@@ -69,7 +69,7 @@ public class SearchCandidatesSteps
     @Given("^A DuckDuckGo page parser service$")
     public void aDuckDuckGoPageParserServiceForUrlAs() throws Throwable
     {
-        pageParser = new JsoupDuckDuckGoResultParser();
+        pageParser = new JsoupDuckDuckGoResultParser(new RegexTextCleaner("\\b[^-]+"));
     }
 
     @Given("^A DuckDuckGo candidates search service for url as \"([^\"]*)\", iso 4-letters locale as \"([^\"]*)\"$")

@@ -9,10 +9,13 @@ public class DuckDuckGoCandidatesSearchFactory implements CandidatesSearchFactor
     @Override
     public CandidatesSearch create(Configuration config, CandidateFactory candidateFactory)
     {
+        TextCleaner titleCleaner = new RegexTextCleaner(
+                config.retrieve("TITLE_CLEANER_EXTRACT_PATTERN")
+        );
         return new DuckDuckGoCandidatesSearch(
                 Integer.parseInt(config.retrieve("STARTING_CANDIDATE_INDEX")),
                 new UnirestWebClient(),
-                new JsoupDuckDuckGoResultParser(),
+                new JsoupDuckDuckGoResultParser(titleCleaner),
                 config.retrieve("DUCK_URL"),
                 new RandomDuckDuckGoHeadersProvider(
                         config.retrieve("AGENTS_RESOURCE_PATH"),

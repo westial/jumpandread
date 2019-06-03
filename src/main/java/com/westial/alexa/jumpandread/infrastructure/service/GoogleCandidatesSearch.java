@@ -28,6 +28,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
     private final String googleCx;
     private final CandidateFactory candidateFactory;
     private final int resultsBySearch;
+    private final TextCleaner titleCleaner;
     private final String googleLr;
     private final String dork;
 
@@ -42,7 +43,8 @@ public class GoogleCandidatesSearch implements CandidatesSearch
             String iso4Language,
             CandidateFactory candidateFactory,
             int resultsBySearch,
-            String dork)
+            String dork,
+            TextCleaner titleCleaner)
     {
         this.startingIndex = startingIndex;
         this.googleKey = googleKey;
@@ -51,6 +53,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
 
         this.candidateFactory = candidateFactory;
         this.resultsBySearch = resultsBySearch;
+        this.titleCleaner = titleCleaner;
 
         HttpTransport httpTransport = new NetHttpTransport();
         JsonFactory jsonFactory = new JacksonFactory();
@@ -93,7 +96,7 @@ public class GoogleCandidatesSearch implements CandidatesSearch
                         resultsIndex,
                         user,
                         searchId,
-                        result.getTitle(),
+                        titleCleaner.extract(result.getTitle()),
                         result.getFormattedUrl(),
                         result.getSnippet()
                 );

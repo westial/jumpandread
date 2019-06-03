@@ -91,9 +91,7 @@ public abstract class ReadingCommandTemplate
                         "response.search.result.listing.(index(%s),title(%s),domain(%s))",
                         String.valueOf(candidateIndex),
                         candidate.getTitle(),
-                        Presenter.DOMAIN_START_TOKEN
-                                + candidate.getPublishedBy()
-                                + Presenter.DOMAIN_END_TOKEN
+                        candidate.getPublishedBy()
                 );
                 appendResult(results, Presenter.STRONG_TOKEN);
             }

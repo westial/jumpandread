@@ -38,6 +38,7 @@ public class DuckDuckGoCandidatesSearchTest
         testEnv.put("LANGUAGES_RESOURCE_PATH", "languages.list");
         testEnv.put("REFERRERS_RESOURCE_PATH", "referrers.list");
         testEnv.put("DUCK_LOCALE_RESOURCE_PATH", "duckduckgo.kl.lang.es.list");
+        testEnv.put("TITLE_CLEANER_EXTRACT_PATTERN", "\\b[^-]+");
         testEnv.put("ISO4_LANGUAGE", "es-ES");
         testEnv.put("MAX_PARAGRAPHS_PROVIDED", "50");
         testEnv.put("CONTENT_PROVIDER_MARGIN", "20");
