@@ -6,7 +6,7 @@
  "presentation.getting.started.obvious": "Buscar, busca{{ . }} leer, lee{{ . }} saltar, salta{{ . }}{{ . }}... ji, ji, ji. Te lo repito. Buscar, leer, saltar.",
  "presentation.getting.started.jocking": "El conejo busca una receta de zanahoria pero no sabe leer, solo sabe saltar. Je, je, je, qué malos somos los autómatas haciendo bromas...",
  "command.search.with.terms": "Si quieres buscar algo concreto, dime,{{ . }} Alexa, busca, y las palabras de lo que quieras buscar",
- "command.read.with.number": "Cuando he buscado por las palabras que me has indicado, te devuelvo una lista numerada con los títulos de los resultados que he obtenido. Dime,{{ . }} Alexa, lee, y el número de resultado que quieras entrar a leer. Y a continuación seleccionaré un primer grupo de parágrafos y los empezaré a leer.",
+ "command.read.with.number": "Cuando he buscado por las palabras que me has indicado, te devuelvo una lista numerada con los títulos completos, o parte de ellos cuando son muy largos, de los resultados que he obtenido. Dime,{{ . }} Alexa, lee, y el número de resultado que quieras entrar a leer. Y a continuación seleccionaré un primer grupo de parágrafos y los empezaré a leer.",
  "command.reading.jump": "Si los párrafos del contenido que he seleccionado no te gustan y quieres ir hacia adelante rápidamente, dime,{{ . }} Alexa, salta.",
  "command.reading.next": "Cuando quieras pasar al siguiente grupo de parágrafos también puedes usar la orden ,{{ . }} Alexa, siguiente.",
  "command.reading.repeat": "Puedes pedirme que te repita los últimos párrafos del contenido que te he leído, dime,{{ . }} Alexa, repetir.",
