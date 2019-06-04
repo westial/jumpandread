@@ -1,4 +1,0 @@
-{
-    "^https?://(?:www\\.)?gutenberg\\..+": "WebNarrative",
-    "^https?://(?:www\\.)?medium\\.com/.+": "CustomMedium"
-}

@@ -12,6 +12,8 @@
                         }
                     ],
                     "samples": [
+                        "número {candidateIndex}",
+                        "el número {candidateIndex}",
                         "el {candidateIndex}",
                         "la {candidateIndex}",
                         "{candidateIndex}",

@@ -1,5 +1,0 @@
-{
-    "^https?://(?:www\\.)?gutenberg\\..+": "WebNarrative",
-    "^https?://(?:www\\.)?medium\\.com/@[^/]+/.+": "WebSearch",
-    "^https?://(?:www\\.)?medium\\.com/[^@].+": "CustomMedium"
-}

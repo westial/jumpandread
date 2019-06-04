@@ -1,5 +1,0 @@
-{
-    "hello": "common hola never has to be published",
-    "Hello %s thanks a lot, how many? ... like that %s": "Hola %s muchas gracias, cuántas? ... como unas %s",
-    "This is a proof only,{{ , }} my name is %s and I am %d years old.{{ . }} And you?": "Esto es una prueba,{{ , }} mi nombre es %s y tengo %d años.{{ . }} Y tú?"
-}
