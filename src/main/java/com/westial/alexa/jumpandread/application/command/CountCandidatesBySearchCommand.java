@@ -13,6 +13,10 @@ public class CountCandidatesBySearchCommand
 
     public Integer execute(String searchId)
     {
+        if (null == searchId)
+        {
+            return 0;
+        }
         return repository.countBySearch(searchId);
     }
 }

@@ -155,46 +155,61 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         // Create Skill
 
-        skill = Skills.standard()
-                .addRequestHandlers(
-                        new Previous(
-                                backwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-                        ),
-                        new Backward(
-                                backwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
-                        ),
-                        new Next(
-                                forwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-                        ),
-                        new Forward(
-                                forwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
-                        ),
-                        new List(listUseCase),
-                        new Launch(launchUseCase),
-                        new Help(helpUseCase),
-                        new Pause(
-                                pauseUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-                        ),
-                        new Read(
-                                currentUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-                        ),
-                        new Repeat(
-                                backwardUseCase,
-                                Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
-                        ),
-                        new Search(searchUseCase),
-                        new SessionEnded(sessionEndedUseCase, launchUseCase),
-                        new Stop(stopUseCase)
-                )
-                .build();
+        if (null == state.getSearchId())
+        {
+            skill = Skills.standard()
+                    .addRequestHandlers(
+                            new Launch(launchUseCase),
+                            new Search(searchUseCase),
+                            new Help(helpUseCase),
+                            new SessionEnded(sessionEndedUseCase, launchUseCase),
+                            new Stop(stopUseCase),
+                            new FallbackSearch(searchUseCase)
+                    ).build();
+        } else
+        {
+            skill = Skills.standard()
+                    .addRequestHandlers(
+                            new Previous(
+                                    backwardUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                            ),
+                            new Backward(
+                                    backwardUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
+                            ),
+                            new Next(
+                                    forwardUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                            ),
+                            new Forward(
+                                    forwardUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT")),
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_JUMP_FACTOR"))
+                            ),
+                            new List(listUseCase),
+                            new Launch(launchUseCase),
+                            new Help(helpUseCase),
+                            new Pause(
+                                    pauseUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                            ),
+                            new Read(
+                                    currentUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                            ),
+                            new Repeat(
+                                    backwardUseCase,
+                                    Integer.parseInt(config.retrieve("PARAGRAPHS_GROUP_MEMBERS_COUNT"))
+                            ),
+                            new Search(searchUseCase),
+                            new SessionEnded(sessionEndedUseCase, launchUseCase),
+                            new Stop(stopUseCase)
+                    )
+                    .build();
+
+        }
 
         response = skill.invoke(request);
 

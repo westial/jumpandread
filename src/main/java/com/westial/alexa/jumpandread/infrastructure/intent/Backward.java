@@ -32,7 +32,11 @@ public class Backward implements RequestHandler
 
     public boolean canHandle(HandlerInput input)
     {
-        return input.matches(intentName(INTENT_NAME));
+        return input.matches(
+                intentName(INTENT_NAME)
+                        .or(intentName("AMAZON.PageUpIntent"))
+                        .or(intentName("AMAZON.ScrollUpIntent"))
+        );
     }
 
     @Override

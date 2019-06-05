@@ -21,7 +21,7 @@ public class Next implements RequestHandler
     public Next(
             ForwardUseCase nextUseCase,
             int defaultParagraphsGroup
-            )
+    )
     {
         this.nextUseCase = nextUseCase;
         this.defaultParagraphsGroup = defaultParagraphsGroup;
@@ -31,10 +31,9 @@ public class Next implements RequestHandler
     {
         return input.matches(
                 intentName(INTENT_NAME)
-                        .or(intentName("AMAZON.ResumeIntent")
-                                .or(intentName("AMAZON.NextIntent")
-                                )
-                        )
+                        .or(intentName("AMAZON.ResumeIntent"))
+                        .or(intentName("AMAZON.NextIntent"))
+                        .or(intentName("AMAZON.MoreIntent"))
         );
     }
 

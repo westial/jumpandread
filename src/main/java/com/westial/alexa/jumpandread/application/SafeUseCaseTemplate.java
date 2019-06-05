@@ -1,6 +1,5 @@
 package com.westial.alexa.jumpandread.application;
 
-import com.westial.alexa.jumpandread.application.exception.CannotContinueMandatoryReadException;
 import com.westial.alexa.jumpandread.domain.Presenter;
 import com.westial.alexa.jumpandread.infrastructure.structure.PresenterView;
 
@@ -14,7 +13,7 @@ public abstract class SafeUseCaseTemplate
             Presenter presenter,
             int defaultUnsignedCandidatesFactor,
             int defaultUnsignedParagraphsFactor
-            )
+    )
     {
         this.presenter = presenter;
         this.defaultUnsignedCandidatesFactor = defaultUnsignedCandidatesFactor;
@@ -38,24 +37,15 @@ public abstract class SafeUseCaseTemplate
             int unsignedCandidatesFactor,
             int unsignedParagraphsFactor,
             int paragraphsGroup
-            )
+    )
     {
-        try
-        {
-            presenter = safeInvoke(
-                    intentName,
-                    candidateIndex,
-                    unsignedCandidatesFactor,
-                    unsignedParagraphsFactor,
-                    paragraphsGroup
-                    );
-
-        } catch (CannotContinueMandatoryReadException excReading)
-        {
-            excReading.printStackTrace();
-            presenter.addText("notice.no.more.paragraphs");
-
-        }
+        presenter = safeInvoke(
+                intentName,
+                candidateIndex,
+                unsignedCandidatesFactor,
+                unsignedParagraphsFactor,
+                paragraphsGroup
+        );
 
         return new PresenterView(presenter);
     }

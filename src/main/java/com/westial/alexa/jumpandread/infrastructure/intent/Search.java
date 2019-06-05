@@ -41,9 +41,15 @@ public class Search implements RequestHandler
                 current.getName(),
                 INTENT_NAME
         );
-        Slot termsSlot = current.getSlots().get(TERMS_SLOT_NAME);
         StringBuilder searchTerms = new StringBuilder();
-        searchTerms.append(termsSlot.getValue());
+
+        Slot termsSlot;
+
+        if (null != current.getSlots() && null != current.getSlots().get(TERMS_SLOT_NAME))
+        {
+            termsSlot = current.getSlots().get(TERMS_SLOT_NAME);
+            searchTerms.append(termsSlot.getValue());
+        }
 
         View view = searchUseCase.invoke(INTENT_NAME, searchTerms);
 

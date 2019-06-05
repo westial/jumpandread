@@ -2,6 +2,8 @@ package junit;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westial.alexa.jumpandread.DuckDuckGoJumpAndReadRouter;
 import com.westial.alexa.jumpandread.FreeFirstFailSafeJumpAndReadRouter;
 import org.junit.Assert;
@@ -104,8 +106,7 @@ public class FullFlowsTest
             );
             userId = userSessionItems.get(0);
             sessionId = userSessionItems.get(1);
-        }
-        else
+        } else
         {
             userId = String.format(
                     "amzn1.ask.account.%s.%s", "test",
@@ -240,6 +241,134 @@ public class FullFlowsTest
     }
 
     @Test
+    public void readCandidateNumberInANewSession() throws Throwable
+    {
+        setEnvironment("environment_bypattern_force_mediumwebnarrative_es" +
+                ".json");
+        handler = new DuckDuckGoJumpAndReadRouter();
+
+        String witness;
+
+        runIntent(INTENT.readthis);
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+        String fallbackWitness = witness;
+
+        runIntent(INTENT.next);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.previous);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.list);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.pause);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.readnumber);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.forward);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.backward);
+        Assert.assertNotNull(witness);
+        Assert.assertEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+
+
+
+        runIntent(INTENT.launch);
+        Assert.assertNotNull(witness);
+        Assert.assertNotEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.stop);
+        Assert.assertNotNull(witness);
+        Assert.assertNotEquals(
+                witness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        Assert.assertNotEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.help);
+        Assert.assertNotNull(witness);
+        Assert.assertNotEquals(
+                witness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        Assert.assertNotEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+
+        runIntent(INTENT.searchmath);
+        Assert.assertNotNull(witness);
+        Assert.assertNotEquals(
+                witness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        Assert.assertNotEquals(
+                fallbackWitness,
+                extractSsmlMessageOnly(outputStreamResult.toString())
+        );
+        witness = extractSsmlMessageOnly(outputStreamResult.toString());
+    }
+
+    private String extractSsmlMessageOnly(String jsonInput) throws IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<HashMap<String, Object>> typeRef
+                = new TypeReference<HashMap<String, Object>>() {};
+        Map<String, Object> inputMap = mapper.readValue(jsonInput, typeRef);
+        inputMap = (Map) inputMap.get("response");
+        inputMap = (Map) inputMap.get("outputSpeech");
+        return (String) inputMap.get("ssml");
+    }
+
+    @Test
     public void basicIntentsFlowWebSearch() throws Throwable
     {
         setEnvironment(SAMPLE_ENVIRONMENT_VARS);
@@ -249,8 +378,7 @@ public class FullFlowsTest
             // It has to be lazy checked and avoid first intents when
             // recycling session.
             recycledFlow();
-        }
-        else
+        } else
         {
             runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el " +
                     "funcionamiento básico brevemente).+(?=Puedes pedirme que" +

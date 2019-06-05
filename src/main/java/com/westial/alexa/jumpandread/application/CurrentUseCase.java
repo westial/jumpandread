@@ -68,6 +68,7 @@ public class CurrentUseCase extends SafeUseCaseTemplate
             if (0 == candidatesCount)
             {
                 presenter.addText("warning.no.search.in.this.session.yet");
+                presenter.addText("command.search.with.terms");
                 System.out.printf(
                         "WARNING: %s. Search Id: %s",
                         noCandidate.getMessage(),

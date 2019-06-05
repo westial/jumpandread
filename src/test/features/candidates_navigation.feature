@@ -173,7 +173,7 @@ Feature: All movements between candidates and paragraphs with their exceptions p
     And A newly created use case for current candidate reading
     When I invoke current candidate use case for intent name as "ReadCandidate", candidate index as "3", paragraphs group as "10"
     Then The result after invocation is not null
-    And The speech contained in result is as "warning.no.search.in.this.session.yet"
+    And The speech contained in result is as "warning.no.search.in.this.session.yetcommand.search.with.terms"
 
 
   Scenario: Trying to read next paragraphs when candidate has no more paragraphs notices user and goes to next candidate and reads first paragraphs group
