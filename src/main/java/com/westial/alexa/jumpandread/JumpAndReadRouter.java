@@ -162,7 +162,6 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
             skill = Skills.standard()
                     .addRequestHandlers(
                             new Launch(launchUseCase),
-                            new Search(searchUseCase),
                             new Help(helpUseCase),
                             new SessionEnded(sessionEndedUseCase, launchUseCase),
                             new Stop(stopUseCase),
