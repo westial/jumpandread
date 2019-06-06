@@ -60,7 +60,6 @@ public class Search implements RequestHandler
             return input.getResponseBuilder()
                     .addElicitSlotDirective(TERMS_SLOT_NAME, current)
                     .withSpeech(view.getSpeech())
-                    .withReprompt(view.getSpeech())
                     .build();
         }
 
