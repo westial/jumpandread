@@ -140,7 +140,7 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
 
         SearchUseCase searchUseCase = useCaseFactory.createSearch();
 
-        SearchUseCase fallbackSearchUseCase = useCaseFactory.createFallbackSearch();
+        FallbackUseCase fallbackUseCase = useCaseFactory.createFallback();
 
         PauseUseCase pauseUseCase = useCaseFactory.createPause();
 
@@ -163,9 +163,10 @@ public abstract class JumpAndReadRouter implements RequestStreamHandler
                     .addRequestHandlers(
                             new Launch(launchUseCase),
                             new Help(helpUseCase),
+                            new Search(searchUseCase),
                             new SessionEnded(sessionEndedUseCase, launchUseCase),
                             new Stop(stopUseCase),
-                            new FallbackSearch(fallbackSearchUseCase)
+                            new Fallback(fallbackUseCase)
                     ).build();
         } else
         {

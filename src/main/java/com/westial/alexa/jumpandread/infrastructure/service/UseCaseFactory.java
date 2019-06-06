@@ -100,13 +100,11 @@ public class UseCaseFactory
         );
     }
 
-    public SearchUseCase createFallbackSearch()
+    public FallbackUseCase createFallback()
     {
-        return new SearchUseCase(
+        return new FallbackUseCase(
                 state,
-                new SearchCandidatesCommand(candidatesSearch),
-                presenter,
-                "dialog.fallback.search.what"
+                presenter
         );
     }
 
