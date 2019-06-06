@@ -9,13 +9,6 @@
                         {
                             "name": "candidateIndex",
                             "type": "AMAZON.NUMBER"
-                        },
-                        {
-                            "name": "searchTerms",
-                            "type": "AMAZON.SearchQuery",
-                            "samples": [
-                                "{searchTerms}"
-                            ]
                         }
                     ],
                     "samples": [
@@ -324,16 +317,6 @@
                             "confirmationRequired": false,
                             "elicitationRequired": false,
                             "prompts": {}
-                        },
-                        {
-                            "name": "searchTerms",
-                            "type": "AMAZON.SearchQuery",
-                            "confirmationRequired": true,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "confirmation": "Confirm.Slot.931081730687.212093844238",
-                                "elicitation": "Elicit.Slot.798008352785.877697191399"
-                            }
                         }
                     ]
                 }

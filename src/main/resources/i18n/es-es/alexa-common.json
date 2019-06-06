@@ -15,6 +15,7 @@
  "presentation.finish": "Y bien, esta era mi introducción, ya puedes empezar a buscar. Te toca a tí, dime,{{ . }} Alexa, buscar",
  "warning.after.pause": "{{ whisper }}Pausa. Para continuar dime,{{ . }} Alexa, continuar{{ end whisper }}",
  "warning.no.search.results": "Lo siento mucho, pero no he encontrado ningun resultado con las palabras que me has pedido.",
+ "warning.no.search.results(searchTerms(%s))": "Lo siento mucho, pero no he encontrado ningun resultado por las palabras %s",
  "warning.no.more.paragraphs": "Disculpa, no puedo continuar leyendo porque sigo sin encontrar texto para leer en el resultado seleccionado. Para ir al siguiente resultado dime,{{ . }} Alexa salta. También puedes volver a la lista de resultados con la orden,{{ . }} Alexa lista.",
  "warning.something.unexpected": "Disculpa, algo raro ha pasado... o no encuentro tu última búsqueda, o no veo que queden más resultados en ella,  o has pedido leer un número de resultado que no está dentro del rango de búsqueda. Si quieres buscar otra cosa, dame la orden:{{ . }} Alexa, buscar, y las palabras que quieras buscar.",
  "warning.something.unexpected.after.pause": "Lo siento, después de la pausa me he quedado en blanco.",

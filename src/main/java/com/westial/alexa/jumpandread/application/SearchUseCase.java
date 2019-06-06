@@ -67,7 +67,7 @@ public class SearchUseCase {
                     );
                 }
 
-                presenter.addText(Presenter.LONGEST_TOKEN);
+                presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText(listing);
 
             }
@@ -78,7 +78,11 @@ public class SearchUseCase {
 
             }
             catch (NoSearchResultException me) {
-                presenter.addText("warning.no.search.results");
+                presenter.addText(
+                        "warning.no.search.results(searchTerms(%s))",
+                        searchTerms.toString()
+                );
+                presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.want.other");
                 presenter.addText(Presenter.STRONG_TOKEN);
                 presenter.addText("dialog.search.what");
