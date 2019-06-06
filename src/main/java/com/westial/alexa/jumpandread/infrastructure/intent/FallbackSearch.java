@@ -2,7 +2,10 @@ package com.westial.alexa.jumpandread.infrastructure.intent;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
+import com.amazon.ask.model.Response;
 import com.westial.alexa.jumpandread.application.SearchUseCase;
+
+import java.util.Optional;
 
 /**
  * This intent has to be configured alone because always can handle itself.
@@ -23,5 +26,12 @@ public class FallbackSearch extends Search implements RequestHandler
     public boolean canHandle(HandlerInput input)
     {
         return true;
+    }
+
+    @Override
+    public Optional<Response> handle(HandlerInput input)
+    {
+        System.out.printf("DEBUG: Intent %s\n", INTENT_NAME);
+        return super.handle(input);
     }
 }

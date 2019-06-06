@@ -30,6 +30,14 @@ public class SearchUseCase {
         state.updateIntent(intentName);
 
         if (0 == searchTerms.length()) {
+            System.out.printf(
+                    "DEBUG: com.westial.alexa.jumpandread.application.SearchUseCase.invoke dialog: %s\n",
+                    searchWhatDialog
+            );
+            System.out.printf(
+                    "DEBUG: com.westial.alexa.jumpandread.application.SearchUseCase.invoke searchTerms: %s\n",
+                    searchTerms.toString()
+            );
             presenter.addText(searchWhatDialog);
         }
         else {
