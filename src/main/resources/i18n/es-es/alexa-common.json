@@ -26,6 +26,7 @@
  "warning.no.more.paragraphs.but.children.already.in.list": "Ya habías pasado por este resultado que no tiene contenido pero tenía algunos enlaces a otros resultados que ya te he añadido a la lista de resultados de tu última búsqueda.",
  "warning.search.exception": "Ups..., ha ocurrido un error inesperado durante la búsqueda. Te recomiendo repetir la búsqueda.",
  "dialog.search.what": "¿Qué quieres buscar?",
+ "dialog.fallback.search.what": "No puedo hacer lo que me pides sin haber buscado algo antes. ¿Qué quieres buscar?",
  "dialog.search.want.other": "¿Quieres probar a buscar otra cosa?",
  "warning.session.exit.due.error": "Ha ocurrido un error y la sesión se va a cerrar.",
  "salutation.bye.1": "Hasta pronto.",

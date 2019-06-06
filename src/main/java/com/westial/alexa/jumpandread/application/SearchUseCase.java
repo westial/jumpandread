@@ -12,22 +12,25 @@ public class SearchUseCase {
     private final State state;
     private final SearchCandidatesCommand searchCommand;
     private final Presenter presenter;
+    private final String searchWhatDialog;
 
     public SearchUseCase(
             State state,
             SearchCandidatesCommand searchCommand,
-            Presenter presenter
+            Presenter presenter,
+            String searchWhatDialog
     ) {
         this.state = state;
         this.searchCommand = searchCommand;
         this.presenter = presenter;
+        this.searchWhatDialog = searchWhatDialog;
     }
 
     public View invoke(String intentName, StringBuilder searchTerms) {
         state.updateIntent(intentName);
 
         if (0 == searchTerms.length()) {
-            presenter.addText("dialog.search.what");
+            presenter.addText(searchWhatDialog);
         }
         else {
             try {

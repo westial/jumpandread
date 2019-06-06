@@ -95,7 +95,18 @@ public class UseCaseFactory
         return new SearchUseCase(
                 state,
                 new SearchCandidatesCommand(candidatesSearch),
-                presenter
+                presenter,
+                "dialog.search.what"
+        );
+    }
+
+    public SearchUseCase createFallbackSearch()
+    {
+        return new SearchUseCase(
+                state,
+                new SearchCandidatesCommand(candidatesSearch),
+                presenter,
+                "dialog.fallback.search.what"
         );
     }
 

@@ -357,17 +357,6 @@ public class FullFlowsTest
         witness = extractSsmlMessageOnly(outputStreamResult.toString());
     }
 
-    private String extractSsmlMessageOnly(String jsonInput) throws IOException
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<HashMap<String, Object>> typeRef
-                = new TypeReference<HashMap<String, Object>>() {};
-        Map<String, Object> inputMap = mapper.readValue(jsonInput, typeRef);
-        inputMap = (Map) inputMap.get("response");
-        inputMap = (Map) inputMap.get("outputSpeech");
-        return (String) inputMap.get("ssml");
-    }
-
     @Test
     public void basicIntentsFlowWebSearch() throws Throwable
     {
@@ -435,6 +424,8 @@ public class FullFlowsTest
         runAndCheckIntentLaunch("^<speak>.+(?=Voy a explicarte el " +
                 "funcionamiento básico brevemente).+(?=Puedes pedirme que te " +
                 "repita los últimos párrafos del contenido).{100,}</speak>$");
+        runAndCheckIntentSearchThat(LAZY_EXPECTED_PATTERN, INTENT.searchmediumnarrative);
+        // Search twice
         runAndCheckIntentSearchThat("^<speak>.+1<break[^/]+/>(?=SkyMath and the" +
                 " NCTM Standards).{200,}</speak>$", INTENT.searchmath);
     }
@@ -455,6 +446,17 @@ public class FullFlowsTest
         handler = new FreeFirstFailSafeJumpAndReadRouter();
         runAndCheckIntentHelp("^<speak>(?=Para ir directamente al servicio).+" +
                 "(?=Para volver a la lista de resultados).+</speak>$");
+    }
+
+    private String extractSsmlMessageOnly(String jsonInput) throws IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<HashMap<String, Object>> typeRef
+                = new TypeReference<HashMap<String, Object>>() {};
+        Map<String, Object> inputMap = mapper.readValue(jsonInput, typeRef);
+        inputMap = (Map) inputMap.get("response");
+        inputMap = (Map) inputMap.get("outputSpeech");
+        return (String) inputMap.get("ssml");
     }
 
     private void recycledFlow()
