@@ -1,0 +1,496 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "salta y lee",
+            "intents": [
+                {
+                    "name": "ReadCandidate",
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{candidateIndex}",
+                        "el {candidateIndex}",
+                        "el número {candidateIndex}",
+                        "la {candidateIndex}",
+                        "la número {candidateIndex}",
+                        "ir al {candidateIndex}",
+                        "ir al número {candidateIndex}",
+                        "ir a la {candidateIndex}",
+                        "ir a la número {candidateIndex}",
+                        "ir al resultado {candidateIndex}",
+                        "ir al resultado número {candidateIndex}",
+                        "la {candidateIndex}",
+                        "lee {candidateIndex}",
+                        "lee el {candidateIndex}",
+                        "lee la {candidateIndex}",
+                        "léeme {candidateIndex}",
+                        "léeme el {candidateIndex}",
+                        "léeme la {candidateIndex}",
+                        "leer {candidateIndex}",
+                        "leer el {candidateIndex}",
+                        "leer la {candidateIndex}",
+                        "me lea el resultado número {candidateIndex}",
+                        "número {candidateIndex}",
+                        "por favor léeme el {candidateIndex}",
+                        "quiero escuchar el {candidateIndex}",
+                        "quiero escuchar el número {candidateIndex}",
+                        "por favor léeme la {candidateIndex}",
+                        "quiero escuchar la {candidateIndex}",
+                        "quiero escuchar la número {candidateIndex}",
+                        "quiero escuchar el resultado número {candidateIndex}",
+                        "quiero oír el resultado número {candidateIndex}",
+                        "ves al {candidateIndex}",
+                        "ves al número {candidateIndex}",
+                        "ves a la {candidateIndex}",
+                        "ves a la número {candidateIndex}",
+                        "ves al resultado {candidateIndex}",
+                        "ves al resultado número {candidateIndex}",
+                        "{candidateIndex} con salta y lee",
+                        "el {candidateIndex} con salta y lee",
+                        "el número {candidateIndex} con salta y lee",
+                        "la {candidateIndex} con salta y lee",
+                        "la número {candidateIndex} con salta y lee",
+                        "ir al {candidateIndex} con salta y lee",
+                        "ir al número {candidateIndex} con salta y lee",
+                        "ir a la {candidateIndex} con salta y lee",
+                        "ir a la número {candidateIndex} con salta y lee",
+                        "ir al resultado {candidateIndex} con salta y lee",
+                        "ir al resultado número {candidateIndex} con salta y lee",
+                        "la {candidateIndex} con salta y lee",
+                        "lee {candidateIndex} con salta y lee",
+                        "lee el {candidateIndex} con salta y lee",
+                        "lee la {candidateIndex} con salta y lee",
+                        "léeme {candidateIndex} con salta y lee",
+                        "léeme el {candidateIndex} con salta y lee",
+                        "léeme la {candidateIndex} con salta y lee",
+                        "leer {candidateIndex} con salta y lee",
+                        "leer el {candidateIndex} con salta y lee",
+                        "leer la {candidateIndex} con salta y lee",
+                        "me lea el resultado número {candidateIndex} con salta y lee",
+                        "número {candidateIndex} con salta y lee",
+                        "por favor léeme el {candidateIndex} con salta y lee",
+                        "quiero escuchar el {candidateIndex} con salta y lee",
+                        "quiero escuchar el número {candidateIndex} con salta y lee",
+                        "por favor léeme la {candidateIndex} con salta y lee",
+                        "quiero escuchar la {candidateIndex} con salta y lee",
+                        "quiero escuchar la número {candidateIndex} con salta y lee",
+                        "quiero escuchar el resultado número {candidateIndex} con salta y lee",
+                        "quiero oír el resultado número {candidateIndex} con salta y lee",
+                        "ves al {candidateIndex} con salta y lee",
+                        "ves al número {candidateIndex} con salta y lee",
+                        "ves a la {candidateIndex} con salta y lee",
+                        "ves a la número {candidateIndex} con salta y lee",
+                        "ves al resultado {candidateIndex} con salta y lee",
+                        "ves al resultado número {candidateIndex} con salta y lee"
+                    ]
+                },
+                {
+                    "name": "SearchCandidates",
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{searchTerms}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "acerca de {searchTerms}",
+                        "algo",
+                        "algo que tenga que ver con {searchTerms}",
+                        "busca {searchTerms}",
+                        "busca {searchTerms}",
+                        "busca algo",
+                        "busca artículo",
+                        "busca publicación",
+                        "busca un texto que hable de {searchTerms}",
+                        "busca",
+                        "búscame {searchTerms}",
+                        "búscame algo",
+                        "buscame artículo",
+                        "buscame publicación",
+                        "buscar {searchTerms}",
+                        "buscar",
+                        "busque {searchTerms}",
+                        "encuentra {searchTerms}",
+                        "encuéntrame {searchTerms}",
+                        "escuchar sobre {searchTerms}",
+                        "escuchar un artículo sobre {searchTerms}",
+                        "escuchar un texto sobre {searchTerms}",
+                        "escuchar una publicación sobre {searchTerms}",
+                        "lee acerca de {searchTerms}",
+                        "lee algo",
+                        "lee artículo",
+                        "lee publicación",
+                        "léeme algo sobre {searchTerms}",
+                        "léeme algo",
+                        "léeme artículo",
+                        "léeme publicación",
+                        "leer algo",
+                        "me busque {searchTerms}",
+                        "me busque algo de {searchTerms}",
+                        "me lea {searchTerms}",
+                        "me lea algo de {searchTerms}",
+                        "me lea un artículo de {searchTerms}",
+                        "me puedes buscar {searchTerms}",
+                        "para {searchTerms}",
+                        "para buscar {searchTerms}",
+                        "por {searchTerms}",
+                        "quiero oír un artículo sobre {searchTerms}",
+                        "quiero oír un texto sobre {searchTerms}",
+                        "quiero que busque {searchTerms}",
+                        "quiero que busque un artículo sobre {searchTerms}",
+                        "sobre {searchTerms}",
+                        "un artículo con las palabras {searchTerms}",
+                        "un artículo de {searchTerms}",
+                        "un artículo que hable de {searchTerms}",
+                        "un artículo sobre {searchTerms}",
+                        "un artículo",
+                        "un texto con las palabras {searchTerms}",
+                        "un texto de {searchTerms}",
+                        "un texto que hable de {searchTerms}",
+                        "un texto sobre {searchTerms}",
+                        "una publicación con las palabras {searchTerms}",
+                        "una publicación de {searchTerms}",
+                        "una publicación que hable de {searchTerms}",
+                        "una publicación sobre {searchTerms}",
+                        "una publicación",
+                        "acerca de {searchTerms} con salta y lee",
+                        "algo con salta y lee",
+                        "algo que tenga que ver con {searchTerms} con salta y lee",
+                        "busca {searchTerms} con salta y lee",
+                        "busca {searchTerms} con salta y lee",
+                        "busca algo con salta y lee",
+                        "busca artículo con salta y lee",
+                        "busca publicación con salta y lee",
+                        "busca un texto que hable de {searchTerms} con salta y lee",
+                        "busca con salta y lee",
+                        "búscame {searchTerms} con salta y lee",
+                        "búscame algo con salta y lee",
+                        "buscame artículo con salta y lee",
+                        "buscame publicación con salta y lee",
+                        "buscar {searchTerms} con salta y lee",
+                        "buscar con salta y lee",
+                        "busque {searchTerms} con salta y lee",
+                        "encuentra {searchTerms} con salta y lee",
+                        "encuéntrame {searchTerms} con salta y lee",
+                        "escuchar sobre {searchTerms} con salta y lee",
+                        "escuchar un artículo sobre {searchTerms} con salta y lee",
+                        "escuchar un texto sobre {searchTerms} con salta y lee",
+                        "escuchar una publicación sobre {searchTerms} con salta y lee",
+                        "lee acerca de {searchTerms} con salta y lee",
+                        "lee algo con salta y lee",
+                        "lee artículo con salta y lee",
+                        "lee publicación con salta y lee",
+                        "léeme algo sobre {searchTerms} con salta y lee",
+                        "léeme algo con salta y lee",
+                        "léeme artículo con salta y lee",
+                        "léeme publicación con salta y lee",
+                        "leer algo con salta y lee",
+                        "me busque {searchTerms} con salta y lee",
+                        "me busque algo de {searchTerms} con salta y lee",
+                        "me lea {searchTerms} con salta y lee",
+                        "me lea algo de {searchTerms} con salta y lee",
+                        "me lea un artículo de {searchTerms} con salta y lee",
+                        "me puedes buscar {searchTerms} con salta y lee",
+                        "para {searchTerms} con salta y lee",
+                        "para buscar {searchTerms} con salta y lee",
+                        "por {searchTerms} con salta y lee",
+                        "quiero oír un artículo sobre {searchTerms} con salta y lee",
+                        "quiero oír un texto sobre {searchTerms} con salta y lee",
+                        "quiero que busque {searchTerms} con salta y lee",
+                        "quiero que busque un artículo sobre {searchTerms} con salta y lee",
+                        "sobre {searchTerms} con salta y lee",
+                        "un artículo con las palabras {searchTerms} con salta y lee",
+                        "un artículo de {searchTerms} con salta y lee",
+                        "un artículo que hable de {searchTerms} con salta y lee",
+                        "un artículo sobre {searchTerms} con salta y lee",
+                        "un artículo con salta y lee",
+                        "un texto con las palabras {searchTerms} con salta y lee",
+                        "un texto de {searchTerms} con salta y lee",
+                        "un texto que hable de {searchTerms} con salta y lee",
+                        "un texto sobre {searchTerms} con salta y lee",
+                        "una publicación con las palabras {searchTerms} con salta y lee",
+                        "una publicación de {searchTerms} con salta y lee",
+                        "una publicación que hable de {searchTerms} con salta y lee",
+                        "una publicación sobre {searchTerms} con salta y lee",
+                        "una publicación con salta y lee"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "cómo funciona",
+                        "cómo funciona esto",
+                        "no sé cómo funciona",
+                        "ayuda",
+                        "ayúdame"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "cancela",
+                        "quita bicho",
+                        "fuera",
+                        "salir",
+                        "quieto",
+                        "quieta",
+                        "stop",
+                        "párate",
+                        "para",
+                        "cancelar"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PauseIntent",
+                    "samples": [
+                        "pausa",
+                        "espera",
+                        "quieta",
+                        "quieto"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": [
+                        "menú",
+                        "vuelve al principio",
+                        "vuelve al inicio",
+                        "inicio"
+                    ]
+                },
+                {
+                    "name": "AMAZON.ResumeIntent",
+                    "samples": [
+                        "venga",
+                        "continúa"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Continue",
+                    "slots": [],
+                    "samples": [
+                        "corre",
+                        "siguiente",
+                        "dime",
+                        "arrí",
+                        "arri",
+                        "palante",
+                        "dale",
+                        "continúa",
+                        "lee",
+                        "arranca",
+                        "venga",
+                        "adelante",
+                        "sigue",
+                        "seguir",
+                        "continuar"
+                    ]
+                },
+                {
+                    "name": "Forward",
+                    "slots": [],
+                    "samples": [
+                        "saltar",
+                        "salta",
+                        "salta hacia adelante",
+                        "salta adelante",
+                        "pasa",
+                        "pasar",
+                        "pasapalabra",
+                        "pega un salto",
+                        "salto",
+                        "brinca",
+                        "brincar",
+                        "palante"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PreviousIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Previous",
+                    "slots": [],
+                    "samples": [
+                        "anterior",
+                        "el anterior",
+                        "previo",
+                        "el previo",
+                        "el de antes",
+                        "atrás",
+                        "patrás"
+                    ]
+                },
+                {
+                    "name": "Backward",
+                    "slots": [],
+                    "samples": [
+                        "rebobina",
+                        "hacia atrás",
+                        "tira atrás",
+                        "salta atrás",
+                        "salta hacia atrás"
+                    ]
+                },
+                {
+                    "name": "AMAZON.RepeatIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Repeat",
+                    "slots": [],
+                    "samples": [
+                        "no lo he entendido",
+                        "no lo comprendo",
+                        "no lo entiendo",
+                        "no lo he entendido bien",
+                        "la última",
+                        "otra vez",
+                        "repite",
+                        "repetir"
+                    ]
+                },
+                {
+                    "name": "List",
+                    "slots": [],
+                    "samples": [
+                        "qué habías encontrado",
+                        "vuelve a la lista",
+                        "lístame los resultados",
+                        "qué tenía en la lista",
+                        "cuáles eran los últimos resultados",
+                        "qué he encontrado en la última búsqueda",
+                        "lista de resultados",
+                        "la última lista de resultados",
+                        "dame la lista",
+                        "listar",
+                        "lista",
+                        "me liste los resultados de la última búsqueda",
+                        "quiero oír la lista de resultados",
+                        "quiero oír la última lista de resultados",
+                        "quiero oír los últimos resultados",
+                        "qué resultados hay en la lista"
+                    ]
+                },
+                {
+                    "name": "AMAZON.MoreIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PageDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PageUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SearchCandidates",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.931081730687.212093844238",
+                                "elicitation": "Elicit.Slot.798008352785.877697191399"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ReadCandidate",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "SKILL_RESPONSE"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.798008352785.877697191399",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Qué es lo que buscas?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿Qué quieres buscar?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.931081730687",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres buscar {searchTerms} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.931081730687.212093844238",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres buscar {searchTerms} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1057603318951.1466430063659",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Quieres continuar, o quieres buscar otra cosa?"
+                    }
+                ]
+            }
+        ]
+    }
+}

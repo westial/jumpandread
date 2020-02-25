@@ -1,0 +1,172 @@
+When I first started using Mockito, I was amazed at how it manipulates objects for tests. I used annotations to declare mock fields and then either use initMock on the setup method or a MockitoRule, as it was what most online tutorials explain to do.
+
+@Before
+public void setUp() {
+  Mockito.initMocks(this);
+}
+@Rule
+public MockitoRule rule = MockitoJUnit.rule();
+Both these techniques use reflexion to find and instantiate fields in the test class marked with Mockito related annotations. In fact, MockitoJUnit internally uses MockitoJUnitRule which in turn uses initMocks.
+
+However, there is a couple of things to consider next time you write or update a test with Mockito. I’m gonna describe how using Mockito manually may be beneficial.
+
+Speed
+As mentioned, the way Mockito injects test doubles is reflexion. It can be slow. I’ve seen up to a 10x slow down on unit tests. Integration or instrumented tests don’t have this effect because they have other time-intensive constraints.
+
+When doing unit tests, rapid feedback is a must have. Especially with techniques like TDD. Even 300ms per test suit can add up to a considerate amount of time. When committing code, it’s always a good practice to run all unit tests and with 100 test classes adds up to 30 seconds.
+
+So, what’s the alternative? We can instantiate test doubles using Mockito’s factory method mock().
+
+private Service service = mock(Service.class);
+If you use Kotlin (tests are a great place to start) then it can be simplified using inlined functions with reified types.
+
+inline fun <reified T> mock(): T = Mockito.mock(T::class.java)
+val service = mock<Service>()
+Mutability
+When declaring doubles with @Mock, we have to leave them as non-final. It’s a good practice to treat test code in the same way as we treat production code. I have said this in the past, but now it gives me shivers down my spine when I hear: “Well, it’s just a test”.
+
+Fields that don’t change during the lifecycle of a class ought to be final. It gives the contract that it’s gonna remain pointing to the same object and avoids unexpected changes. So, why don’t we do this in our tests?
+
+If we use declarative doubles, they can be final.
+
+private final Service service = mock(Service.class);
+Ensuring the field is gonna always point to the desired double. JUnit creates a new instance of the test class for each test, so the behaviour of each of the doubles will reset after each run.
+
+Static analysis
+When not using a variable, most IDEs and static analysis tools warn you about it. However, when using field injection, the IDE doesn’t know that JUnit instantiates the object later on. To avoid false positives some editors, like it’s the case for IntelliJ, suppresses warnings on variables with specific annotations.
+
+The results are that visibility for unused fields gets lost. If someone comes after to update a test, there is a significant danger that, if they aren’t extra careful, they will leave a field that is no longer needed. I’ve done it, and I’ve seen good developers do it.
+
+Note: The newest versions of IntelliJ are a bit more clever about this.
+
+Continues Integration servers that integrate with static analysis tools have the opposite issue. Because they aren’t instantiated the SA tool will report that those fields are not used. And many projects decide to disable analysis of test code. Not a wise decision IMO.
+
+Encapsulation
+The area where we declare the mocks tends to become a dumping field where every test drops its needs. Adding extra unnecessary complexity and making it hard to follow any non-trivial test.
+
+Well written tests should be independent of each other. As a test grows in size, we start dumping required doubles due to the need to be injected by the test rule.
+
+What I’ve done in the past to solve this issue is to create local factory methods which instantiate the subject of the test.
+
+private static Service givenAService() {
+  return new Service();
+}
+Since this is an implementation detail, we can move it to the bottom of the file, after our tests.
+
+Now, in our test, we can use this “given” method.
+
+@Test
+public void shouldProvideName() {
+  Service service = givenAService();
+  String name = service.getName();
+  assertThat(name).isEqualTo("Service");
+}
+Let’s look at an example where the service consumes an ApiClient which in turn produces some data that we want the service to manipulate.
+
+@Test
+public void shouldProvideItems_fromApiClient() {
+  Service service = givenAService_withAClient_thatFetches(API_DATA);
+
+  List<Item> items = service.findAllItems();
+
+  assertThat(items).containsOnly(ITEM_1, ITEM_2);
+}
+private static Service givenAService_withAClient_thatFetches(
+  List<ApiItem> data
+) {
+  ApiClient client = mock(ApiClient.class);
+  when(client.fetchAllData()).thenReturn(data);
+  return new Service(client);
+}
+For a different case we can define a new factory method.
+
+@Test
+public void shouldProvideNoItems_whenApiClientFails() {
+  Service service = givenAService_withAClient_thatFails();
+
+  List<Item> items = service.findAllItems();
+
+  assertThat(items).isEmpty();
+}
+private static ApiClient givenAService_withAClient_thatFails() {
+  ApiClient client = mock(ApiClient.class);
+  when(client.fetchAllData()).thenThrow(new RuntimeException());
+  return new Service(client);
+}
+By encapsulating the expectations inside “given methods” we can scale test suites easily and without potentially influencing other tests in the process.
+
+If tests start to overlap expectations (usually with large objects), it may be interesting to create an internal builder that provides them so we can chain them.
+
+Service service = givenAService()
+  .withAClient_thatFetches(API_DATA)
+  .withAnIntegerToCurencyMapper()
+  .build();
+However, this should be a last resort, and its need may indicate that the tested object has too many dependencies.
+
+Avoid setup
+If we use these expectation methods, there is no need to have a setup method (or a tear down). Like an abstract class that defines behaviour which the extender has to be aware of. With a setup method, we are injecting logic to all of our tests, even if they don’t need it.
+
+Bonus: Stubs
+Mockito’s factory method mock() creates a proxy object that records interactions. If we are creating an object that merely provides behaviour or data and we don’t care for verification, we can make the doubles a bit more efficient.
+
+By default, Mockito’s instances record every interaction so that we can use verify after we exercise an object. However, this can be expensive, and we should only use it as a last resort. Using verify can indicate that we are doing too much white box testing and the test cares too much about the implementation. Asserting a final state makes the code that we are testing more open for modifications.
+
+We can create a stub with Mockito.
+
+Type type = Mockito.mock(
+  Type.class,
+  Mockito.withSettings().stubsOnly()
+);
+For convenience I recommend to have a static factory method somewhere like a helper called MockitoExtensions, for example.
+
+public static <T> T stub(Class<T> type) {
+  return Mockito.mock(type, Mockito.withSettings().stubsOnly());
+}
+Or the homologous inlined function in Kotlin.
+
+inline fun <reified T> T stub() =
+  Mockito.mock(T::class.java, Mockito.withSettings().stubsOnly())
+The positive side effect of using this by default is that it will fail if we try to verify, and at that point we can asses whether we require to record interactions with a mock instead of a stub.
+
+TestingJavaJunitMockito
+Go to the profile of pablisco
+pablisco
+Software Artisan
+
+Related reads
+Sharing code between local and instrumentation tests
+Go to the profile of Alex Zhukovich
+Alex Zhukovich
+Feb 2
+Related reads
+Facilitating dependency initialization with Dagger multibindings
+Go to the profile of Nick Rose
+Nick Rose
+Feb 13
+Related reads
+Mocking static method in Kotlin
+Go to the profile of I'Boss Potiwarakorn
+I'Boss Potiwarakorn
+Jul 11, 2018
+Responses
+Jaume Mila
+Write a response…
+Jaume Mila
+Conversation with pablisco.
+Go to the profile of Oleksiy Pylypenko
+Oleksiy Pylypenko
+Mar 12
+Just want to add one thing. Reflection is not a bottleneck in the performance of mocking frameworks usually.
+
+The problem is code transformation which is costly. It resets optimizations in HotSpot and very costly to initialize without Java Agent.
+
+https://github.com/mockk/mockk/issues/13#issuecomment-429113700
+
+Have you tried mockk btw?
+
+Go to the profile of pablisco
+pablisco
+Mar 12
+I’ve looked at it but not tried it yet fully. Looks interesting, although I’ve head reports of being slower than Mockito…
+
+Btw, when I was talking about cost in the title I wasn’t just referring to the time but also other points :)

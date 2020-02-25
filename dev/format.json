@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "userAgent": "ask-java/2.5.5 Java/1.8.0_172",
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>No recuerdo haber buscado nada para ti<break strength=\"x-strong\"/>todavía.Para buscar<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>busca<break strength=\"x-strong\"/>y las palabras de lo que quieras buscar</speak>"
+    },
+    "reprompt": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>No recuerdo haber buscado nada para ti<break strength=\"x-strong\"/>todavía.Para buscar<break strength=\"x-strong\"/>dime,<break time=\"1500ms\"/> Alexa<break strength=\"x-strong\"/>busca<break strength=\"x-strong\"/>y las palabras de lo que quieras buscar</speak>"
+      }
+    },
+    "shouldEndSession": false
+  }
+}
