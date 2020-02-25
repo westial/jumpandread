@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export AWS_PROFILE=default
+
+export AWS_ACCOUNT="012345678901"         # Your 12-digit AWS account number (ID)
+export LAMBDA_ROLE="service-role/lambda"  # Create it before
+
+export AWS_S3_BUCKET="your.s3.bucket"     # Configure your bucket name

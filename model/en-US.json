@@ -1,0 +1,486 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "reading jump",
+            "intents": [
+                {
+                    "name": "ReadCandidate",
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{candidateIndex}",
+                        "the {candidateIndex}",
+                        "the number {candidateIndex}",
+                        "go to {candidateIndex}",
+                        "go to the number {candidateIndex}",
+                        "go to the {candidateIndex}",
+                        "go to the number {candidateIndex}",
+                        "go to the result {candidateIndex}",
+                        "go to result number {candidateIndex}",
+                        "the {candidateIndex}",
+                        "read {candidateIndex}",
+                        "read the {candidateIndex}",
+                        "read me {candidateIndex}",
+                        "read me the {candidateIndex}",
+                        "read the number {candidateIndex}",
+                        "read number {candidateIndex}",
+                        "read the {candidateIndex}",
+                        "read me the result number {candidateIndex}",
+                        "number {candidateIndex}",
+                        "please read me the {candidateIndex}",
+                        "I want to hear the {candidateIndex}",
+                        "I want to hear the number {candidateIndex}",
+                        "please read me the {candidateIndex}",
+                        "I want to hear the {candidateIndex}",
+                        "I want to hear the number {candidateIndex}",
+                        "I want to hear the result number {candidateIndex}",
+                        "I want to hear the result number {candidateIndex}",
+                        "you see {candidateIndex}",
+                        "you see the number {candidateIndex}",
+                        "you see the {candidateIndex}",
+                        "you see the number {candidateIndex}",
+                        "you see the result {candidateIndex}",
+                        "you see result number {candidateIndex}",
+                        "{candidateIndex} with reading jump",
+                        "the {candidateIndex} with jumps and reads",
+                        "the number {candidateIndex} with jumps and reads",
+                        "the {candidateIndex} with jumps and reads",
+                        "the number {candidateIndex} with jumps and reads",
+                        "go to {candidateIndex} with reading jump",
+                        "go to the number {candidateIndex} with reading jump",
+                        "go to the {candidateIndex} with reading jump",
+                        "go to the number {candidateIndex} with reading jump",
+                        "go to the result {candidateIndex} with reading jump",
+                        "go to result number {candidateIndex} with reading jump",
+                        "the {candidateIndex} with jumps and reads",
+                        "read {candidateIndex} with reading jump",
+                        "read {candidateIndex} with reading jump",
+                        "read the {candidateIndex} with reading jump",
+                        "read me {candidateIndex} with reading jump",
+                        "Read me the {candidateIndex} with reading jump",
+                        "read me the {candidateIndex} with reading jump",
+                        "read {candidateIndex} with reading jump",
+                        "read the {candidateIndex} with reading jump",
+                        "read the {candidateIndex} with reading jump",
+                        "read me the result number {candidateIndex} with reading jump",
+                        "number {candidateIndex} with jumps and reads",
+                        "please read me the {candidateIndex} with reading jump",
+                        "I want to hear {candidateIndex} with jumps and reads",
+                        "I want to hear the number {candidateIndex} with jumps and reads",
+                        "please read me the {candidateIndex} with reading jump",
+                        "I want to hear the {candidateIndex} with jumps and reads",
+                        "I want to hear the number {candidateIndex} with jumps and reads",
+                        "I want to hear the result number {candidateIndex} with jumps and reads",
+                        "I want to hear the result number {candidateIndex} with jumps and reads",
+                        "you see {candidateIndex} with reading jump",
+                        "you see the {candidateIndex} number with reading jump",
+                        "you see the {candidateIndex} with reading jump",
+                        "you see the number {candidateIndex} with reading jump",
+                        "you see the result {candidateIndex} with reading jump",
+                        "you see the result number {candidateIndex} with jumps and reads",
+                        "Tell me {candidateIndex}",
+                        "Please tell me {candidateIndex}",
+                        "Tell me {candidateIndex} with reading jump ",
+                        "Tell me the {candidateIndex} with reading jump ",
+                        "Jump and read {candidateIndex}",
+                        "{candidateIndex} reading jump"
+                    ]
+                },
+                {
+                    "name": "SearchCandidates",
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{searchTerms}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "about {searchTerms}",
+                        "something",
+                        "something that has to do with {searchTerms}",
+                        "search for {searchTerms}",
+                        "search by {searchTerms}",
+                        "look for {searchTerms}",
+                        "look by {searchTerms}",
+                        "search {searchTerms}",
+                        "search something",
+                        "search article",
+                        "search for publication",
+                        "look for a text that talks about {searchTerms}",
+                        "search",
+                        "look for me {searchTerms}",
+                        "find me something",
+                        "find me an article",
+                        "find me a publication",
+                        "search for",
+                        "find {searchTerms}",
+                        "find me {searchTerms}",
+                        "hear about {searchTerms}",
+                        "listen to an article about {searchTerms}",
+                        "listen to a text about {searchTerms}",
+                        "listen to a post about {searchTerms}",
+                        "read about {searchTerms}",
+                        "read something",
+                        "read article",
+                        "read publication",
+                        "read me something about {searchTerms}",
+                        "read me something",
+                        "read me the article",
+                        "Read me",
+                        "Read something",
+                        "I searched for {searchTerms}",
+                        "I searched for something from {searchTerms}",
+                        "read me {searchTerms}",
+                        "read me something from {searchTerms}",
+                        "read me an article from {searchTerms}",
+                        "you can search for me {searchTerms}",
+                        "for {searchTerms}",
+                        "to search for {searchTerms}",
+                        "by {searchTerms}",
+                        "I want to hear an article about {searchTerms}",
+                        "I want to hear a text about {searchTerms}",
+                        "I want you to search {searchTerms}",
+                        "I want you to look for an article on {searchTerms}",
+                        "about {searchTerms}",
+                        "an article with the words {searchTerms}",
+                        "an article from {searchTerms}",
+                        "an article that talks about {searchTerms}",
+                        "an article on {searchTerms}",
+                        "an article",
+                        "a text with the words {searchTerms}",
+                        "a text from {searchTerms}",
+                        "a text that talks about {searchTerms}",
+                        "a text about {searchTerms}",
+                        "a post with the words {searchTerms}",
+                        "a post from {searchTerms}",
+                        "a post that talks about {searchTerms}",
+                        "a post about {searchTerms}",
+                        "a publication",
+                        "about {searchTerms} with reading jump",
+                        "something with jumps and reads",
+                        "something that has to do with {searchTerms} with jumps and reads",
+                        "search {searchTerms} with reading jump",
+                        "search {searchTerms} with reading jump",
+                        "look for something with jumps and reads",
+                        "look for article with reading jump",
+                        "look for publication with jumps and reads",
+                        "look for a text that talks about {searchTerms} with jumps and reads",
+                        "search with jumps and read",
+                        "find me {searchTerms} with reading jump",
+                        "Find me something with jumps and read",
+                        "Find me article with reading jump",
+                        "find me publication with jumps and reads",
+                        "search {searchTerms} with reading jump",
+                        "search with jumps and read",
+                        "search {searchTerms} with reading jump",
+                        "find {searchTerms} with reading jump",
+                        "Find me {searchTerms} with reading jump",
+                        "hear about {searchTerms} with reading jump",
+                        "listen to an article about {searchTerms} with reading jump",
+                        "listen to a text about {searchTerms} with reading jump",
+                        "listen to a post about {searchTerms} with reading jump",
+                        "read about {searchTerms} with reading jump",
+                        "read something with jumps and read",
+                        "read article with jumps and reads",
+                        "reads publication with jumps and reads",
+                        "read me something about {searchTerms} with reading jump",
+                        "read me something with jumps and read",
+                        "read me the article with jumps and read",
+                        "read me publication with jumps and read",
+                        "read something with jumps and reads",
+                        "search me {searchTerms} with reading jump",
+                        "I searched for something from {searchTerms} with jumps and read",
+                        "read me {searchTerms} with reading jump",
+                        "read me something from {searchTerms} with reading jump",
+                        "read me an article from {searchTerms} with jumps and reads",
+                        "you can search for me {searchTerms} with reading jump",
+                        "for {searchTerms} with reading jump",
+                        "to search {searchTerms} with reading jump",
+                        "by {searchTerms} with reading jump",
+                        "I want to hear an article about {searchTerms} with jumps and reads",
+                        "I want to hear a text about {searchTerms} with jumps and reads",
+                        "I want you to search {searchTerms} with reading jump",
+                        "I want you to look for an article on {searchTerms} with reading jump",
+                        "about {searchTerms} with reading jump",
+                        "an article with the words {searchTerms} with jumps and reads",
+                        "an article from {searchTerms} with reading jump",
+                        "an article that talks about {searchTerms} with jumps and reads",
+                        "an article on {searchTerms} with reading jump",
+                        "an article with jumps and reads",
+                        "a text with the words {searchTerms} with reading jump",
+                        "a text from {searchTerms} with reading jump",
+                        "a text that talks about {searchTerms} with jumps and reads",
+                        "a text about {searchTerms} with reading jump",
+                        "a post with the words {searchTerms} with reading jump",
+                        "a {searchTerms} post with reading jump",
+                        "a post that talks about {searchTerms} with jumps and reads",
+                        "a post about {searchTerms} with reading jump",
+                        "a publication with jumps and reads",
+                        "can you search {searchTerms}",
+                        "can I hear about {searchTerms}",
+                        "can I hear a text about {searchTerms}",
+                        "search {searchTerms}",
+                        "what is {searchTerms}",
+                        "what is the article about {searchTerms}",
+                        "please read {searchTerms}",
+                        "can you tell me about {searchTerms}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "how it works",
+                        "please tell how it works",
+                        "I don't know how it works"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PauseIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ResumeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Continue",
+                    "slots": [],
+                    "samples": [
+                        "run",
+                        "following",
+                        "tell me",
+                        "I came",
+                        "go ahead",
+                        "keep going",
+                        "read",
+                        "Starts",
+                        "go on",
+                        "ahead",
+                        "follow",
+                        "continue",
+                        "mhm",
+                        "follow through"
+                    ]
+                },
+                {
+                    "name": "Forward",
+                    "slots": [],
+                    "samples": [
+                        "skip",
+                        "jump",
+                        "jump forward",
+                        "pass",
+                        "happen",
+                        "hit a jump",
+                        "forward",
+                        "after"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PreviousIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Previous",
+                    "slots": [],
+                    "samples": [
+                        "last",
+                        "the last one please",
+                        "previous",
+                        "previous one",
+                        "last one",
+                        "go back please",
+                        "please go back",
+                        "please back",
+                        "back"
+                    ]
+                },
+                {
+                    "name": "Backward",
+                    "slots": [],
+                    "samples": [
+                        "rewind",
+                        "backward",
+                        "jump back"
+                    ]
+                },
+                {
+                    "name": "AMAZON.RepeatIntent",
+                    "samples": []
+                },
+                {
+                    "name": "Repeat",
+                    "slots": [],
+                    "samples": [
+                        "I did not understand",
+                        "I do not get it",
+                        "I have not understood it well",
+                        "the last",
+                        "again",
+                        "repeat",
+                        "please repeat ",
+                        "I don't understand ",
+                        "can you repeat ",
+                        "can you say that again ",
+                        "I'm not sure what that means",
+                        "what"
+                    ]
+                },
+                {
+                    "name": "List",
+                    "slots": [],
+                    "samples": [
+                        "what you had found",
+                        "go back to the list",
+                        "Show me the results",
+                        "what was on the list",
+                        "what were the last results",
+                        "what I found in the last search",
+                        "list of results",
+                        "the last list of results",
+                        "the last list",
+                        "give me the list",
+                        "to list",
+                        "list",
+                        "I listened to the results of the last search",
+                        "I want to hear the list of results",
+                        "I want to hear the last list of results",
+                        "I want to hear the latest results",
+                        "what results are in the list",
+                        "what is in the list ",
+                        "tell me the list ",
+                        "tell me the results ",
+                        "I'd like to know the results ",
+                        "I am ready for the list"
+                    ]
+                },
+                {
+                    "name": "AMAZON.MoreIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PageDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PageUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SearchCandidates",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "searchTerms",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.931081730687.212093844238",
+                                "elicitation": "Elicit.Slot.798008352785.877697191399"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ReadCandidate",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "candidateIndex",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "SKILL_RESPONSE"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.798008352785.877697191399",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿What are you searching for?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿What do you look for?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.931081730687",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Do you want to search for {searchTerms} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.931081730687.212093844238",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Are you looking for {searchTerms} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1057603318951.1466430063659",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Do you want to continue, or do you want to look for another topic?"
+                    }
+                ]
+            }
+        ]
+    }
+}
