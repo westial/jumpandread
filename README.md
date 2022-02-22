@@ -1,6 +1,9 @@
 Alexa Jump and Read
 ===================
 
+**THIS PROJECT IS UNMAINTAINED AND SOME VULNERABILITIES IN THE DEPENDENCY CHAIN HAS BEEN FOUND.
+IF YOU USE THIS PROJECT FOR ANYTHING YOU HAVE TO FIX THIS VULNERABILITIES AT LEAST IN YOUR FORK.**
+
 This is a stable working Alexa Skill source code with a deployment help script
 used for a former unsuccessful business.
 
