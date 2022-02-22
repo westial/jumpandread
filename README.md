@@ -1,9 +1,15 @@
 Alexa Jump and Read
 ===================
 
-**THIS PROJECT IS UNMAINTAINED AND SOME VULNERABILITIES IN THE DEPENDENCY CHAIN HAS BEEN FOUND.
-IF YOU USE THIS PROJECT FOR ANYTHING YOU HAVE TO FIX THIS VULNERABILITIES AT LEAST IN YOUR FORK.
-More information here <https://github.com/westial/jumpandread/security/dependabot>**
+## Supply chain vulnerabilities ##
+
+**THIS PROJECT IS UNMAINTAINED AND SOME VULNERABILITIES HAS BEEN FOUND IN THE SUPPLY CHAIN.**
+
+* Uncaught Exception in jsoup < 1.14.2.
+* Path Traversal and Improper Input Validation in Apache Commons IO < 2.7.
+* TemporaryFolder on unix-like systems does not limit access to created files >= 4.7, < 4.13.1.
+
+## Introduction ##
 
 This is a stable working Alexa Skill source code with a deployment help script
 used for a former unsuccessful business.
